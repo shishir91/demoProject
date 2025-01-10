@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import api from "../api/config.js";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
+import PointsConfirmation from "./components/PointConfirmation.jsx";
 
 const Login = () => {
   const [formData, setFormData] = useState({
