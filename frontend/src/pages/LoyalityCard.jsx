@@ -16,13 +16,13 @@ import InstallationGuide from "./components/InstallationGuide";
 const LoyalityCard = () => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   if (!user && !token) {
-  //     navigate("/");
-  //   }
-  // }, [token]);
+  useEffect(() => {
+    if (!user && !token) {
+      navigate("/");
+    }
+  }, [token]);
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white bg-gray-200 m-5">
       {/* Container Div with customizable background color */}
