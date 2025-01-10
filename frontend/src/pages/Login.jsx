@@ -83,11 +83,14 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200 space-y-6">
       {isLoading && <LoadingSpinner />}
       {showConfirmation && <PointsConfirmation />}
-      // {/* Logo */}
+      {/* Logo */}
       <div className="w-20 h-20 rounded-full bg-green-800 flex items-center justify-center">
-        <span className="text-white text-sm font-bold">Your Logo</span>
+        <img
+          src="https://st5.depositphotos.com/69915036/62675/v/450/depositphotos_626754468-stock-illustration-your-logo-here-placeholder-symbol.jpg"
+          alt=""
+        />
       </div>
-      // {/* Form */}
+      {/* Form */}
       <div className="w-96 p-6 bg-white rounded-lg shadow-lg">
         <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">
           Earn Points
