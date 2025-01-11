@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import samparka from "/SAMPARKA.png";
+import image from "/unnamed.jpg";
 import PointsConfirmation from "./components/PointConfirmation";
 import InstallationGuide from "./components/InstallationGuide";
 
@@ -29,11 +30,8 @@ const LoyalityCard = () => {
       <div className="p-8 text-white rounded-2xl shadow-lg flex flex-col items-center space-y-6 bg-white">
         <div className="flex flex-col items-center justify-center text-center">
           {/* Logo */}
-          <div className="w-20 h-20 rounded-full bg-green-800 flex items-center justify-center">
-            <img
-              src="https://st5.depositphotos.com/69915036/62675/v/450/depositphotos_626754468-stock-illustration-your-logo-here-placeholder-symbol.jpg"
-              alt=""
-            />
+          <div className="w-20 h-20 flex items-center justify-center">
+            <img src={image} alt="" />
           </div>
 
           {/* Title */}
@@ -111,12 +109,10 @@ const LoyalityCard = () => {
         </div>
 
         {/* Footer Text */}
-        <a
-          href="https://www.samparka.info/"
-          target="_blank"
-          className="flex"
-        >
-          <p className="text-gray-700 text-sm text-center mt-1 mr-1">Powered By</p>
+        <a href="https://www.samparka.info/" target="_blank" className="flex">
+          <p className="text-gray-700 text-sm text-center mt-1 mr-1">
+            Powered By
+          </p>
           <img src={samparka} width={100} />
         </a>
       </div>

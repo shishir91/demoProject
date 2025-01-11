@@ -5,6 +5,8 @@ import api from "../api/config.js";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
 import PointsConfirmation from "./components/PointConfirmation.jsx";
+import image from "/unnamed.jpg";
+import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user && token) {
-      navigate("/loyality");
+      navigate("/verification");
     }
   }, [token]);
 
@@ -44,39 +46,83 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
     try {
+      setLoading(true);
       const response = await api.post("/customer/register", { ...formData });
       console.log(response);
       if (response.data.success) {
+        const phoneNumber = response.data.customer.phone; // Ensure this comes from the API response
+        const token = import.meta.env.VITE_SPARROW_SMS_TOKEN;
+        const SMS_API_URL = "https://api.sparrowsms.com/v2/sms/";
+        const otp = 292655; // Generate a 6-digit OTP
+
+        // Prepare SMS payload
+        const payload = {
+          token: token,
+          from: "TheAlert", // Replace with your approved sender ID
+          to: phoneNumber,
+          text: `Hello, welcome to our service! Your OTP is ${otp}.`,
+        };
+
+        // Function to send SMS
+        const sendSMS = async () => {
+          if (!token) {
+            console.error("SMS token is not defined in environment variables.");
+            return;
+          }
+
+          try {
+            console.log("Sending SMS with payload:", payload);
+            const response = await axios.post(SMS_API_URL, payload, {
+              headers: {
+                token,
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (response.data && response.data.response_code === 200) {
+              console.log("SMS sent successfully:", response.data);
+            } else {
+              console.error("SMS API response error:", response.data);
+            }
+          } catch (error) {
+            console.error(
+              "Error sending SMS:",
+              error.response ? error.response.data : error.message
+            );
+          }
+        };
+
+        // Save user info and token in localStorage
         localStorage.setItem(
           "userInfo",
           JSON.stringify(response.data.customer)
         );
         localStorage.setItem("token", response.data.token);
 
+        // Send the SMS and handle navigation
         setShowConfirmation(true);
+        await sendSMS();
 
         setTimeout(() => {
           setShowConfirmation(false);
-          navigate("/loyality");
+          navigate("/verification");
         }, 2000);
-
-        navigate("/loyality");
+        setLoading(false);
       } else {
+        setLoading(false);
         toast.error(response.data.message, {
           autoClose: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
+      setLoading(false);
       console.log(error);
       toast.error(error, {
         autoClose: 2000,
         theme: "colored",
       });
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -85,11 +131,8 @@ const Login = () => {
       {isLoading && <LoadingSpinner />}
       {showConfirmation && <PointsConfirmation />}
       {/* Logo */}
-      <div className="w-20 h-20 rounded-full bg-green-800 flex items-center justify-center">
-        <img
-          src="https://st5.depositphotos.com/69915036/62675/v/450/depositphotos_626754468-stock-illustration-your-logo-here-placeholder-symbol.jpg"
-          alt=""
-        />
+      <div className="w-20 h-20 flex items-center justify-center">
+        <img src={image} alt="" />
       </div>
       {/* Form */}
       <div className="w-96 p-6 bg-white rounded-lg shadow-lg">
