@@ -33,7 +33,7 @@ const Login = () => {
 
   useEffect(() => {
     if (user && token) {
-      navigate("/loyality");
+      navigate("/verification");
     }
   }, [token]);
 
@@ -51,47 +51,22 @@ const Login = () => {
       const response = await api.post("/customer/register", { ...formData });
       console.log(response);
       if (response.data.success) {
-        // const phoneNumber = response.data.customer.phone; // Ensure this comes from the API response
-        // const token = import.meta.env.VITE_SPARROW_SMS_TOKEN;
-        // const SMS_API_URL = "https://api.sparrowsms.com/v2/sms/";
-        // const otp = 292655; // Generate a 6-digit OTP
+        try {
+          const smsResponse = await api.post("/api/send-otp", {
+            phoneNumber: response.data.customer.phone,
+          });
 
-        // // Prepare SMS payload
-        // const payload = {
-        //   token: token,
-        //   from: "TheAlert", // Replace with your approved sender ID
-        //   to: phoneNumber,
-        //   text: `Hello, welcome to our service! Your OTP is ${otp}.`,
-        // };
-
-        // // Function to send SMS
-        // const sendSMS = async () => {
-        //   if (!token) {
-        //     console.error("SMS token is not defined in environment variables.");
-        //     return;
-        //   }
-
-        //   try {
-        //     console.log("Sending SMS with payload:", payload);
-        //     const response = await axios.post(SMS_API_URL, payload, {
-        //       headers: {
-        //         token,
-        //         "Content-Type": "application/json",
-        //       },
-        //     });
-
-        //     if (response.data && response.data.response_code === 200) {
-        //       console.log("SMS sent successfully:", response.data);
-        //     } else {
-        //       console.error("SMS API response error:", response.data);
-        //     }
-        //   } catch (error) {
-        //     console.error(
-        //       "Error sending SMS:",
-        //       error.response ? error.response.data : error.message
-        //     );
-        //   }
-        // };
+          if (smsResponse.data.success) {
+            console.log("SMS sent successfully:", smsResponse.data);
+          } else {
+            console.error("SMS API response error:", smsResponse.data);
+          }
+        } catch (error) {
+          console.error(
+            "Error sending SMS:",
+            error.response ? error.response.data : error.message
+          );
+        }
 
         // Save user info and token in localStorage
         localStorage.setItem(
@@ -100,13 +75,11 @@ const Login = () => {
         );
         localStorage.setItem("token", response.data.token);
 
-        // Send the SMS and handle navigation
         setShowConfirmation(true);
-        // await sendSMS();
 
         setTimeout(() => {
           setShowConfirmation(false);
-          navigate("/loyality");
+          navigate("/verification");
         }, 2000);
         setLoading(false);
       } else {

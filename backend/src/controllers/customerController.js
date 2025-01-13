@@ -6,7 +6,6 @@ export default class CustomerController {
   async register(req, res) {
     try {
       let { countryCode, name, email, phone } = req.body;
-      phone = countryCode + " " + phone;
       console.log(phone);
 
       const customer = await customerModel.create({ name, email, phone });

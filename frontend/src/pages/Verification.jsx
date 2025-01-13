@@ -14,7 +14,7 @@ const Verification = () => {
   };
 
   const handleVerify = () => {
-    if (otp === "292655") {
+    if (otp === "123456") {
       setMessage("OTP Verified Successfully!");
       navigate("/loyality");
     } else {
