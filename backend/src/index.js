@@ -13,60 +13,64 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
-app.use(
-  cors({
-    origin:
-      process.env.NODE_ENV === "production"
-        ? ["https://demoproject-1-wrxz.onrender.com/", "demoproject-1-wrxz.onrender.com/"]
-        : "http://localhost:5173",
-    methods: "GET,POST,PUT,DELETE",
-  })
-);
+// app.use(
+//   cors({
+//     origin:
+//       process.env.NODE_ENV === "production"
+//         ? [
+//             "https://demoproject-1-wrxz.onrender.com/",
+//             "https://www.demoproject-1-wrxz.onrender.com/",
+//           ]
+//         : "http://localhost:5173",
+//     methods: "GET,POST,PUT,DELETE",
+//   })
+// );
 
-app.post("/api/send-otp", async (req, res) => {
-  const { phoneNumber } = req.body;
+// app.post("/api/send-otp", async (req, res) => {
+//   const { phoneNumber } = req.body;
 
-  if (!phoneNumber) {
-    return res.status(400).json({ error: "Phone number and OTP are required" });
-  }
+//   if (!phoneNumber) {
+//     return res.status(400).json({ error: "Phone number and OTP are required" });
+//   }
 
-  const payload = {
-    token: process.env.SPARROW_SMS_TOKEN,
-    from: "TheAlert", // Replace with your approved sender ID
-    to: phoneNumber,
-    text: `Hello, welcome to our service! Your OTP is 123456.`,
-  };
+//   const payload = {
+//     token: process.env.SPARROW_SMS_TOKEN,
+//     from: "TheAlert", // Replace with your approved sender ID
+//     to: phoneNumber,
+//     text: `Hello, welcome to our service! Your OTP is 123456.`,
+//   };
 
-  console.log(payload);
+//   console.log(payload);
 
-  try {
-    const response = await axios.post(
-      "https://api.sparrowsms.com/v2/sms/",
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+//   try {
+//     const response = await axios.post(
+//       "https://api.sparrowsms.com/v2/sms/",
+//       payload,
+//       {
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
 
-    if (response.data.response_code === 200) {
-      return res
-        .status(200)
-        .json({ success: true, message: "SMS sent successfully" });
-    } else {
-      return res
-        .status(500)
-        .json({ error: "SMS API response error", details: response.data });
-    }
-  } catch (error) {
-    return res.status(500).json({
-      error: "Error sending SMS",
-      details: error.response ? error.response.data : error.message,
-    });
-  }
-});
+//     if (response.data.response_code === 200) {
+//       return res
+//         .status(200)
+//         .json({ success: true, message: "SMS sent successfully" });
+//     } else {
+//       return res
+//         .status(500)
+//         .json({ error: "SMS API response error", details: response.data });
+//     }
+//   } catch (error) {
+//     return res.status(500).json({
+//       error: "Error sending SMS",
+//       details: error.response ? error.response.data : error.message,
+//     });
+//   }
+// });
 
 app.use("/customer", customerRoute);
 app.use("/reward", rewardRoute);
