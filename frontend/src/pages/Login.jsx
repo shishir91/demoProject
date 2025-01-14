@@ -38,30 +38,31 @@ const Login = () => {
       const response = await api.post("/customer/register", { ...formData });
       console.log(response);
       if (response.data.success) {
-        try {
-          const smsResponse = await api.post("/api/send-otp", {
-            phoneNumber: response.data.customer.phone,
-          });
+        // try {
+        //   const smsResponse = await api.post("/api/send-otp", {
+        //     phoneNumber: response.data.customer.phone,
+        //   });
 
-          if (smsResponse.data.success) {
-            console.log("SMS sent successfully:", smsResponse.data);
-          } else {
-            console.error("SMS API response error:", smsResponse.data);
-          }
-        } catch (error) {
-          console.error(
-            "Error sending SMS:",
-            error.response ? error.response.data : error.message
-          );
-        }
+        //   if (smsResponse.data.success) {
+        //     console.log("SMS sent successfully:", smsResponse.data);
+        //   } else {
+        //     console.error("SMS API response error:", smsResponse.data);
+        //   }
+        // } catch (error) {
+        //   console.error(
+        //     "Error sending SMS:",
+        //     error.response ? error.response.data : error.message
+        //   );
+        // }
 
-        navigate("/verification", {
-          state: {
-            userInfo: JSON.stringify(response.data.customer),
-            token: response.data.token,
-          },
-        });
+        // navigate("/verification", {
+        //   state: {
+        //     userInfo: JSON.stringify(response.data.customer),
+        //     token: response.data.token,
+        //   },
+        // });
         setLoading(false);
+        navigate("/loyality");
       } else {
         setLoading(false);
         toast.error(response.data.message, {

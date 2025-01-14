@@ -15,18 +15,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cors());
 
-// app.use(
-//   cors({
-//     origin:
-//       process.env.NODE_ENV === "production"
-//         ? [
-//             "https://demoproject-1-wrxz.onrender.com/",
-//             "https://www.demoproject-1-wrxz.onrender.com/",
-//           ]
-//         : "http://localhost:5173",
-//     methods: "GET,POST,PUT,DELETE",
-//   })
-// );
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? [
+            "https://demoproject-1-wrxz.onrender.com/",
+            "https://www.demoproject-1-wrxz.onrender.com/",
+          ]
+        : "http://localhost:5173",
+    methods: "GET,POST,PUT,DELETE",
+  })
+);
 
 // app.post("/api/send-otp", async (req, res) => {
 //   const { phoneNumber } = req.body;
