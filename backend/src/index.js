@@ -18,7 +18,7 @@ app.use(
   cors({
     origin:
       process.env.NODE_ENV === "production"
-        ? ["https://www.samparka.co:443", "https://samparka.co:443"]
+        ? ["https://demoproject-1-wrxz.onrender.com/", "demoproject-1-wrxz.onrender.com/"]
         : "http://localhost:5173",
     methods: "GET,POST,PUT,DELETE",
   })
