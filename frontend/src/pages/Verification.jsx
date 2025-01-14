@@ -18,7 +18,7 @@ const Verification = () => {
   };
 
   const handleVerify = () => {
-    if (otp === "123456") {
+    if (otp === "277353") {
       // Save user info and token in localStorage
       localStorage.setItem("userInfo", userInfo);
       localStorage.setItem("token", token);

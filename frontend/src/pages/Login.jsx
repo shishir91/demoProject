@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Mail, User, Phone } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import api from "../api/config.js";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
@@ -38,37 +38,20 @@ const Login = () => {
       const response = await api.post("/customer/register", { ...formData });
       console.log(response);
       if (response.data.success) {
-        // try {
-        //   const smsResponse = await api.post("/api/send-otp", {
-        //     phoneNumber: response.data.customer.phone,
-        //   });
-
-        //   if (smsResponse.data.success) {
-        //     console.log("SMS sent successfully:", smsResponse.data);
-        //   } else {
-        //     console.error("SMS API response error:", smsResponse.data);
-        //   }
-        // } catch (error) {
-        //   console.error(
-        //     "Error sending SMS:",
-        //     error.response ? error.response.data : error.message
-        //   );
-        // }
-
-        // navigate("/verification", {
-        //   state: {
-        //     userInfo: JSON.stringify(response.data.customer),
-        //     token: response.data.token,
-        //   },
-        // });
-
-        localStorage.setItem(
-          "userInfo",
-          JSON.stringify(response.data.customer)
-        );
-        localStorage.setItem("token", response.data.token);
         setLoading(false);
-        navigate("/loyality");
+        console.log(response.data);
+
+        toast.success(response.data.message, {
+          autoClose: 1000,
+          theme: "colored",
+          onClose: () =>
+            navigate("/verification", {
+              state: {
+                userInfo: JSON.stringify(response.data.customer),
+                token: response.data.token,
+              },
+            }),
+        });
       } else {
         setLoading(false);
         toast.error(response.data.message, {
@@ -89,6 +72,7 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200 space-y-6">
       {isLoading && <LoadingSpinner />}
+      {<ToastContainer/>}
       {/* Logo */}
       <div className="w-20 h-20 flex items-center justify-center">
         <img src={image} alt="" />

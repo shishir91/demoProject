@@ -1,9 +1,7 @@
 import axios from "axios";
 
 export default class SmsController {
-  async sendOTP(req, res) {
-    const { phoneNumber } = req.body;
-
+  async sendOTP(phoneNumber) {
     if (!phoneNumber) {
       return res
         .status(400)
@@ -14,7 +12,7 @@ export default class SmsController {
       token: process.env.SPARROW_SMS_TOKEN,
       from: "TheAlert",
       to: phoneNumber,
-      text: `Hello, welcome to our service! Your OTP is 123456.`,
+      text: `Hello, welcome to our service! Your OTP is 277353.`,
     };
 
     console.log(payload);
@@ -31,19 +29,15 @@ export default class SmsController {
       );
 
       if (response.data.response_code === 200) {
-        return res
-          .status(200)
-          .json({ success: true, message: "SMS sent successfully" });
+        return { success: true, message: "SMS sent successfully" };
       } else {
-        return res
-          .status(500)
-          .json({ error: "SMS API response error", details: response.data });
+        return { error: "SMS API response error", details: response.data };
       }
     } catch (error) {
-      return res.status(500).json({
+      return {
         error: "Error sending SMS",
         details: error.response ? error.response.data : error.message,
-      });
+      };
     }
   }
 }
