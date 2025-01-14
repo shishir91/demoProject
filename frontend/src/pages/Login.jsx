@@ -61,6 +61,12 @@ const Login = () => {
         //     token: response.data.token,
         //   },
         // });
+
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify(response.data.customer)
+        );
+        localStorage.setItem("token", response.data.token);
         setLoading(false);
         navigate("/loyality");
       } else {

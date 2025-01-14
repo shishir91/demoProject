@@ -19,9 +19,8 @@ export default class CustomerController {
         });
       } else {
         return res.json({
-          success: true,
-          message: "Registration Successful",
-          customer,
+          success: false,
+          message: "Registration Failed",
         });
       }
     } catch (error) {
