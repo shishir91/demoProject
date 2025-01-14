@@ -14,21 +14,23 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-const allowedOrigins = ["https://www.samparka.co", "https://samparka.co"];
+// const allowedOrigins = ["https://www.samparka.co", "https://samparka.co"];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: "GET,POST,PUT,DELETE",
-    credentials: true, // If you are using cookies or authorization headers
-  })
-);
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Not allowed by CORS"));
+//       }
+//     },
+//     methods: "GET,POST,PUT,DELETE",
+//     credentials: true, // If you are using cookies or authorization headers
+//   })
+// );
+
+app.use(cors());
 
 app.post("/api/send-otp", async (req, res) => {
   const { phoneNumber } = req.body;
