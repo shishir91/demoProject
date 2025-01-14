@@ -1,10 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Verification = () => {
   const [otp, setOtp] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  console.log(location);
+
+  const { userInfo, token } = location.state;
 
   const handleChange = (e) => {
     const value = e.target.value;
@@ -15,6 +19,9 @@ const Verification = () => {
 
   const handleVerify = () => {
     if (otp === "123456") {
+      // Save user info and token in localStorage
+      localStorage.setItem("userInfo", userInfo);
+      localStorage.setItem("token", token);
       setMessage("OTP Verified Successfully!");
       navigate("/loyality");
     } else {

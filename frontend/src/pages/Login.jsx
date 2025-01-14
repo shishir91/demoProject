@@ -1,12 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Mail, User, Phone } from "lucide-react";
 import { toast } from "react-toastify";
 import api from "../api/config.js";
 import { useNavigate } from "react-router-dom";
 import LoadingSpinner from "./components/LoadingSpinner.jsx";
-import PointsConfirmation from "./components/PointConfirmation.jsx";
 import image from "/unnamed.jpg";
-import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -19,21 +17,10 @@ const Login = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const ref = useRef();
-
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
-  // useEffect(() => {
-  //   const timer = setTimeout(() => {
-  //     setShowConfirmation(false);
-  //   }, 2000);
-
-  //   return () => clearTimeout(timer);
-  // }, []);
 
   useEffect(() => {
     if (user && token) {
-      navigate("/verification");
+      navigate("/loyality");
     }
   }, [token]);
 
@@ -68,19 +55,12 @@ const Login = () => {
           );
         }
 
-        // Save user info and token in localStorage
-        localStorage.setItem(
-          "userInfo",
-          JSON.stringify(response.data.customer)
-        );
-        localStorage.setItem("token", response.data.token);
-
-        setShowConfirmation(true);
-
-        setTimeout(() => {
-          setShowConfirmation(false);
-          navigate("/verification");
-        }, 2000);
+        navigate("/verification", {
+          state: {
+            userInfo: JSON.stringify(response.data.customer),
+            token: response.data.token,
+          },
+        });
         setLoading(false);
       } else {
         setLoading(false);
@@ -102,7 +82,6 @@ const Login = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-200 space-y-6">
       {isLoading && <LoadingSpinner />}
-      {showConfirmation && <PointsConfirmation />}
       {/* Logo */}
       <div className="w-20 h-20 flex items-center justify-center">
         <img src={image} alt="" />
