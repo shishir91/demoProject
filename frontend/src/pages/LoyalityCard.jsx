@@ -100,7 +100,7 @@ const LoyalityCard = () => {
 
           {/* Reservation Button */}
           <button
-            disabled
+            onClick={() => navigate("/reservation")}
             className="flex items-center space-x-2 px-6 py-2 mt-3 bg-gray-200 hover:bg-gray-400 rounded-lg text-green-100 transition"
           >
             <BookmarkPlus className="w-5 h-5 text-green-800" />

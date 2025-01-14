@@ -19,7 +19,7 @@ app.use(
     origin:
       process.env.NODE_ENV === "production"
         ? "https://samparka.co" // Your production frontend URL
-        : "http://localhost:5173", // Your local development frontend URL
+        : "http://localhost:5174", // Your local development frontend URL
     methods: "GET,POST,PUT,DELETE", // Allow specific HTTP methods
   })
 );
