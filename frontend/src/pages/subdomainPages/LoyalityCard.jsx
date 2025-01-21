@@ -11,13 +11,6 @@ const LoyalityCard = () => {
   const { pointsId } = useParams();
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!user && !token) {
-      navigate("/");
-    }
-    getPoints();
-  }, [token]);
-
   getPoints = async () => {
     try {
       const response = await api.put(`/customer/getPoints/${pointsId}`);
@@ -31,6 +24,13 @@ const LoyalityCard = () => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    if (!user && !token) {
+      navigate("/");
+    }
+    getPoints();
+  }, [token]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
