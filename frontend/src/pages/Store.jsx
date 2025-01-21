@@ -181,7 +181,7 @@ const Store = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                       {/* visit */}
                       <a
-                        href={`http://${store.url}.localhost:5173/points_distribution`}
+                        href={`http://${store.url}.samparka.co/points_distribution`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >
