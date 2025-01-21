@@ -27,7 +27,11 @@ app.use(
               "http://localhost:5173", // Direct match
             ];
 
-      const dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.demoproject-1-wrxz.onrender.com$/;
+      let dynamicLocalhostRegex;
+      process.env.NODE_ENV === "production"
+        ? (dynamicLocalhostRegex =
+            /^https:\/\/[a-z0-9-]+\.demoproject-1-wrxz.onrender.com$/)
+        : (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.localhost:5173$/);
 
       if (
         !origin ||
