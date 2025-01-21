@@ -79,7 +79,7 @@ const App = () => {
     setSubdomain(sub);
   }, []);
 
-  if (!subdomain || subdomain == "") {
+  if (!subdomain || subdomain == "" || subdomain == "www") {
     return (
       <Router>
         <Navbar />
@@ -189,7 +189,6 @@ const App = () => {
         </Routes>
       </Router>
     );
-
   } else {
     return (
       <Router>
