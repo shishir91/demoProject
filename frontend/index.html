@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /> -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <!-- <link rel="manifest" href="/site.webmanifest" /> -->
+    <title>Your Logo</title>
+  </head>
+
+  <body style="background-color: #1e1b1a">
+    <div id="root">
+      <!-- <button id="add-to-home" style="display: none">Add to Home Screen</button> -->
+    </div>
+    <script type="module" src="/src/main.jsx"></script>
+    <!-- <script>
+      if ("serviceWorker" in navigator) {
+        navigator.serviceWorker
+          .register("/service-worker.js")
+          .then(() => console.log("Service Worker registered successfully."))
+          .catch((err) =>
+            console.log("Service Worker registration failed:", err)
+          );
+      }
+    </script> -->
+    <!-- 
+    <script>
+      let deferredPrompt;
+
+      window.addEventListener("beforeinstallprompt", (e) => {
+        // Prevent the mini-infobar from appearing
+        // e.preventDefault();
+        // Save the event for later use
+        deferredPrompt = e;
+
+        // Show a custom "Add to Home Screen" button
+        const addButton = document.getElementById("add-to-home");
+        addButton.style.display = "block";
+
+        addButton.addEventListener("click", () => {
+          // Hide the button
+          addButton.style.display = "none";
+
+          // Show the install prompt
+          deferredPrompt.prompt();
+
+          // Wait for the user's choice
+          deferredPrompt.userChoice.then((choiceResult) => {
+            if (choiceResult.outcome === "accepted") {
+              console.log("User accepted the A2HS prompt");
+            } else {
+              console.log("User dismissed the A2HS prompt");
+            }
+            deferredPrompt = null;
+          });
+        });
+
+        if (
+          navigator.userAgent.includes("iPhone") ||
+          navigator.userAgent.includes("iPad")
+        ) {
+          alert(
+            'To install this app, tap the Share button and select "Add to Home Screen".'
+          );
+        }
+      });
+    </script> -->
+  </body>
+</html>

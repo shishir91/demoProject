@@ -1,0 +1,209 @@
+import React, { useEffect, useState } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Login from "./pages/Login";
+import Navbar from "./components/Navbar";
+import Dashboard from "./pages/admin/Dashboard";
+import { ToastContainer } from "react-toastify";
+import MessageForm from "./pages/MessageForm";
+import ScheduledMessage from "./pages/admin/ScheduledMessage";
+import Sidebar from "./components/Sidebar";
+import Store from "./pages/Store";
+import AddStore from "./pages/admin/AddStore";
+import EditStore from "./pages/EditStore";
+import LoyalityCardC from "./pages/customer/LoyalityCard";
+import LoyalityCard from "./components/LoyalityCardComponent";
+import Loyality from "./pages/CustomizeLoyalityCard";
+import Reward from "./pages/Reward";
+import CreateReward from "./pages/CreateReward";
+import CustomerLogin from "./pages/customer/CustomerLogin";
+import Verification from "./pages/customer/Verification";
+import Rewards from "./pages/customer/Rewards";
+import Reservation from "./pages/customer/Reservation";
+import Customers from "./pages/Customers";
+
+const App = () => {
+  // Use state to track auth status
+  const [authState, setAuthState] = useState({
+    userInfo: JSON.parse(localStorage.getItem("userInfo")),
+    token: localStorage.getItem("token"),
+  });
+
+  // Listen for storage changes
+  useEffect(() => {
+    const handleStorageChange = () => {
+      setAuthState({
+        userInfo: JSON.parse(localStorage.getItem("userInfo")),
+        token: localStorage.getItem("token"),
+      });
+    };
+
+    // Listen for custom event from login component
+    window.addEventListener("auth-change", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("auth-change", handleStorageChange);
+    };
+  }, []);
+
+  const ProtectedRoute = ({ children }) => {
+    if (!authState.userInfo || !authState.token) {
+      return <Navigate to="/" replace />;
+    }
+    return children;
+  };
+
+  const PublicRoute = ({ children }) => {
+    if (authState.userInfo && authState.token) {
+      if (authState.userInfo.role === "admin") {
+        return <Navigate to="/dashboard" replace />;
+      } else {
+        return <Navigate to="/store" replace />;
+      }
+    }
+    return children;
+  };
+
+  const [subdomain, setSubdomain] = useState("");
+
+  useEffect(() => {
+    const host = window.location.hostname.split(".");
+    console.log(host);
+
+    const sub = host.length > 1 ? host[0] : null;
+    console.log(sub);
+    setSubdomain(sub);
+  }, []);
+
+  if (!subdomain || subdomain == "") {
+    return (
+      <Router>
+        <Navbar />
+        <ToastContainer />
+        <Routes>
+          {/* Public Route with Protection */}
+          <Route
+            path="/"
+            element={
+              <PublicRoute>
+                <Login />
+              </PublicRoute>
+            }
+          />
+          {/* Protected Routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <>
+                  <Sidebar />
+                  <Dashboard />
+                </>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/sms"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                {authState.userInfo && authState.userInfo.role === "admin" ? (
+                  <ScheduledMessage />
+                ) : (
+                  <MessageForm />
+                )}
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/store">
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <Store />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="loyalityCard"
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <Loyality />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route
+            path="/addStore"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <AddStore />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/editStore"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <EditStore />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/reward">
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <Reward />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="createReward/:status"
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <CreateReward />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
+          <Route
+            path="/customers"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <Customers />
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    );
+
+  } else {
+    return (
+      <Router>
+        {/* <Reservation /> */}
+        <Routes>
+          <Route index element={<CustomerLogin />} />
+          <Route path="/verification" element={<Verification />} />
+          <Route path="/loyality" element={<LoyalityCardC />} />
+          <Route path="/rewards" element={<Rewards />} />
+          <Route path="/reservation" element={<Reservation />} />
+        </Routes>
+      </Router>
+    );
+  }
+};
+
+export default App;
