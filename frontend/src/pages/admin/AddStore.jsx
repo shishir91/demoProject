@@ -64,7 +64,7 @@ const AddStore = () => {
     // Append each field to the FormData object
     formDataToSend.append("name", formData.name);
     formDataToSend.append("location", formData.location);
-    formDataToSend.append("phone", formData.phoneNumber);
+    formDataToSend.append("phone", formData.phone);
     formDataToSend.append("url", formData.url);
     formDataToSend.append("assignedUser", formData.assignedUser);
 
@@ -156,7 +156,7 @@ const AddStore = () => {
               type="text"
               id="phoneNumber"
               name="phone"
-              value={formData.phoneNumber}
+              value={formData.phone}
               onChange={handleChange}
               required
               className="mt-1 block w-full px-4 py-2 bg-[#1E1B1A] border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"

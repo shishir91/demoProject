@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Poppins", "sans-serif"], // Set Poppins as the default sans-serif font
+        sans: ["Poppins", "sans-serif"], 
       },
       animation: {
         pulseCircle: "pulseCircle 2s infinite",

@@ -15,16 +15,18 @@ import Sidebar from "./components/Sidebar";
 import Store from "./pages/Store";
 import AddStore from "./pages/admin/AddStore";
 import EditStore from "./pages/EditStore";
-import LoyalityCardC from "./pages/customer/LoyalityCard";
 import LoyalityCard from "./components/LoyalityCardComponent";
 import Loyality from "./pages/CustomizeLoyalityCard";
 import Reward from "./pages/Reward";
 import CreateReward from "./pages/CreateReward";
-import CustomerLogin from "./pages/customer/CustomerLogin";
-import Verification from "./pages/customer/Verification";
-import Rewards from "./pages/customer/Rewards";
-import Reservation from "./pages/customer/Reservation";
+import LoyalityCardC from "./pages/subdomainPages/LoyalityCard";
+import CustomerLogin from "./pages/subdomainPages/CustomerLogin";
+import Verification from "./pages/subdomainPages/Verification";
+import Rewards from "./pages/subdomainPages/Rewards";
+import Reservation from "./pages/subdomainPages/Reservation";
 import Customers from "./pages/Customers";
+import StoreSide from "./pages/subdomainPages/StoreSide";
+import NotFound from "./components/NotFound";
 
 const App = () => {
   // Use state to track auth status
@@ -193,12 +195,19 @@ const App = () => {
     return (
       <Router>
         {/* <Reservation /> */}
+        {/* <NotFound /> */}
+        <ToastContainer />
         <Routes>
           <Route index element={<CustomerLogin />} />
+          <Route
+            path="/points_distribution"
+            element={<StoreSide url={subdomain} />}
+          />
           <Route path="/verification" element={<Verification />} />
-          <Route path="/loyality" element={<LoyalityCardC />} />
+          <Route path="/loyality/:pointsId" element={<LoyalityCardC />} />
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/reservation" element={<Reservation />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>
     );

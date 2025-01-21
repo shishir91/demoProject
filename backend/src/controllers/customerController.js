@@ -1,5 +1,6 @@
 import generateToken from "../config/generateToken.js";
 import customerModel from "../models/customerModel.js";
+import pointsModel from "../models/pointsModel.js";
 import SmsController from "./smsController.js";
 
 const smsController = new SmsController();
@@ -39,6 +40,37 @@ export default class CustomerController {
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
+    }
+  }
+
+  async getPoints(req, res) {
+    try {
+      console.log(req.params);
+
+      const { pointsId } = req.params;
+      if (pointsId) {
+        const points = await pointsModel.findById(pointsId);
+        if (points) {
+          const receivedPoints = points.points;
+          const customer = await customerModel.findByIdAndUpdate(
+            req.user,
+            { $inc: { points: receivedPoints } },
+            { new: true }
+          );
+          return res.json({
+            success: true,
+            message: `congratulation. You have received ${receivedPoints} points`,
+            customer,
+          });
+        } else {
+          return res.json({ success: false, message: "No Points Found" });
+        }
+      } else {
+        return res.json({ success: false, message: "No Points Found" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
     }
   }
 }

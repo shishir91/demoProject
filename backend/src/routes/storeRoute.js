@@ -44,6 +44,8 @@ router.post(
 );
 
 //USER CONTROL
+router.get("/getPointsDetail/:storeURL", storeController.getPointsDetail);
+router.put("/changePoints/:storeURL", storeController.changePoints);
 router.get("/myStores", authMiddleware, storeController.getMyStore);
 router.put("/editStore", authMiddleware, storeController.editStore);
 router.put(

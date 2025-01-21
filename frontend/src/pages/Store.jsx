@@ -161,99 +161,106 @@ const Store = () => {
 
       {/* Store List */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {stores && stores.map((store, index) => (
-          <div
-            key={index}
-            className="bg-[#2A2524] p-4 rounded-lg shadow-md relative"
-          >
-            <div className="absolute top-4 right-4">
-              <div className="relative">
-                <EllipsisVertical
-                  className="h-6 w-6 text-gray-500 cursor-pointer"
-                  onClick={() =>
-                    setDropdownOpen(
-                      dropdownOpen === store._id ? null : store._id
-                    )
-                  }
-                />
-                {dropdownOpen === store._id && (
-                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
-                    {/* visit */}
-                    <button className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center">
-                      <ExternalLink className="h-5 w-5 mr-2 text-gray-500" />
-                      Visit
-                    </button>
-                    {/* edit */}
-                    <button
-                      onClick={() =>
-                        navigate("/editStore", { state: { store } })
-                      }
-                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
-                    >
-                      <Pencil className="h-5 w-5 mr-2 text-gray-500" />
-                      Edit
-                    </button>
-                    {/* loyality card */}
-                    <button
-                      onClick={() =>
-                        navigate("/store/loyalityCard", { state: { store } })
-                      }
-                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
-                    >
-                      <IdCard className="h-5 w-5 mr-2 text-gray-500" />
-                      Loyality Card
-                    </button>
-                    {user.role == "admin" && (
-                      // {/* delete */}
-                      <button
-                        onClick={() => {
-                          setShowModal(true);
-                          setModelStoreId(store._id);
-                        }}
-                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center"
+        {stores &&
+          stores.map((store, index) => (
+            <div
+              key={index}
+              className="bg-[#2A2524] p-4 rounded-lg shadow-md relative"
+            >
+              <div className="absolute top-4 right-4">
+                <div className="relative">
+                  <EllipsisVertical
+                    className="h-6 w-6 text-gray-500 cursor-pointer"
+                    onClick={() =>
+                      setDropdownOpen(
+                        dropdownOpen === store._id ? null : store._id
+                      )
+                    }
+                  />
+                  {dropdownOpen === store._id && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                      {/* visit */}
+                      <a
+                        href={`http://${store.url}.localhost:5173/points_distribution`}
+                        target="_blank"
+                        rel="noopener noreferrer"
                       >
-                        <Trash2 className="h-5 w-5 mr-2 text-red-500" />
-                        Delete
+                        <button className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center">
+                          <ExternalLink className="h-5 w-5 mr-2 text-gray-500" />
+                          Visit
+                        </button>
+                      </a>
+                      {/* edit */}
+                      <button
+                        onClick={() =>
+                          navigate("/editStore", { state: { store } })
+                        }
+                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                      >
+                        <Pencil className="h-5 w-5 mr-2 text-gray-500" />
+                        Edit
                       </button>
-                    )}
-                  </div>
-                )}
+                      {/* loyality card */}
+                      <button
+                        onClick={() =>
+                          navigate("/store/loyalityCard", { state: { store } })
+                        }
+                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                      >
+                        <IdCard className="h-5 w-5 mr-2 text-gray-500" />
+                        Loyality Card
+                      </button>
+                      {user.role == "admin" && (
+                        // {/* delete */}
+                        <button
+                          onClick={() => {
+                            setShowModal(true);
+                            setModelStoreId(store._id);
+                          }}
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center"
+                        >
+                          <Trash2 className="h-5 w-5 mr-2 text-red-500" />
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <h2 className="text-lg font-semibold mb-2 text-green-300">
+                {store.name}
+              </h2>
+              <p className="flex items-center text-sm text-gray-400 mb-1">
+                <MapPin className="w-4 h-4 mr-2" />
+                {store.location}
+              </p>
+              <p className="flex items-center text-sm text-gray-400 mb-4">
+                <Calendar className="w-4 h-4 mr-2" />
+                {new Date(store.createdAt).toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+
+              <img
+                src={store.logo}
+                alt={``}
+                className="w-20 h-20 object-cover rounded-full mx-auto mb-4"
+              />
+              <div className="flex justify-between items-center">
+                {/* Action Buttons */}
+
+                <div className="flex items-center">
+                  <Switch
+                    status={store.status === "active"}
+                    onChange={() => handleStatusChange(store._id, store.status)}
+                  />
+                </div>
               </div>
             </div>
-
-            <h2 className="text-lg font-semibold mb-2 text-green-300">
-              {store.name}
-            </h2>
-            <p className="flex items-center text-sm text-gray-400 mb-1">
-              <MapPin className="w-4 h-4 mr-2" />
-              {store.location}
-            </p>
-            <p className="flex items-center text-sm text-gray-400 mb-4">
-              <Calendar className="w-4 h-4 mr-2" />
-              {new Date(store.createdAt).toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
-            </p>
-
-            <img
-              src={store.logo}
-              alt={``}
-              className="w-20 h-20 object-cover rounded-full mx-auto mb-4"
-            />
-            <div className="flex justify-between items-center">
-              {/* Action Buttons */}
-
-              <div className="flex items-center">
-                <Switch
-                  status={store.status === "active"}
-                  onChange={() => handleStatusChange(store._id, store.status)}
-                />
-              </div>
-            </div>
-          </div>
-        ))}
+          ))}
       </div>
 
       {/* Model */}

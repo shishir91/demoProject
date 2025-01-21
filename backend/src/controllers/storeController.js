@@ -1,5 +1,6 @@
 import loyalityModel from "../models/loyalityModel.js";
 import storeModel from "../models/storeModel.js";
+import pointsModel from "../models/pointsModel.js";
 
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
@@ -17,7 +18,6 @@ const s3 = new S3Client({
 });
 
 export default class StoreController {
-
   async createStore(req, res) {
     try {
       console.log(req.body);
@@ -28,6 +28,7 @@ export default class StoreController {
         ...req.body,
         logo: imageUrl,
       });
+      await pointsModel.create({ store });
       return res.json({ success: true, message: "New Store Created", store });
     } catch (error) {
       return res.status(500).send(error.message);
@@ -113,7 +114,7 @@ export default class StoreController {
           Key: store.logo,
         };
         const command = new DeleteObjectCommand(deleteObjectParams);
-        await s3.send(command)
+        await s3.send(command);
         const deleteStore = await storeModel.findByIdAndDelete(storeId);
         console.log(deleteStore);
 
@@ -167,6 +168,50 @@ export default class StoreController {
         message: "Error updating store status",
         error: error.message,
       });
+    }
+  }
+
+  //POINTS
+  async changePoints(req, res) {
+    try {
+      const { storeURL } = req.params;
+      console.log(storeURL);
+      const store = await storeModel.findOne({ url: storeURL });
+      console.log(store._id);
+      const { points } = req.body;
+      console.log(points);
+      const changedPoints = await pointsModel.findOneAndUpdate(
+        { store: store._id },
+        { points },
+        { new: true }
+      );
+      return res.json({
+        success: true,
+        message: "Points Changed",
+        changedPoints,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  async getPointsDetail(req, res) {
+    try {
+      const { storeURL } = req.params;
+      console.log(storeURL);
+      const store = await storeModel.findOne({ url: storeURL });
+      console.log(store);
+      const points = await pointsModel.findOne({store});
+      console.log(points);
+
+      return res.json({
+        success: true,
+        points,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
     }
   }
 

@@ -31,7 +31,7 @@ app.use(
       process.env.NODE_ENV === "production"
         ? (dynamicLocalhostRegex =
             /^https:\/\/[a-z0-9-]+\.samparka.co$/)
-        : (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.localhost:5173$/);
+        : (dynamicLocalhostRegex = /^http:\/\/[a-z0-9-]+\.localhost:5173$/);
 
       if (
         !origin ||

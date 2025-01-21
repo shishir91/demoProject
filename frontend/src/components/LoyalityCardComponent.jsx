@@ -3,15 +3,16 @@ import "./css/loyalityCard.css";
 import { BookmarkPlus, Award, Coffee, ThumbsUp, Smile } from "lucide-react";
 import samparka from "/SAMPARKA.png";
 import image from "/unnamed.jpg";
+import { useNavigate } from "react-router-dom";
 
 const LoyalityCard = ({
-  store = "",
+  store = "Your Store",
   logo = image,
   bgColor = "#E5E7EB",
-  textColor = "#e5e7eb",
+  textColor = "#001001",
   cardColor = "#FFFFFF",
   stampColor = "#2f6a4f",
-  stamp = "smile",
+  stamp = "thumbsUp",
   customStamp = null,
 }) => {
   // Map of available icons
@@ -20,9 +21,10 @@ const LoyalityCard = ({
     smile: <Smile className="w-6 h-6" />,
     coffee: <Coffee className="w-6 h-6" />,
   };
+  const navigate = useNavigate();
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen text-white m-5"
+      className="flex flex-col items-center justify-center min-h-screen text-white"
       style={{ backgroundColor: bgColor }}
     >
       {/* Container Div with customizable background color */}
@@ -110,13 +112,23 @@ const LoyalityCard = ({
         {/* Buttons */}
         <div className="flex flex-col items-center justify-center text-center">
           {/* View Rewards Button */}
-          <button className="flex items-center space-x-2 px-6 py-2 bg-gray-200 hover:bg-gray-400 rounded-lg text-green-100 transition">
+          <button
+            onClick={() => {
+              navigate("/rewards");
+            }}
+            className="flex items-center space-x-2 px-6 py-2 bg-gray-200 hover:bg-gray-400 rounded-lg text-green-100 transition"
+          >
             <Award className="w-5 h-5" style={{ color: stampColor }} />
             <span style={{ color: stampColor }}>View Rewards</span>
           </button>
 
           {/* Reservation Button */}
-          <button className="flex items-center space-x-2 px-6 py-2 mt-3 bg-gray-200 hover:bg-gray-400 rounded-lg text-green-100 transition">
+          <button
+            onClick={() => {
+              navigate("/reservation");
+            }}
+            className="flex items-center space-x-2 px-6 py-2 mt-3 bg-gray-200 hover:bg-gray-400 rounded-lg text-green-100 transition"
+          >
             <BookmarkPlus className="w-5 h-5" style={{ color: stampColor }} />
             <span style={{ color: stampColor }}>Reservation</span>
           </button>

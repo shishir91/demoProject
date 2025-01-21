@@ -39,100 +39,102 @@ const Rewards = () => {
   ];
 
   return (
-    <div className="flex items-center justify-center max-h-full bg-gray-200">
-      <div className="text-white p-6 w-full max-w-md justify-center bg-white rounded-xl shadow-xl border-3xl my-5">
-        {/* Tabs */}
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <button
-            onClick={() => setActiveTab("all")}
-            className={`py-3 rounded-lg text-sm font-medium transition-colors
+    <div className="min-h-screen bg-gray-200">
+      <div className="flex items-center justify-center ">
+        <div className="text-white p-6 w-full max-w-md justify-center bg-white rounded-xl shadow-xl border-3xl my-5">
+          {/* Tabs */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            <button
+              onClick={() => setActiveTab("all")}
+              className={`py-3 rounded-lg text-sm font-medium transition-colors
             ${
               activeTab === "all"
                 ? "bg-[#275343] text-white"
                 : "bg-[#275343]/20 text-teal-500"
             }`}
-          >
-            All Rewards
-          </button>
-          <button
-            onClick={() => setActiveTab("my")}
-            className={`py-3 rounded-lg text-sm font-medium transition-colors
+            >
+              All Rewards
+            </button>
+            <button
+              onClick={() => setActiveTab("my")}
+              className={`py-3 rounded-lg text-sm font-medium transition-colors
             ${
               activeTab === "my"
                 ? "bg-[#275343] text-white"
                 : "bg-[#275343]/20 text-teal-500"
             }`}
-          >
-            My Rewards
-          </button>
-        </div>
+            >
+              My Rewards
+            </button>
+          </div>
 
-        {/* Rewards List */}
-        {activeTab == "all" ? (
-          <div className="space-y-4">
-            {rewardsData.map((reward, index) => (
-              <div
-                key={index}
-                className="bg-white rounded-2xl overflow-hidden shadow-xl border-3xl"
-              >
-                {/* Points Header */}
-                <div className="bg-amber-900 px-4 py-2 flex justify-between items-center">
-                  <div className="text-white font-medium flex items-center gap-2">
-                    <Gift className="w-4 h-4" />
-                    {reward.points} Points
-                  </div>
-                  <button
-                    onClick={() => handleInfoClick(index)}
-                    className="focus:outline-none"
-                  >
-                    <Info className="w-5 h-5 text-white/80" />
-                  </button>
-                </div>
-
-                {/* Reward Image */}
-                <div className="aspect-[2/1] relative">
-                  <img
-                    src={reward.image}
-                    alt="Reward"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-
-                {/* Footer */}
-                <div className="p-4 flex flex-col">
-                  <div className="flex justify-between items-center">
-                    <button className="px-6 py-2 rounded-full bg-green-800 text-gray-200 text-sm font-medium">
-                      Redeem
+          {/* Rewards List */}
+          {activeTab == "all" ? (
+            <div className="space-y-4">
+              {rewardsData.map((reward, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-2xl overflow-hidden shadow-xl border-3xl"
+                >
+                  {/* Points Header */}
+                  <div className="bg-amber-900 px-4 py-2 flex justify-between items-center">
+                    <div className="text-white font-medium flex items-center gap-2">
+                      <Gift className="w-4 h-4" />
+                      {reward.points} Points
+                    </div>
+                    <button
+                      onClick={() => handleInfoClick(index)}
+                      className="focus:outline-none"
+                    >
+                      <Info className="w-5 h-5 text-white/80" />
                     </button>
-                    <span className="text-gray-600 text-sm font-bold">
-                      {reward.name}
-                    </span>
                   </div>
 
-                  {/* Description */}
-                  {selectedReward === index && (
-                    <p className="mt-3 text-sm text-gray-500">
-                      {reward.description}
-                    </p>
-                  )}
+                  {/* Reward Image */}
+                  <div className="aspect-[2/1] relative">
+                    <img
+                      src={reward.image}
+                      alt="Reward"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+
+                  {/* Footer */}
+                  <div className="p-4 flex flex-col">
+                    <div className="flex justify-between items-center">
+                      <button className="px-6 py-2 rounded-full bg-green-800 text-gray-200 text-sm font-medium">
+                        Redeem
+                      </button>
+                      <span className="text-gray-600 text-sm font-bold">
+                        {reward.name}
+                      </span>
+                    </div>
+
+                    {/* Description */}
+                    {selectedReward === index && (
+                      <p className="mt-3 text-sm text-gray-500">
+                        {reward.description}
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          ) : (
+            <div className="text-gray-800 font-bold text-center">
+              No Rewards Clamed
+            </div>
+          )}
+          {/* Back Button */}
+          <div className="bottom-4 left-4 right-4 my-6">
+            <button
+              onClick={() => navigate("/loyality")}
+              className="w-full bg-green-800 text-teal-200 py-4 rounded-lg flex items-center justify-center gap-2"
+            >
+              <ArrowLeft className="w-5 h-5" />
+              Back To Dashboard
+            </button>
           </div>
-        ) : (
-          <div className="text-gray-800 font-bold text-center">
-            No Rewards Clamed
-          </div>
-        )}
-        {/* Back Button */}
-        <div className="bottom-4 left-4 right-4 my-6">
-          <button
-            onClick={() => navigate("/loyality")}
-            className="w-full bg-green-800 text-teal-200 py-4 rounded-lg flex items-center justify-center gap-2"
-          >
-            <ArrowLeft className="w-5 h-5" />
-            Back To Dashboard
-          </button>
         </div>
       </div>
     </div>
