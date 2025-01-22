@@ -19,6 +19,23 @@ const s3 = new S3Client({
 });
 
 export default class StoreController {
+  async checkStore(req, res) {
+    try {
+      const { storeURL } = req.params;
+      const store = await storeModel.findOne({ url: storeURL });
+      console.log(store);
+
+      if (store && store.status == "active") {
+        return res.json({ success: true, message: "Store Available" });
+      } else {
+        return res.json({ success: false, message: "Store UnAvailable" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
   async createStore(req, res) {
     try {
       console.log(req.body);

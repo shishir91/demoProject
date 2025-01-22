@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import api from "./api/config";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/admin/Dashboard";
@@ -71,6 +72,7 @@ const App = () => {
   };
 
   const [subdomain, setSubdomain] = useState("");
+  const [storeStatus, setStoreStatus] = useState();
 
   useEffect(() => {
     const host = window.location.hostname.split(".");
@@ -80,6 +82,24 @@ const App = () => {
     console.log(sub);
     setSubdomain(sub);
   }, []);
+
+  useEffect(() => {
+    const checkStore = async () => {
+      if (subdomain && subdomain !== "" && subdomain !== "www") {
+        console.log(subdomain);
+
+        try {
+          const response = await api.get(`/store/checkStore/${subdomain}`);
+          if (response.data) {
+            setStoreStatus(response.data.success);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    checkStore();
+  }, [subdomain]);
 
   if (!subdomain || subdomain == "" || subdomain == "www") {
     return (
@@ -191,7 +211,7 @@ const App = () => {
         </Routes>
       </Router>
     );
-  } else {
+  } else if (storeStatus) {
     return (
       <Router>
         {/* <Reservation /> */}
@@ -214,6 +234,8 @@ const App = () => {
         </Routes>
       </Router>
     );
+  } else {
+    return <NotFound />;
   }
 };
 
