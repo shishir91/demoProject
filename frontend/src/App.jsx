@@ -28,6 +28,7 @@ import Reservation from "./pages/subdomainPages/Reservation";
 import Customers from "./pages/Customers";
 import StoreSide from "./pages/subdomainPages/StoreSide";
 import NotFound from "./components/NotFound";
+import GetPoints from "./pages/subdomainPages/GetPoints";
 
 const App = () => {
   // Use state to track auth status
@@ -71,6 +72,7 @@ const App = () => {
     return children;
   };
 
+  //HANDLE SUBDOMAIN
   const [subdomain, setSubdomain] = useState("");
   const [storeStatus, setStoreStatus] = useState();
 
@@ -214,19 +216,17 @@ const App = () => {
   } else if (storeStatus) {
     return (
       <Router>
-        {/* <Reservation /> */}
-        {/* <NotFound /> */}
         <ToastContainer />
         <Routes>
-          <Route index element={<CustomerLogin />} />
+          <Route index element={<CustomerLogin url={subdomain} />} />
           <Route
             path="/points_distribution"
             element={<StoreSide url={subdomain} />}
           />
           <Route path="/verification" element={<Verification />} />
           <Route path="/loyality">
-            <Route index element={<LoyalityCardC />} />
-            <Route path="/loyality/:pointsId" element={<LoyalityCardC />} />
+            <Route index element={<LoyalityCardC url={subdomain} />} />
+            <Route path=":pointsId" element={<GetPoints />} />
           </Route>
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/reservation" element={<Reservation />} />

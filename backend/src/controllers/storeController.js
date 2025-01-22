@@ -1,4 +1,4 @@
-import loyalityModel from "../models/loyalityModel.js";
+// import loyalityModel from "../models/loyalityModel.js";
 import storeModel from "../models/storeModel.js";
 import pointsModel from "../models/pointsModel.js";
 import userModel from "../models/userModel.js";
@@ -240,87 +240,6 @@ export default class StoreController {
         success: true,
         points,
       });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send(error);
-    }
-  }
-
-  //Loyality Card APISSS
-  async getLoyalityCard(req, res) {
-    try {
-      console.log(req.user);
-      console.log(req.query);
-      const { storeId } = req.query;
-      console.log(req.body);
-
-      const store = await storeModel.findById(storeId);
-      if (!store) {
-        return res.json({ success: false, message: "Cannot find the store" });
-      }
-      if (req.user.role == "admin" || req.user.id == store.user[0]) {
-        console.log("access granted");
-        const loyalityCard = await loyalityModel.find({ store });
-        console.log(loyalityCard);
-
-        if (loyalityCard || loyalityCard.length > 0) {
-          return res.json({ success: true, loyalityCard });
-        }
-      } else {
-        return res.json({ success: false, message: "You don't have access" });
-      }
-    } catch (error) {
-      console.log(error);
-      return res.status(500).send(error);
-    }
-  }
-
-  async createOrEditLoyalityCard(req, res) {
-    try {
-      console.log(req.user);
-      console.log(req.query);
-      console.log(req.body);
-      const { storeId } = req.query;
-      let loyalityCard;
-
-      const store = await storeModel.findById(storeId);
-      if (!store) {
-        return res.json({ success: false, message: "Cannot find the store" });
-      }
-      if (req.user.role == "admin" || req.user.id == store.user[0]) {
-        console.log("access granted");
-        loyalityCard = await loyalityModel.find({ store });
-
-        if (!loyalityCard || loyalityCard.length < 1) {
-          console.log("Create Loyality Card");
-          const newLoyalityCard = await loyalityModel.create({
-            ...req.body,
-            store,
-          });
-          return res.json({
-            success: true,
-            message: "Loyality Card Saved",
-            newLoyalityCard,
-          });
-        } else {
-          console.log("Edit Loyality Card");
-
-          const newLoyalityCard = await loyalityModel.findByIdAndUpdate(
-            loyalityCard[0]._id,
-            { ...req.body, store },
-            { new: true }
-          );
-          console.log(newLoyalityCard);
-
-          return res.json({
-            success: true,
-            message: "Loyality Card Saved",
-            newLoyalityCard,
-          });
-        }
-      } else {
-        return res.json({ success: false, message: "You don't have access" });
-      }
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

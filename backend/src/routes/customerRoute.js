@@ -6,8 +6,14 @@ const router = Router();
 
 const customerController = new CustomerController();
 
-//forDemoProject
-router.post("/register", customerController.register);
+router.post("/register/:storeURL", customerController.register);
+
+router.get(
+  "/loyaltyCard/:storeURL",
+  customerMiddleware,
+  customerController.getLoyaltyCardData
+);
+
 router.put(
   "/getPoints/:pointsId",
   customerMiddleware,

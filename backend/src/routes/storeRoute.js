@@ -55,12 +55,5 @@ router.put(
   storeController.editStoreStatus
 );
 
-//loyalitycard
-router.get("/getLoyalityCard", authMiddleware, storeController.getLoyalityCard);
-router.put(
-  "/loyalityCard",
-  authMiddleware,
-  storeController.createOrEditLoyalityCard
-);
 
 export default router;

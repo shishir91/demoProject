@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import LoyalityCard from "../components/LoyalityCardComponent";
 import LoadingSpinner from "../components/LoadingSpinner";
 import image from "/unnamed.jpg";
@@ -10,55 +10,16 @@ const CustomizeLoyaltyCard = () => {
   const location = useLocation();
   const store = location.state?.store;
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
+
+  console.log(store.loyaltyCard);
 
   const [cardData, setCardData] = useState({
+    ...store.loyaltyCard,
     store: store.name,
-    logo: image,
-    bgColor: "#e5e7eb",
-    textColor: "#e5e7eb",
-    cardColor: "#ffffff",
-    stampColor: "#2f6a4f",
-    stamp: "smile",
-    customStamp: null,
   });
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const getLoyalityCard = async () => {
-      try {
-        const response = await api.get(
-          `/store/getLoyalityCard?storeId=${store._id}`,
-          {
-            headers: { token },
-          }
-        );
-        console.log(response);
-
-        if (response.data.success && response.data.loyalityCard.length > 0) {
-          setCardData((prev) => ({
-            ...prev,
-            ...response.data.loyalityCard[0],
-            store: store.name,
-          }));
-        } else {
-          toast.error(response.data.message, {
-            autoClose: 2000,
-            theme: "colored",
-          });
-        }
-      } catch (error) {
-        console.log(error);
-        toast.error(error.message, {
-          autoClose: 2000,
-          theme: "colored",
-        });
-      } finally {
-        setLoading(false); // Mark loading as complete
-      }
-    };
-    getLoyalityCard();
-  }, [store._id, token]);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -67,10 +28,11 @@ const CustomizeLoyaltyCard = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.put(
-        `/store/loyalityCard?storeId=${store._id}`,
-        { ...cardData },
+        `/store/editStore?storeId=${store._id}`,
+        { loyaltyCard: { ...cardData } },
         { headers: { token } }
       );
 
@@ -78,7 +40,7 @@ const CustomizeLoyaltyCard = () => {
         toast.success(response.data.message, {
           autoClose: 1000,
           theme: "colored",
-          onClose: () => window.location.reload(),
+          onClose: () => navigate("/store"),
         });
       } else {
         toast.error(response.data.message, {
@@ -92,6 +54,8 @@ const CustomizeLoyaltyCard = () => {
         autoClose: 2000,
         theme: "colored",
       });
+    } finally {
+      setLoading(false);
     }
   };
 

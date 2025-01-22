@@ -14,6 +14,7 @@ const LoyalityCard = ({
   stampColor = "#2f6a4f",
   stamp = "thumbsUp",
   customStamp = null,
+  points = 18,
 }) => {
   // Map of available icons
   const availableIcons = {
@@ -53,10 +54,14 @@ const LoyalityCard = ({
                 key={index}
                 className={`
                 relative w-14 h-14 rounded-xl flex items-center justify-center shadow-xl
-                ${index < 1 && "shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"}
+                ${
+                  index < points &&
+                  "shadow-[inset_0_1px_1px_rgba(255,255,255,0.1)]"
+                }
               `}
                 style={{
-                  backgroundColor: index < 1 ? stampColor : stampColor + "66",
+                  backgroundColor:
+                    index < points ? stampColor : stampColor + "66",
                 }}
               >
                 {/* content */}
@@ -71,7 +76,7 @@ const LoyalityCard = ({
                         src={customStamp}
                         alt="Custom Icon"
                         className={`w-6 h-6 ${
-                          index < 1
+                          index < points
                             ? "text-green-100"
                             : "text-gray-100 opacity-50"
                         }`}
@@ -79,7 +84,7 @@ const LoyalityCard = ({
                     ) : (
                       <div
                         className={
-                          index < 1
+                          index < points
                             ? "text-green-100"
                             : "text-gray-100 opacity-50"
                         }
@@ -105,7 +110,7 @@ const LoyalityCard = ({
           </div>
           <div className="flex justify-between">
             <p className="text-sm text-center mr-10">Earned Stamps:</p>
-            <p className="text-sm text-center ml-10">1</p>
+            <p className="text-sm text-center ml-10">{points}</p>
           </div>
         </div>
 

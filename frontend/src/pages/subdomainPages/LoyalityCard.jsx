@@ -1,45 +1,45 @@
-import React, { useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import api from "../../api/config";
 import InstallationGuide from "../../components/InstallationGuide";
 import LoyalityCardComponent from "../../components/LoyalityCardComponent";
 import { toast } from "react-toastify";
 
-const LoyalityCard = () => {
+const LoyalityCard = (store) => {
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const { pointsId } = useParams();
+  const [cardData, setCardData] = useState({});
   const navigate = useNavigate();
 
-  const getPoints = async () => {
-    try {
-      const response = await api.put(`/customer/getPoints/${pointsId}`);
-      if (response.data.success) {
-        toast.success(response.data.success, {
-          autoClose: 2000,
-          theme: "colored",
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
     if (!user && !token) {
       navigate("/");
     }
-    getPoints();
+    const getStore = async () => {
+      try {
+        const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
+          headers: { token },
+        });
+        if (response.data.success) {
+          setCardData(response.data.cardData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getStore();
   }, [token]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-200">
+    <div>
       <div className="">
-        <LoyalityCardComponent />
+        <LoyalityCardComponent {...cardData} points={user.points} />
       </div>
       <div className="relative">
         {/* Install Banner */}
         <InstallationGuide />
       </div>
+      <Outlet />
     </div>
   );
 };
