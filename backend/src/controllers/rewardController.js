@@ -5,7 +5,10 @@ export default class RewardController {
   async createReward(req, res) {
     try {
       const { storeId } = req.query;
-
+      const { name, expiry, validity, points, evergreen } = req.body;
+      if (!name || !expiry || !validity || !points || !evergreen) {
+        return res.json({ success: false, message: "All fields are required" });
+      }
       const store = await storeModel.findById(storeId);
       if (!store) {
         return res.json({ success: false, message: "Cannot find the store" });
