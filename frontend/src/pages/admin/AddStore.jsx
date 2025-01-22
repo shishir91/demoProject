@@ -66,7 +66,7 @@ const AddStore = () => {
     formDataToSend.append("location", formData.location);
     formDataToSend.append("phone", formData.phone);
     formDataToSend.append("url", formData.url);
-    formDataToSend.append("assignedUser", formData.assignedUser);
+    formDataToSend.append("user", formData.user);
 
     // Append the file (image)
     if (formData.image) {
@@ -89,9 +89,18 @@ const AddStore = () => {
           theme: "colored",
           onClose: () => navigate("/store"),
         });
+      } else {
+        toast.error(response.data.message, {
+          autoClose: 2000,
+          theme: "colored",
+        });
       }
     } catch (error) {
       console.log(error);
+      toast.error(error.message, {
+        autoClose: 2000,
+        theme: "colored",
+      });
     } finally {
       setLoading(false);
     }
@@ -213,15 +222,15 @@ const AddStore = () => {
           {/* Assign User */}
           <div>
             <label
-              htmlFor="assignedUser"
+              htmlFor="user"
               className="block text-sm font-medium text-gray-200"
             >
               Assign User
             </label>
             <select
-              id="assignedUser"
+              id="user"
               name="user"
-              value={formData.assignedUser}
+              value={formData.user}
               onChange={handleChange}
               required
               className="mt-1 block w-full px-4 py-2 bg-[#1E1B1A] border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"

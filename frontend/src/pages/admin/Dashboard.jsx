@@ -96,7 +96,7 @@ const Dashboard = () => {
           </thead>
           <tbody>
             {users.map((user) => (
-              <tr key={user.id} className="border-t">
+              <tr key={user._id} className="border-t">
                 <td className="px-4 py-2 text-gray-300">{user._id}</td>
                 <td className="px-4 py-2 text-gray-300">{user.email}</td>
                 <td className="px-4 py-2 text-gray-300">{user.password}</td>

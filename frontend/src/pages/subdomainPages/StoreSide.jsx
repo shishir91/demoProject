@@ -24,7 +24,7 @@ const StoreSide = (subdomain) => {
         console.log(response);
 
         setQrCodeUrl(
-          `https://${subdomain}.samparka.co/loyality/${response.data.points.id}`
+          `https://${subdomain.url}samparka.co/loyality/${response.data.points.id}`
         );
       }
     } catch (error) {

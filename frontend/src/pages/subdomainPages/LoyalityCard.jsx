@@ -11,7 +11,7 @@ const LoyalityCard = () => {
   const { pointsId } = useParams();
   const navigate = useNavigate();
 
-  getPoints = async () => {
+  const getPoints = async () => {
     try {
       const response = await api.put(`/customer/getPoints/${pointsId}`);
       if (response.data.success) {
@@ -24,7 +24,6 @@ const LoyalityCard = () => {
       console.log(error);
     }
   };
-
   useEffect(() => {
     if (!user && !token) {
       navigate("/");

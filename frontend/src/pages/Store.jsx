@@ -47,7 +47,7 @@ const Store = () => {
       if (response.data.success) {
         console.log(response);
 
-        setStores(response.data.store);
+        setStores(response.data.stores);
       }
     } catch (error) {
       console.log(error);

@@ -1,6 +1,7 @@
 import loyalityModel from "../models/loyalityModel.js";
 import storeModel from "../models/storeModel.js";
 import pointsModel from "../models/pointsModel.js";
+import userModel from "../models/userModel.js";
 
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
@@ -21,12 +22,24 @@ export default class StoreController {
   async createStore(req, res) {
     try {
       console.log(req.body);
-
+      const { name, location, phone, url, user } = req.body;
+      if (!req.file || !name || !location || !phone || !url || !user) {
+        return res.json({ success: false, message: "All fields are required" });
+      }
+      if (/[^a-z0-9.-]/.test(url)) {
+        return res.json({ success: false, message: "Invalid URL" });
+      }
+      const checkStore = await storeModel.find({ url });
+      console.log(checkStore);
+      if (checkStore.length > 0) {
+        return res.json({ success: false, message: "URL already taken" });
+      }
       const imageUrl = req.file ? req.file.key : null;
       console.log(req.body.formData);
       const store = await storeModel.create({
         ...req.body,
         logo: imageUrl,
+        user,
       });
       await pointsModel.create({ store });
       return res.json({ success: true, message: "New Store Created", store });
@@ -57,7 +70,8 @@ export default class StoreController {
 
   async getMyStore(req, res) {
     try {
-      console.log(req.body.formData);
+      console.log(req.user);
+
       const stores = await storeModel.find({ user: req.user });
       for (const store of stores) {
         const getObjectParams = {
@@ -202,7 +216,7 @@ export default class StoreController {
       console.log(storeURL);
       const store = await storeModel.findOne({ url: storeURL });
       console.log(store);
-      const points = await pointsModel.findOne({store});
+      const points = await pointsModel.findOne({ store });
       console.log(points);
 
       return res.json({

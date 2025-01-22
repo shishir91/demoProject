@@ -204,7 +204,10 @@ const App = () => {
             element={<StoreSide url={subdomain} />}
           />
           <Route path="/verification" element={<Verification />} />
-          <Route path="/loyality" element={<LoyalityCardC />} />
+          <Route path="/loyality">
+            <Route index element={<LoyalityCardC />} />
+            <Route path="/loyality/:pointsId" element={<LoyalityCardC />} />
+          </Route>
           <Route path="/rewards" element={<Rewards />} />
           <Route path="/reservation" element={<Reservation />} />
           <Route path="*" element={<NotFound />} />
