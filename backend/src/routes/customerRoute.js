@@ -6,6 +6,7 @@ const router = Router();
 
 const customerController = new CustomerController();
 
+router.get("/", customerMiddleware, customerController.getCustomerData);
 router.post("/register/:storeURL", customerController.register);
 
 router.get(
