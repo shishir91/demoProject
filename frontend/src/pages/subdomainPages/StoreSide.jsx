@@ -11,7 +11,7 @@ const StoreSide = (subdomain) => {
   const [qrCodeUrl, setQrCodeUrl] = useState("");
   const [isNew, setIsNew] = useState(false);
 
-  const newQR = `http://${subdomain.url}.localhost:5173/`;
+  const newQR = `http://${subdomain.url}.samparka.co/`;
 
   useEffect(() => {
     setLoading(true);

@@ -16,7 +16,6 @@ import Sidebar from "./components/Sidebar";
 import Store from "./pages/Store";
 import AddStore from "./pages/admin/AddStore";
 import EditStore from "./pages/EditStore";
-import LoyalityCard from "./components/LoyalityCardComponent";
 import Loyality from "./pages/CustomizeLoyalityCard";
 import Reward from "./pages/Reward";
 import CreateReward from "./pages/CreateReward";

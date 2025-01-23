@@ -2,11 +2,12 @@ import express from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
 import cors from "cors";
-import adminRoute from "./routes/adminRoute.js";
 import userRoute from "./routes/userRoute.js";
+import adminRoute from "./routes/adminRoute.js";
 import storeRoute from "./routes/storeRoute.js";
 import rewardRoute from "./routes/rewardRoute.js";
 import customerRoute from "./routes/customerRoute.js";
+import manifestRoute from "./routes/manifestRoute.js";
 
 const app = express();
 
@@ -19,18 +20,14 @@ app.use(
     origin: (origin, callback) => {
       const allowedOrigins =
         process.env.NODE_ENV === "production"
-          ? [
-              "https://samparka.co",
-              "https://www.samparka.co",
-            ]
+          ? ["https://samparka.co", "https://www.samparka.co"]
           : [
               "http://localhost:5173", // Direct match
             ];
 
       let dynamicLocalhostRegex;
       process.env.NODE_ENV === "production"
-        ? (dynamicLocalhostRegex =
-            /^https:\/\/[a-z0-9-]+\.samparka.co$/)
+        ? (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.samparka.co$/)
         : (dynamicLocalhostRegex = /^http:\/\/[a-z0-9-]+\.localhost:5173$/);
 
       if (
@@ -50,11 +47,12 @@ app.use(
   })
 );
 
-app.use("/customer", customerRoute);
-app.use("/reward", rewardRoute);
-app.use("/store", storeRoute);
-app.use("/admin", adminRoute);
+app.use("/", manifestRoute);
 app.use("/user", userRoute);
+app.use("/admin", adminRoute);
+app.use("/store", storeRoute);
+app.use("/reward", rewardRoute);
+app.use("/customer", customerRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Running...." + process.env.CLIENT_ORIGIN);
