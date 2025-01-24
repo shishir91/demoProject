@@ -23,6 +23,25 @@
     manifestLink.rel = "manifest";
     manifestLink.href = `http://localhost:8080/manifest.json?subdomain=${subdomain}`;
     document.head.appendChild(manifestLink);
+    // Dynamic for Apple Devices
+    fetch(`http://localhost:8080/store-data?subdomain=${subdomain}`)
+      .then((response) => response.json())
+      .then((store) => {
+        // Dynamically set Apple-specific meta tags
+        const metaTitle = document.createElement("meta");
+        metaTitle.name = "apple-mobile-web-app-title";
+        metaTitle.content = store.title;
+
+        const touchIcon = document.createElement("link");
+        touchIcon.rel = "apple-touch-icon";
+        touchIcon.href = store.icon;
+
+        document.head.appendChild(metaTitle);
+        document.head.appendChild(touchIcon);
+
+        console.log("Dynamic Apple meta tags and icon added for:", store.title);
+      })
+      .catch((error) => console.error("Failed to fetch store data:", error));
   </script>
 
   <body style="background-color: #1e1b1a">
@@ -38,12 +57,6 @@
             console.log("Service Worker registration failed:", err)
           );
       }
-
-      // Debugging Manifest Fetch
-      // fetch("/manifest.json")
-      //   .then((res) => res.json())
-      //   .then((data) => console.log("Manifest fetched successfully:", data))
-      //   .catch((err) => console.error("Failed to fetch manifest:", err));
     </script>
   </body>
 </html>
