@@ -23,7 +23,6 @@ export default class StoreController {
     try {
       const { storeURL } = req.params;
       const store = await storeModel.findOne({ url: storeURL });
-      console.log(store);
 
       if (store && store.status == "active") {
         return res.json({ success: true, message: "Store Available" });

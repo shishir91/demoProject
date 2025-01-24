@@ -3,6 +3,8 @@ import { QrCode } from "lucide-react";
 import QRCode from "react-qr-code";
 
 const SetPoints = ({ qrCodeUrl, setPoints, handlePointsChange }) => {
+  console.log(qrCodeUrl);
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4 flex-col md:flex-row">
       {/* Points Selection */}

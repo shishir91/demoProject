@@ -16,6 +16,11 @@ const GetPoints = (store) => {
     if (!user && !token) {
       navigate("/");
     }
+  }, []);
+  useEffect(() => {
+    if (!user && !token) {
+      navigate("/");
+    }
     const getPoints = async () => {
       try {
         const response = await api.put(
@@ -30,6 +35,8 @@ const GetPoints = (store) => {
             theme: "colored",
             onClose: () => navigate("/loyality"),
           });
+        } else {
+          navigate("/loyality");
         }
       } catch (error) {
         console.log(error);

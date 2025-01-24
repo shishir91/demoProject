@@ -1,17 +1,31 @@
 import express from "express";
 import Store from "../models/storeModel.js";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 const router = express.Router();
 
 // Dynamic manifest.json route
 router.get("/manifest.json", async (req, res) => {
   try {
-    // Extract subdomain from request
-    const host = req.headers.host; // e.g., "shishir.samparka.co"
-    const subdomain = host.split(".")[0]; // e.g., "shishir"
+    const { subdomain } = req.query;
 
     // Find store by subdomain
-    const store = await Store.findOne({ subdomain });
+    const store = await Store.findOne({ url: subdomain });
+    const getObjectParams = {
+      Bucket: "samparkabucket",
+      Key: store.logo,
+    };
+    const command = new GetObjectCommand(getObjectParams);
+    const url = await getSignedUrl(s3, command);
+    store.logo = url;
     if (!store) {
       return res.status(404).json({ error: "Store not found" });
     }

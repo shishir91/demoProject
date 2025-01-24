@@ -7,19 +7,29 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="manifest" href="/manifest.json" />
+    <!-- <link rel="manifest" href="http://localhost:8080/manifest.json" /> -->
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
     <title>Your Logo</title>
   </head>
+  <script>
+    // Extract subdomain
+    const host = window.location.hostname; // e.g., shishirstore.localhost
+    const subdomain = host.split(".")[0]; // Get 'shishirstore'
+
+    // Dynamically set the manifest link
+    const manifestLink = document.createElement("link");
+    manifestLink.rel = "manifest";
+    manifestLink.href = `http://localhost:8080/manifest.json?subdomain=${subdomain}`;
+    document.head.appendChild(manifestLink);
+  </script>
 
   <body style="background-color: #1e1b1a">
-    <div id="root">
-      <!-- <button id="add-to-home" style="display: none">Add to Home Screen</button> -->
-    </div>
+    <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
     <script>
+      // Debugging Service Worker
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
           .register("/service-worker.js")
@@ -28,48 +38,12 @@
             console.log("Service Worker registration failed:", err)
           );
       }
+
+      // Debugging Manifest Fetch
+      // fetch("/manifest.json")
+      //   .then((res) => res.json())
+      //   .then((data) => console.log("Manifest fetched successfully:", data))
+      //   .catch((err) => console.error("Failed to fetch manifest:", err));
     </script>
-    <!-- 
-    <script>
-      let deferredPrompt;
-
-      window.addEventListener("beforeinstallprompt", (e) => {
-        // Prevent the mini-infobar from appearing
-        // e.preventDefault();
-        // Save the event for later use
-        deferredPrompt = e;
-
-        // Show a custom "Add to Home Screen" button
-        const addButton = document.getElementById("add-to-home");
-        addButton.style.display = "block";
-
-        addButton.addEventListener("click", () => {
-          // Hide the button
-          addButton.style.display = "none";
-
-          // Show the install prompt
-          deferredPrompt.prompt();
-
-          // Wait for the user's choice
-          deferredPrompt.userChoice.then((choiceResult) => {
-            if (choiceResult.outcome === "accepted") {
-              console.log("User accepted the A2HS prompt");
-            } else {
-              console.log("User dismissed the A2HS prompt");
-            }
-            deferredPrompt = null;
-          });
-        });
-
-        if (
-          navigator.userAgent.includes("iPhone") ||
-          navigator.userAgent.includes("iPad")
-        ) {
-          alert(
-            'To install this app, tap the Share button and select "Add to Home Screen".'
-          );
-        }
-      });
-    </script> -->
   </body>
 </html>
