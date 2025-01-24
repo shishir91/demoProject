@@ -23,7 +23,7 @@ export default class MailController {
             A new message has just been scheduled by a user with email id ${userEmail}. Please review the details in the admin panel.
             </p>
             <div style="text-align: center; margin-top: 20px;">
-                <a href="http://localhost:5173/work" 
+                <a href="http://samparka.co/work" 
                 style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
                 View Scheduled Messages
                 </a>
@@ -69,7 +69,7 @@ export default class MailController {
             <h2 style="color: #333;">Congratulation 🎉 </h2>
             <p style="color: #555;">You have received ${points} points.</p>
             <div style="text-align: center; margin-top: 20px;">
-                <a href="http://${storeURL}.localhost:5173/loyality" 
+                <a href="http://${storeURL}.samparka.co/loyality" 
                 style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
                 View Points
                 </a>
