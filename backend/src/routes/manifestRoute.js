@@ -34,6 +34,7 @@ router.get("/manifest.json", async (req, res) => {
     const manifest = {
       name: store.name,
       short_name: store.name,
+      start_url: "/loyality",
       icons: [
         {
           src: store.logo,
