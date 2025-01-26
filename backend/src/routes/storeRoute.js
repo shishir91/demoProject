@@ -54,6 +54,10 @@ router.put(
   authMiddleware,
   storeController.editStoreStatus
 );
-
+router.get(
+  "/getCustomers/:storeID",
+  authMiddleware,
+  storeController.getCustomers
+);
 
 export default router;

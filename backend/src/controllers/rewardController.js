@@ -6,7 +6,9 @@ export default class RewardController {
     try {
       const { storeId } = req.query;
       const { name, expiry, validity, points, evergreen } = req.body;
-      if (!name || !expiry || !validity || !points || !evergreen) {
+      console.log(req.body);
+
+      if (!name || !validity || !points) {
         return res.json({ success: false, message: "All fields are required" });
       }
       const store = await storeModel.findById(storeId);

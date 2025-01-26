@@ -45,7 +45,7 @@ export default class MailController {
 
       return true;
     } catch (error) {
-      console.log(err);
+      console.log(error);
 
       return false;
     }

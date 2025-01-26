@@ -10,6 +10,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
+import customerModel from "../models/customerModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -242,6 +243,19 @@ export default class StoreController {
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
+    }
+  }
+
+  //GET CUSTOMERS
+  async getCustomers(req, res) {
+    try {
+      const { storeID } = req.params;
+      const customers = await customerModel.find({ store: storeID });
+      console.log(customers);
+      return res.json({ success: true, customers });
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
     }
   }
 }

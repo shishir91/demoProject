@@ -3,14 +3,12 @@ import { Search, Settings, Plus, MoreVertical, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/config";
 import { toast } from "react-toastify";
-import RewardTemplate from "../components/rewardComponents/RewardTemplate";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const Reward = () => {
   const navigate = useNavigate();
   const [stores, setStores] = useState([]);
   const [rewards, setRewards] = useState([]);
-  const [selectedStore, setSelectedStore] = useState(null); // Initialize as null
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
@@ -34,8 +32,9 @@ const Reward = () => {
   const getStoresClient = async () => {
     try {
       const response = await api.get("/store/myStores", { headers: { token } });
+
       if (response.data.success) {
-        setStores(response.data.store);
+        setStores(response.data.stores);
       }
     } catch (error) {
       console.error(error);
@@ -48,16 +47,10 @@ const Reward = () => {
 
   const fetchData = async () => {
     try {
-      // Step 1: Populate stores based on user role
       if (user.role === "admin") {
         await getStoresAdmin();
       } else {
         await getStoresClient();
-      }
-
-      // Step 2: Update selectedStore when stores are fetched
-      if (stores.length > 0) {
-        setSelectedStore(stores[0]._id);
       }
     } catch (error) {
       console.error(error);
