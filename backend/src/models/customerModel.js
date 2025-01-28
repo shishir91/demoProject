@@ -4,13 +4,19 @@ const customerModel = mongoose.Schema(
   {
     name: { type: String, required: true },
     email: { type: String, required: true },
-    phone: { type: String, required: true },
+    phone: { type: Number, required: true },
     points: { type: Number, required: true, default: 0 },
     store: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Store",
       required: true,
     },
+    rewards: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Reward",
+      },
+    ],
   },
   {
     timestamps: true,

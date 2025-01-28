@@ -143,8 +143,9 @@ const CustomerLogin = (store) => {
               {/* Phone Input */}
               <div className="relative flex-1">
                 <input
-                  type="text"
+                  type="number"
                   name="phone"
+                  id="phoneNumber"
                   placeholder="Enter your phone number"
                   value={formData.phone}
                   onChange={handleChange}

@@ -15,6 +15,7 @@ import { toast } from "react-toastify";
 import api from "../api/config";
 import CustomizeRewardTemplate from "../components/rewardComponents/CustomizeRewardTemplate";
 import RewardTemplate from "../components/rewardComponents/RewardTemplate";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const CreateReward = () => {
   const { status } = useParams();
@@ -23,82 +24,37 @@ const CreateReward = () => {
   const [stores, setStores] = useState([]);
   const [reward, setReward] = useState({});
   const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const token = localStorage.getItem("token");
-  console.log(location);
-
-  //Customize Template
-  const [templateData, setTemplateData] = useState({
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Latte_and_dark_coffee.jpg/1200px-Latte_and_dark_coffee.jpg",
-    bgColor: "#111827",
-    textColor: "#10B981",
-    buttonColor: "#1F2937",
-  });
-
-  useEffect(() => {
-    if (location.state) {
-      setReward(location.state);
-    }
-  }, [location.state]);
-  // Handle updating state dynamically
-  const handleUpdate = (field, value) => {
-    setTemplateData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-  };
-  //Save Template
-  const handleSaveTemplate = async (e) => {
-    try {
-      const response = await api.put(
-        `/reward/editReward/${location.state.store}?rewardId=${reward._id}`,
-        { template: { ...templateData } },
-        { headers: { token } }
-      );
-      console.log(response);
-      if (response.data.success) {
-        toast.success(response.data.message, {
-          autoClose: 1000,
-          theme: "colored",
-          onClose: () => navigate("/reward"),
-        });
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message, {
-        autoClose: 1000,
-        theme: "colored",
-      });
-    }
-  };
 
   //Create Reward
   const getStoresAdmin = async () => {
     try {
       const response = await api.get("/store", { headers: { token } });
       if (response.data.success) {
-        console.log(response);
-
         setStores(response.data.stores);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   const getStoresClient = async () => {
     try {
       const response = await api.get("/store/myStores", { headers: { token } });
       if (response.data.success) {
-        console.log(response);
-
-        setStores(response.data.store);
+        setStores(response.data.stores);
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
   useEffect(() => {
+    setLoading(true);
     if (user.role == "admin") {
       getStoresAdmin();
     } else {
@@ -123,6 +79,7 @@ const CreateReward = () => {
   };
   const handelSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (formData.expiry === false) {
         setFormData((prev) => ({
@@ -135,7 +92,6 @@ const CreateReward = () => {
         { ...formData },
         { headers: { token } }
       );
-      console.log(response);
       if (response.data.success) {
         setReward(response.data.reward);
         toast.success(response.data.message, {
@@ -158,11 +114,75 @@ const CreateReward = () => {
         autoClose: 2000,
         theme: "colored",
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  //Customize Template
+  const [templateData, setTemplateData] = useState({
+    image:
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Latte_and_dark_coffee.jpg/1200px-Latte_and_dark_coffee.jpg",
+    bgColor: "#111827",
+    textColor: "#10B981",
+    buttonColor: "#1F2937",
+  });
+  useEffect(() => {
+    if (location.state) {
+      setReward(location.state);
+    }
+  }, [location.state]);
+  // Handle updating state dynamically
+  const handleUpdate = (field, value) => {
+    setTemplateData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+  //Save Template
+  const handleSaveTemplate = async (e) => {
+    setLoading(true);
+    try {
+      console.log(templateData);
+      // Create a new FormData object
+      const formDataToSend = new FormData();
+
+      // Append each field to the FormData object
+      formDataToSend.append("bgColor", templateData.bgColor);
+      formDataToSend.append("textColor", templateData.textColor);
+      formDataToSend.append("buttonColor", templateData.buttonColor);
+
+      // Append the file (image)
+      if (templateData.image) {
+        formDataToSend.append("image", templateData.image);
+      }
+
+      const response = await api.put(
+        `/reward/editReward/${location.state.store}?rewardId=${reward._id}`,
+        formDataToSend,
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          autoClose: 1000,
+          theme: "colored",
+          onClose: () => navigate("/reward"),
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, {
+        autoClose: 1000,
+        theme: "colored",
+      });
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-stone-800 text-gray-300 p-6 sm:ml-64 mt-7 mr-7 rounded-2xl">
+      {loading && <LoadingSpinner />}
       {/* Header */}
       <div className="flex items-center gap-2 text-emerald-400 mb-6">
         <div className="flex items-center gap-2 text-emerald-400">
@@ -423,7 +443,18 @@ const CreateReward = () => {
           {/* Right: Preview */}
           <div className="flex-1 flex justify-center">
             <div className="w-full max-w-md">
-              <RewardTemplate {...templateData} {...reward} />
+              {console.log(templateData)}
+
+              <RewardTemplate
+                {...templateData}
+                image={
+                  templateData.image instanceof File ||
+                  templateData.image instanceof Blob
+                    ? URL.createObjectURL(templateData.image)
+                    : "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Latte_and_dark_coffee.jpg/1200px-Latte_and_dark_coffee.jpg"
+                }
+                {...reward}
+              />
             </div>
           </div>
         </div>

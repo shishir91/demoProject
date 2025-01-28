@@ -8,6 +8,7 @@ import {
   Pencil,
   ExternalLink,
   IdCard,
+  Plus,
 } from "lucide-react";
 import Switch from "../components/Switch";
 import { useNavigate } from "react-router-dom";
@@ -160,7 +161,17 @@ const Store = () => {
       </div>
 
       {/* Store List */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Create New Store */}
+        <div
+          onClick={() => navigate("/reward/createReward/create")}
+          className="bg-[#2A2524] p-6 rounded-lg flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-[#1E1B1A] shadow-lg"
+        >
+          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-4">
+            <Plus size={24} className="text-gray-800" />
+          </div>
+          <span className="text-gray-400">Create New Store</span>
+        </div>
         {stores &&
           stores.map((store, index) => (
             <div

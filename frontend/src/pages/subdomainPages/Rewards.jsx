@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Info, ArrowLeft, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../../api/config";
 
 const Rewards = () => {
   const [activeTab, setActiveTab] = useState("all");
@@ -37,6 +39,15 @@ const Rewards = () => {
       description: "Free Cappuccino For Lucky Customers",
     },
   ];
+
+  const redeemReward = async () => {
+    try {
+      const response = await api.put("/asd");
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-200">
@@ -102,7 +113,10 @@ const Rewards = () => {
                   {/* Footer */}
                   <div className="p-4 flex flex-col">
                     <div className="flex justify-between items-center">
-                      <button className="px-6 py-2 rounded-full bg-green-800 text-gray-200 text-sm font-medium">
+                      <button
+                        onClick={redeemReward}
+                        className="px-6 py-2 rounded-full bg-green-800 text-gray-200 text-sm font-medium"
+                      >
                         Redeem
                       </button>
                       <span className="text-gray-600 text-sm font-bold">

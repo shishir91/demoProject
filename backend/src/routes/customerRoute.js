@@ -21,4 +21,10 @@ router.put(
   customerController.getPoints
 );
 
+router.put(
+  "/redeemReward/:rewardID",
+  customerMiddleware,
+  customerController.redeemReward
+);
+
 export default router;

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Search, Settings, Plus, MoreVertical, Award } from "lucide-react";
+import {
+  Search,
+  Settings,
+  Plus,
+  MoreVertical,
+  Award,
+  Trash2,
+  Pencil,
+} from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/config";
 import { toast } from "react-toastify";
@@ -12,6 +20,9 @@ const Reward = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [modelRewardId, setModelRewardId] = useState();
 
   // Fetch stores based on user role
   const getStoresAdmin = async () => {
@@ -79,6 +90,37 @@ const Reward = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
+        autoClose: 2000,
+        theme: "colored",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteReward = async (rewardId) => {
+    setLoading(true);
+    try {
+      const response = await api.delete(`/reward/deleteReward/${rewardId}`, {
+        headers: { token },
+      });
+      if (response.data.success) {
+        setShowModal(false);
+        toast.success(response.data.message, {
+          autoClose: 1000,
+          theme: "colored",
+          onClose: () => window.location.reload(),
+        });
+      } else {
+        toast.error(response.data.message, {
+          autoClose: 2000,
+          theme: "colored",
+        });
+      }
+    } catch (e) {
+      console.log(e);
+      setShowModal(false);
+      toast.error(e.message, {
         autoClose: 2000,
         theme: "colored",
       });
@@ -167,16 +209,49 @@ const Reward = () => {
               className="bg-stone-900 p-4 rounded-lg relative shadow-lg"
             >
               <div className="absolute top-4 right-4">
-                <button className="bg-emerald-500 text-emerald-900 px-3 py-1 rounded-lg text-sm hover:bg-emerald-500/70 transition-colors flex items-center gap-1">
+                <button
+                  onClick={() =>
+                    setDropdownOpen(
+                      dropdownOpen === reward._id ? null : reward._id
+                    )
+                  }
+                  className="bg-emerald-500 text-emerald-900 px-3 py-1 rounded-lg text-sm hover:bg-emerald-500/70 transition-colors flex items-center gap-1"
+                >
                   Actions
                   <MoreVertical size={16} />
                 </button>
+                {dropdownOpen === reward._id && (
+                  <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
+                    {/* edit */}
+                    <button
+                      onClick={() =>
+                        navigate("/editReward", { state: { reward } })
+                      }
+                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center"
+                    >
+                      <Pencil className="h-5 w-5 mr-2 text-gray-500" />
+                      Edit
+                    </button>
+
+                    <button
+                      onClick={() => {
+                        setShowModal(true);
+                        setModelRewardId(reward._id);
+                      }}
+                      className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center"
+                    >
+                      <Trash2 className="h-5 w-5 mr-2 text-red-500" />
+                      Delete
+                    </button>
+                  </div>
+                )}
               </div>
-              <div className="w-full mx-auto">
+
+              <div className="w-full mx-auto flex justify-center">
                 <img
                   src={reward.template.image}
                   alt="Coffee Shop Logo"
-                  className="w-full h-full object-contain"
+                  className="w-auto h-32 object-fit"
                 />
               </div>
               <div className="mt-4 text-center">{reward.name}</div>
@@ -186,6 +261,31 @@ const Reward = () => {
             </div>
           ))}
       </div>
+      {/* Model */}
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-40">
+          <div className="bg-stone-800 rounded-lg p-6 w-full max-w-lg mx-auto shadow-lg">
+            <h2 className="text-xl font-semibold mb-4">Delete Reward</h2>
+            <p className="text-gray-400 mb-2">
+              Are you sure you want to delete this reward?
+            </p>
+            <div className="flex justify-end mt-4">
+              <button
+                onClick={() => setShowModal(false)} // Close modal
+                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-lg mr-2"
+              >
+                No
+              </button>
+              <button
+                onClick={() => handleDeleteReward(modelRewardId)}
+                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg"
+              >
+                Yes
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

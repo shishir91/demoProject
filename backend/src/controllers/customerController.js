@@ -5,6 +5,16 @@ import storeModel from "../models/storeModel.js";
 import MailController from "./mailController.js";
 import SmsController from "./smsController.js";
 import validator from "validator";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import rewardModel from "../models/rewardModel.js";
+const s3 = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
 
 const smsController = new SmsController();
 const mailController = new MailController();
@@ -29,7 +39,6 @@ export default class CustomerController {
       // Check if a customer already exists in the specific store
       const existingCustomer = await customerModel.findOne({
         store,
-        email,
         phone,
       });
 
@@ -110,7 +119,14 @@ export default class CustomerController {
     try {
       const { storeURL } = req.params;
       const store = await storeModel.findOne({ url: storeURL });
-      return res.json({ success: true, cardData: store.loyaltyCard });
+      const getObjectParams = {
+        Bucket: "samparkabucket",
+        Key: store.logo,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      store.logo = url;
+      return res.json({ success: true, store });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
@@ -214,4 +230,41 @@ export default class CustomerController {
       throw error;
     }
   };
+
+  //CUSTOMER REDEEM REWARD
+  async redeemReward(req, res) {
+    try {
+      const { rewardID } = req.params;
+      // req.user
+      const reward = await rewardModel.findById(rewardID);
+      if (!reward) {
+        return res.json({ success: false, message: "Reward not found" });
+      }
+      const customer = await customerModel.findById(req.user);
+      if (customer.points < reward.points) {
+        return res.json({ success: false, message: "Not enough points" });
+      }
+      if (customer.rewards.includes(rewardID)) {
+        return res.json({ success: false, message: "Reward already redeemed" });
+      }
+
+      const redeemReward = await customerModel.findByIdAndUpdate(
+        req.user,
+        {
+          $inc: { points: -reward.points },
+          $push: { rewards: rewardID },
+        },
+        { new: true }
+      );
+
+      return res.json({
+        success: true,
+        message: "Reward redeemed successful",
+        redeemReward,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
 }

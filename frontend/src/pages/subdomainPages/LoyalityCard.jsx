@@ -39,8 +39,14 @@ const LoyalityCard = (store) => {
         const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
           headers: { token },
         });
+        console.log(response.data);
+        
         if (response.data.success) {
-          setCardData(response.data.cardData);
+          setCardData({
+            ...response.data.store.loyaltyCard,
+            store: response.data.store.name,
+            logo: response.data.store.logo,
+          });
         }
       } catch (error) {
         console.error(error);

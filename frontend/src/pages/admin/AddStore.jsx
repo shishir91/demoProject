@@ -8,10 +8,10 @@ import { CircleX } from "lucide-react";
 const AddStore = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
-  const [urlError, setUrlError] = useState("");
   const [users, setUsers] = useState([]);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
+  const [urlError, setUrlError] = useState("");
 
   useEffect(() => {
     if (formData.url && /[^a-z0-9.-]/.test(formData.url)) {
@@ -186,7 +186,7 @@ const AddStore = () => {
               id="image"
               name="image"
               onChange={handleFileChange}
-              // required
+              required
               className="mt-1 block w-full px-4 py-2 bg-[#1E1B1A] border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>

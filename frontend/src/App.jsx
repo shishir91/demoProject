@@ -28,6 +28,9 @@ import Customers from "./pages/Customers";
 import StoreSide from "./pages/subdomainPages/StoreSide";
 import NotFound from "./components/NotFound";
 import GetPoints from "./pages/subdomainPages/GetPoints";
+import LoyalityCard from "./pages/LoyalityCard";
+import L2 from "./components/L2";
+import L1 from "./components/L1";
 
 const App = () => {
   // Use state to track auth status
@@ -91,6 +94,8 @@ const App = () => {
 
         try {
           const response = await api.get(`/store/checkStore/${subdomain}`);
+          console.log(response);
+
           if (response.data) {
             setStoreStatus(response.data.success);
           }
@@ -101,6 +106,14 @@ const App = () => {
     };
     checkStore();
   }, [subdomain]);
+
+  // return (
+  //   <Router>
+  //     <Routes>
+  //       <Route index element={<L1/>} />
+  //     </Routes>
+  //   </Router>
+  // );
 
   if (!subdomain || subdomain == "" || subdomain == "www") {
     return (

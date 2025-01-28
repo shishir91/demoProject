@@ -1,6 +1,7 @@
 // import loyalityModel from "../models/loyalityModel.js";
 import storeModel from "../models/storeModel.js";
 import pointsModel from "../models/pointsModel.js";
+import customerModel from "../models/customerModel.js";
 import userModel from "../models/userModel.js";
 
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -10,7 +11,6 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
-import customerModel from "../models/customerModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -38,7 +38,8 @@ export default class StoreController {
 
   async createStore(req, res) {
     try {
-      console.log(req.body);
+      console.log("req.body: ", req.body);
+      console.log("req.file: ", req.file);
       const { name, location, phone, url, user } = req.body;
       if (!req.file || !name || !location || !phone || !url || !user) {
         return res.json({ success: false, message: "All fields are required" });
@@ -47,15 +48,22 @@ export default class StoreController {
         return res.json({ success: false, message: "Invalid URL" });
       }
       const checkStore = await storeModel.find({ url });
-      console.log(checkStore);
       if (checkStore.length > 0) {
         return res.json({ success: false, message: "URL already taken" });
       }
-      const imageUrl = req.file ? req.file.key : null;
-      console.log(req.body.formData);
+      // S3 upload
+      let imageName = Date.now().toString() + "-" + req.file.originalname;
+      const putObjectParams = {
+        Bucket: "samparkabucket",
+        Key: imageName,
+        Body: req.file.buffer,
+        ContentType: req.file.mimetype,
+      };
+      const command = new PutObjectCommand(putObjectParams);
+      await s3.send(command);
       const store = await storeModel.create({
         ...req.body,
-        logo: imageUrl,
+        logo: imageName,
         user,
       });
       await pointsModel.create({ store });
@@ -87,8 +95,6 @@ export default class StoreController {
 
   async getMyStore(req, res) {
     try {
-      console.log(req.user);
-
       const stores = await storeModel.find({ user: req.user });
       for (const store of stores) {
         const getObjectParams = {
@@ -107,14 +113,40 @@ export default class StoreController {
 
   async editStore(req, res) {
     try {
+      console.log("req.file: ", req.file);
       const { storeId } = req.query;
-      console.log(req.body);
-
       const store = await storeModel.findById(storeId);
       if (!store) {
         return res.json({ success: false, message: "Cannot find the store" });
       }
       if (req.user.role == "admin" || req.user.id == store.user[0]) {
+        if (req.file) {
+          const oldLogoKey = store.logo;
+          if (oldLogoKey && !oldLogoKey.startsWith("https://")) {
+            const deleteObjectParams = {
+              Bucket: "samparkabucket",
+              Key: oldLogoKey,
+            };
+            const deleteCommand = new DeleteObjectCommand(deleteObjectParams);
+            await s3.send(deleteCommand);
+          }
+
+          // S3 upload
+          const imageName = Date.now().toString() + "-" + req.file.originalname;
+          const putObjectParams = {
+            Bucket: "samparkabucket",
+            Key: imageName,
+            Body: req.file.buffer,
+            ContentType: req.file.mimetype,
+          };
+          const putCommand = new PutObjectCommand(putObjectParams);
+          await s3.send(putCommand);
+          console.log(imageName);
+
+          store.logo = imageName;
+          await store.save();
+        }
+
         const newStore = await storeModel.findByIdAndUpdate(
           storeId,
           { ...req.body },

@@ -155,3 +155,4 @@ const LoyalityCard = ({
 };
 
 export default LoyalityCard;
+

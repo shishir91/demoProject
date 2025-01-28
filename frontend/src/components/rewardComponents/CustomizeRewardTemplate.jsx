@@ -20,9 +20,7 @@ const CustomizeRewardTemplate = ({
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              handleUpdate("image", URL.createObjectURL(e.target.files[0]))
-            }
+            onChange={(e) => handleUpdate("image", e.target.files[0])}
             className="block w-full text-sm text-stone-300 bg-stone-800 border border-stone-600 rounded-lg cursor-pointer"
           />
         </div>

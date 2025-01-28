@@ -5,11 +5,14 @@ import LoadingSpinner from "../components/LoadingSpinner";
 import image from "/unnamed.jpg";
 import api from "../api/config";
 import { toast } from "react-toastify";
+import L2 from "../components/L2";
+import L1 from "../components/L1";
 
 const CustomizeLoyaltyCard = () => {
   const location = useLocation();
   const store = location.state?.store;
   const token = localStorage.getItem("token");
+  const [format, setFormat] = useState("L1");
   const navigate = useNavigate();
 
   console.log(store.loyaltyCard);
@@ -17,6 +20,7 @@ const CustomizeLoyaltyCard = () => {
   const [cardData, setCardData] = useState({
     ...store.loyaltyCard,
     store: store.name,
+    logo: store.logo,
   });
 
   const [loading, setLoading] = useState(false);
@@ -77,45 +81,30 @@ const CustomizeLoyaltyCard = () => {
           <h1 className="text-xl font-bold text-green-300 mb-4">
             Customize Your Loyalty Card
           </h1>
+          
           <form className="space-y-4">
-            {/* Logo */}
+            {/* Number of Stamps */}
             <div>
               <label className="block text-sm font-medium text-stone-400 mb-1">
-                Upload Logo
-              </label>
-              <input
-                type="file"
-                name="logo"
-                accept="image/*"
-                onChange={(e) =>
-                  setCardData((prev) => ({
-                    ...prev,
-                    logo: URL.createObjectURL(e.target.files[0]),
-                  }))
-                }
-                className="w-full px-4 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
-              />
-            </div>
-            {/* Background Color */}
-            <div>
-              <label className="block text-sm font-medium text-stone-400 mb-1">
-                Background Color
+                Number of Stamps
               </label>
               <div className="flex items-center gap-2">
-                <input
+                <select
                   type="text"
-                  name="bgColor"
-                  value={cardData.bgColor}
+                  name="totalShapes"
+                  value={cardData.totalShapes}
                   onChange={handleChange}
                   className="flex-1 px-3 py-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
-                />
-                <input
-                  type="color"
-                  name="bgColor"
-                  value={cardData.bgColor}
-                  onChange={handleChange}
-                  className="h-10 w-10 rounded-lg bg-stone-900 border border-stone-600"
-                />
+                >
+                  <option disabled>Select Number of Stamps</option>
+                  <option value={3}>3</option>
+                  <option value={4}>4</option>
+                  <option value={5}>5</option>
+                  <option value={6}>6</option>
+                  <option value={7}>7</option>
+                  <option value={8}>8</option>
+                  <option value={9}>9</option>
+                </select>
               </div>
             </div>
             {/* Card Color */}
@@ -227,11 +216,13 @@ const CustomizeLoyaltyCard = () => {
             </button>
           </form>
         </div>
-        <div className="lg:w-1/2 bg-stone-800 p-6 rounded-lg shadow-lg">
-          <h2 className="text-lg font-bold text-green-300 mb-4">
-            Live Preview
-          </h2>
-          <LoyalityCard {...cardData} />
+        <div className="lg:w-1/2 bg-stone-800 p-6 rounded-lg shadow-lg flex items-center justify-center">
+          <div>
+            <h2 className="text-xl font-bold text-green-300 mb-10 text-center">
+              Live Preview
+            </h2>
+            {format == "L2" ? <L2 {...cardData} /> : <L1 {...cardData} />}
+          </div>
         </div>
       </div>
     </div>

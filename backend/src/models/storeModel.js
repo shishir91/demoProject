@@ -1,16 +1,16 @@
 import mongoose from "mongoose";
 
 const loyaltySchema = new mongoose.Schema({
-  logo: {
+  format: {
     type: String,
-    default:
-      "https://res.cloudinary.com/spyc/image/upload/v1737542135/SAMPARKA_ynzpeq.png",
+    enum: ["L1", "L2"],
+    default: "L2",
   },
-  bgColor: { type: String, default: "#000000" },
-  textColor: { type: String, default: "#001001" },
-  cardColor: { type: String, default: "#FFFFFF" },
-  stampColor: { type: String, default: "#2f6a4f" },
-  stamp: { type: String, default: "thumbsUp" },
+  totalShapes: { type: Number, default: 9 },
+  stampColor: { type: String, default: "#22C55E" },
+  cardColor: { type: String, default: "#016e49" },
+  textColor: { type: String, default: "#ffffff" },
+  stamp: { type: String },
   customStamp: { type: String },
 });
 
