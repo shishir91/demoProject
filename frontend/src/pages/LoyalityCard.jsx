@@ -98,14 +98,14 @@ const LoyalityCard = (
   );
 
   return (
-    <>
+    <div className="mix-h-screen">
       <div
         className={`min-h-screen w-full relative bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[70px] box-border gap-[34px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
       >
         {/* Greeting Section */}
-        <div className="w-80 flex flex-col items-start justify-start pt-[11px] pb-1.5 pl-[29px] pr-14 box-border text-center font-rubik font-thin fontSize-mini1">
+        <div className="w-80 flex flex-col items-start justify-start box-border text-center font-rubik font-thin fontSize-mini1">
           <div className="relative tracking-[0.01em] text-black ">
-            <span className="font-thin">{greeting}</span>
+            <span className="font-thin text-3xl">{greeting}</span>
             <span className="font-medium font-Poppins">👋🏼</span>
           </div>
           <div className="relative text-xl tracking-[0.01em] font-semibold font-poppins mt-[-5px] mq350small1:font-poppins mq350small1:text-mini1">
@@ -180,7 +180,7 @@ const LoyalityCard = (
           <Reward onClose={closeFrame} />
         </PortalDrawer>
       )}
-    </>
+    </div>
   );
 };
 

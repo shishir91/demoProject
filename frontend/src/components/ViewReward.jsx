@@ -17,7 +17,7 @@ const ViewReward = ({ className = "", group1410103762, vector }) => {
       <div className="flex-1 flex flex-col items-center justify-center">
         <div className="h-[74px] flex flex-col items-center justify-center">
           <img
-            className="w-[145px] relative h-[44.4px]"
+            className="w-auto relative h-[75px]"
             alt=""
             src={group1410103762}
           />
