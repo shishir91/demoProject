@@ -237,7 +237,7 @@ const App = () => {
           />
           <Route path="/verification" element={<Verification />} />
           <Route path="/loyality">
-            <Route index element={<LoyalityCardC url={subdomain} />} />
+            <Route index element={<LoyalityCard url={subdomain} />} />
             <Route path=":pointsId" element={<GetPoints url={subdomain} />} />
           </Route>
           <Route path="/rewards" element={<Rewards />} />

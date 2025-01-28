@@ -12,7 +12,7 @@ const CustomizeLoyaltyCard = () => {
   const location = useLocation();
   const store = location.state?.store;
   const token = localStorage.getItem("token");
-  const [format, setFormat] = useState("L1");
+  const [format, setFormat] = useState(store.loyaltyCard.format);
   const navigate = useNavigate();
 
   console.log(store.loyaltyCard);
@@ -36,7 +36,7 @@ const CustomizeLoyaltyCard = () => {
     try {
       const response = await api.put(
         `/store/editStore?storeId=${store._id}`,
-        { loyaltyCard: { ...cardData } },
+        { loyaltyCard: { ...cardData, format } },
         { headers: { token } }
       );
 
@@ -76,37 +76,49 @@ const CustomizeLoyaltyCard = () => {
       <h1 className="text-2xl font-bold text-green-300 mb-6">
         STORE: {store.name}
       </h1>
+      <div>
+        <span>Choose Card Format: </span>
+        <select
+          onChange={(e) => setFormat(e.target.value)}
+          value={format}
+          className="flex-1 px-3 py-2 mb-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
+        >
+          <option value="L1">L1</option>
+          <option value="L2">L2</option>
+        </select>
+      </div>
       <div className="flex flex-col lg:flex-row lg:gap-8">
         <div className="lg:w-1/2 bg-stone-800 p-6 rounded-lg shadow-lg mb-8 lg:mb-0 h-full">
           <h1 className="text-xl font-bold text-green-300 mb-4">
             Customize Your Loyalty Card
           </h1>
-          
           <form className="space-y-4">
-            {/* Number of Stamps */}
-            <div>
-              <label className="block text-sm font-medium text-stone-400 mb-1">
-                Number of Stamps
-              </label>
-              <div className="flex items-center gap-2">
-                <select
-                  type="text"
-                  name="totalShapes"
-                  value={cardData.totalShapes}
-                  onChange={handleChange}
-                  className="flex-1 px-3 py-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
-                >
-                  <option disabled>Select Number of Stamps</option>
-                  <option value={3}>3</option>
-                  <option value={4}>4</option>
-                  <option value={5}>5</option>
-                  <option value={6}>6</option>
-                  <option value={7}>7</option>
-                  <option value={8}>8</option>
-                  <option value={9}>9</option>
-                </select>
+            {format == "L2" && (
+              // {/* Number of Stamps */}
+              <div>
+                <label className="block text-sm font-medium text-stone-400 mb-1">
+                  Number of Stamps
+                </label>
+                <div className="flex items-center gap-2">
+                  <select
+                    type="text"
+                    name="totalShapes"
+                    value={cardData.totalShapes}
+                    onChange={handleChange}
+                    className="flex-1 px-3 py-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
+                  >
+                    <option disabled>Select Number of Stamps</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={6}>6</option>
+                    <option value={7}>7</option>
+                    <option value={8}>8</option>
+                    <option value={9}>9</option>
+                  </select>
+                </div>
               </div>
-            </div>
+            )}
             {/* Card Color */}
             <div>
               <label className="block text-sm font-medium text-stone-400 mb-1">
@@ -151,28 +163,30 @@ const CustomizeLoyaltyCard = () => {
                 />
               </div>
             </div>
-            {/* Stamp Color */}
-            <div>
-              <label className="block text-sm font-medium text-stone-400 mb-1">
-                Stamp Color
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  name="stampColor"
-                  value={cardData.stampColor}
-                  onChange={handleChange}
-                  className="flex-1 px-3 py-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
-                />
-                <input
-                  type="color"
-                  name="stampColor"
-                  value={cardData.stampColor}
-                  onChange={handleChange}
-                  className="h-10 w-10 rounded-lg bg-stone-900 border border-stone-600"
-                />
+            {format == "L2" && (
+              // {/* Stamp Color */}
+              <div>
+                <label className="block text-sm font-medium text-stone-400 mb-1">
+                  Stamp Color
+                </label>
+                <div className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    name="stampColor"
+                    value={cardData.stampColor}
+                    onChange={handleChange}
+                    className="flex-1 px-3 py-2 text-sm text-stone-300 bg-stone-900 border border-stone-600 rounded-lg"
+                  />
+                  <input
+                    type="color"
+                    name="stampColor"
+                    value={cardData.stampColor}
+                    onChange={handleChange}
+                    className="h-10 w-10 rounded-lg bg-stone-900 border border-stone-600"
+                  />
+                </div>
               </div>
-            </div>
+            )}
             {/* Stamp Icon */}
             <div>
               <label className="block text-sm font-medium text-stone-400 mb-1">
@@ -184,9 +198,12 @@ const CustomizeLoyaltyCard = () => {
                 onChange={handleChange}
                 className="w-full px-4 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
               >
+                <option value="">None</option>
+                <option value="coffee" selected>
+                  Coffee
+                </option>
                 <option value="smile">Smile</option>
                 <option value="thumbsUp">Thumbs Up</option>
-                <option value="coffee">Coffee</option>
               </select>
             </div>
             {/* Custom Icon */}
@@ -221,7 +238,9 @@ const CustomizeLoyaltyCard = () => {
             <h2 className="text-xl font-bold text-green-300 mb-10 text-center">
               Live Preview
             </h2>
-            {format == "L2" ? <L2 {...cardData} /> : <L1 {...cardData} />}
+            <div>
+              {format == "L2" ? <L2 {...cardData} /> : <L1 {...cardData} />}
+            </div>
           </div>
         </div>
       </div>

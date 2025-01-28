@@ -1,34 +1,17 @@
-import { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import ViewReward from "../components/ViewReward";
 import Reward from "../components/Reward";
 import PortalDrawer from "../components/PortalDrawer";
 import L1 from "../components/L1";
 import L2 from "../components/L2";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import api from "../api/config";
+import LoadingSpinner from "../components/LoadingSpinner";
+import { toast } from "react-toastify";
 
-const LoyaltyCard = ({
-  greetings = ["Namaste!", "Jwojwolapa!", "Sewaro!", "Tashi Delek!"],
-  userName = "Shreeyanch",
-  points = 3, // Dynamic points
-  totalShapes = 9, // Total number of shapes
-  shapesConfig = {
-    shapeType: "circle", // Options: "circle", "square", "custom"
-    filledIcon: "/send.svg", // Icon for filled state (optional for custom shapes)
-    emptyIcon: "/empty-icon.svg", // Icon for empty state (optional for custom shapes)
-    filledColor: "bg-green-500", // Filled color
-    emptyColor: "bg-gray-200", // Empty color
-  },
-  cardStyle = {
-    bgColor: "bg-seagreen-100",
-    borderColor: "border-whitesmoke-100",
-  },
-  assets = {
-    logo: "/group-1410103762.svg",
-    icon1: "/joysticksvgrepocom-1.svg",
-    icon2: "/icon1.svg",
-    viewRewardIcon: "/vector.svg",
-    frameIcon: "/frame-1410103878.svg",
-  },
+const LoyalityCard = (
+  store,
+  assets = {},
   textConfig = {
     greetingInterval: 2000,
     fontColor: "text-black",
@@ -38,10 +21,64 @@ const LoyaltyCard = ({
     game: "/game",
     reservation: "/reservation",
   },
-}) => {
+  cardStyle = {
+    bgColor: "bg-seagreen-100",
+    borderColor: "border-whitesmoke-100",
+  }
+) => {
+  const greetings = ["Namaste!", "Jwojwolapa!", "Sewaro!", "Tashi Delek!"];
+  const token = localStorage.getItem("token");
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("userInfo"))
+  );
+  const [cardData, setCardData] = useState({});
+  const [loading, setLoading] = useState(true);
   const [isFrameOpen, setFrameOpen] = useState(false);
   const [greeting, setGreeting] = useState(greetings[0]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!user || !token) {
+      navigate("/");
+      return;
+    }
+
+    const getCustomerData = async () => {
+      try {
+        const response = await api.get("/customer", { headers: { token } });
+        console.log(response);
+        localStorage.setItem("userInfo", JSON.stringify(response.data));
+        setUser(response.data);
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const getStore = async () => {
+      try {
+        const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
+          headers: { token },
+        });
+        console.log(response.data);
+
+        if (response.data.success) {
+          setCardData({
+            ...response.data.store.loyaltyCard,
+            store: response.data.store.name,
+            logo: response.data.store.logo,
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getStore();
+    getCustomerData();
+  }, [token]);
 
   useEffect(() => {
     let index = 0;
@@ -72,32 +109,27 @@ const LoyaltyCard = ({
             <span className="font-medium font-Poppins">👋🏼</span>
           </div>
           <div className="relative text-xl tracking-[0.01em] font-semibold font-poppins mt-[-5px] mq350small1:font-poppins mq350small1:text-mini1">
-            {userName}
+            {user.name}
           </div>
         </div>
 
         {/* Rewards Component */}
-        <ViewReward group1410103762={assets.logo} vector="/send.svg" />
+        <ViewReward group1410103762={cardData.logo} vector="/send.svg" />
 
-        {/* L1 Component */}
-        <L1 />
-
-        {/* L2 Component */}
-        <L2
-          points={points}
-          totalShapes={totalShapes}
-          shapesConfig={shapesConfig}
-          cardStyle={cardStyle}
-          textConfig={textConfig}
-        />
-
+        {cardData.format == "L1" ? (
+          // {/* L1 Component */}
+          <L1 {...cardData} points={user?.points || 0} />
+        ) : (
+          // {/* L2 Component */}
+          <L2 {...cardData} points={user?.points || 0} />
+        )}
         {/* View Rewards Button */}
         <div className="self-stretch flex flex-row items-center justify-center py-2 px-0 gap-1 text-mini1">
           <div className="w-5 h-5 overflow-hidden shrink-0 flex flex-row items-center justify-center p-px box-border">
             <img
               className="w-4 relative h-[15px]"
               alt="View Rewards Icon"
-              src={assets.viewRewardIcon}
+              src="/vector.svg"
             />
           </div>
           <div
@@ -109,7 +141,7 @@ const LoyaltyCard = ({
           <img
             className="w-5 relative h-5"
             alt="Frame Icon"
-            src={assets.frameIcon}
+            src="/frame-1410103878.svg"
           />
         </div>
 
@@ -122,7 +154,7 @@ const LoyaltyCard = ({
             <img
               className="w-6 relative h-[22px]"
               alt="Game Icon"
-              src={assets.icon1}
+              src="/joysticksvgrepocom-1.svg"
             />
           </div>
           <div
@@ -132,7 +164,7 @@ const LoyaltyCard = ({
             <img
               className="w-6 relative h-[22px]"
               alt="Reservation Icon"
-              src={assets.icon2}
+              src="/icon1.svg"
             />
           </div>
         </div>
@@ -152,4 +184,4 @@ const LoyaltyCard = ({
   );
 };
 
-export default LoyaltyCard;
+export default LoyalityCard;

@@ -164,7 +164,7 @@ const Store = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Create New Store */}
         <div
-          onClick={() => navigate("/reward/createReward/create")}
+          onClick={() => navigate("/addStore")}
           className="bg-[#2A2524] p-6 rounded-lg flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-[#1E1B1A] shadow-lg"
         >
           <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-4">
