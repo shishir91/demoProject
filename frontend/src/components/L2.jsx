@@ -27,7 +27,7 @@ const L2 = ({
         backgroundColor: cardColor,
         boxShadow: `2px 10px 50px ${hexToRgba(cardColor)}`,
       }}
-      className={` shadow-[0px_25px_58px_rgba(1,_110,_73,_0.5)] rounded-3xs1 h-[360px] flex flex-col items-center justify-center py-1 px-2.5 box-border text-[10px] text-white md1:flex-col sm1:flex-wrap`}
+      className={`shadow-[0px_25px_58px_rgba(1,_110,_73,_0.5)] rounded-3xs1 h-[360px] flex flex-col items-center justify-center py-1 px-2.5 box-border text-[10px] text-white md1:flex-col`}
     >
       <div
         className={`w-60 rounded-3xs1 h-[340px] flex flex-col items-center justify-center px-2.5 gap-1.5 text-[10px] text-white md1:flex-col sm1:flex-wrap`}
