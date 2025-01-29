@@ -68,6 +68,7 @@ const LoyalityCard = (
             ...response.data.store.loyaltyCard,
             store: response.data.store.name,
             logo: response.data.store.logo,
+            location: response.data.store.location,
           });
         }
       } catch (error) {
@@ -100,7 +101,7 @@ const LoyalityCard = (
   return (
     <div className="mix-h-screen">
       <div
-        className={`min-h-screen w-full bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[70px] box-border gap-[34px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
+        className={`min-h-screen w-full bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[70px] box-border gap-[12px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
       >
         {/* Greeting Section */}
         <div className="w-80 flex flex-col items-start justify-start box-border text-center font-rubik font-thin fontSize-mini1">
@@ -114,7 +115,11 @@ const LoyalityCard = (
         </div>
 
         {/* Rewards Component */}
-        <ViewReward group1410103762={cardData.logo} vector="/send.svg" />
+        <ViewReward
+          location={cardData.location}
+          group1410103762={cardData.logo}
+          vector="/send.svg"
+        />
 
         {cardData.format == "L1" ? (
           // {/* L1 Component */}
@@ -123,6 +128,7 @@ const LoyalityCard = (
           // {/* L2 Component */}
           <L2 {...cardData} points={user?.points || 0} />
         )}
+
         {/* View Rewards Button */}
         <div className="self-stretch flex flex-row items-center justify-center py-2 px-0 gap-1 text-mini1">
           <div className="w-5 h-5 overflow-hidden shrink-0 flex flex-row items-center justify-center p-px box-border">

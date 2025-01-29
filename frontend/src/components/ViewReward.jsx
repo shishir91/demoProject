@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 
-const ViewReward = ({ className = "", group1410103762, vector }) => {
+const ViewReward = ({ className = "", location, group1410103762, vector }) => {
   const navigate = useNavigate();
 
   const onFrameContainerClick = useCallback(() => {
@@ -11,7 +11,7 @@ const ViewReward = ({ className = "", group1410103762, vector }) => {
 
   return (
     <div
-      className={`self-stretch flex flex-row items-center justify-center py-2 px-0 gap-1 text-left text-xs-41 text-black font-poppins lg1:pl-0 lg1:pr-0 lg1:box-border ${className}`}
+      className={`self-stretch flex flex-row items-center justify-center py-2 px-0 text-left text-xs-41 text-black font-poppins lg1:pl-0 lg1:pr-0 lg1:box-border ${className}`}
     >
       <div className="flex-1 h-[46px]" />
       <div className="flex-1 flex flex-col items-center justify-center">
@@ -22,9 +22,7 @@ const ViewReward = ({ className = "", group1410103762, vector }) => {
             src={group1410103762}
           />
         </div>
-        <div className="relative tracking-[0.01em] font-medium">
-          Thamel, Kathmandu
-        </div>
+        <div className="relative tracking-[0.01em] font-medium">{location}</div>
       </div>
       <div className="flex-1 flex flex-col items-end justify-center">
         <div
