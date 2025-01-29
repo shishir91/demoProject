@@ -70,7 +70,7 @@ const L2 = ({
 
       <div
         style={{ color: textColor }}
-        className="relative tracking-[0.01em] font-medium text-sm1 mb-2"
+        className="relative tracking-[0.01em] text-xs-41 mb-2"
       >
         Points: {points}
       </div>

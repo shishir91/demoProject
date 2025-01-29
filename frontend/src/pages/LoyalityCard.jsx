@@ -101,7 +101,7 @@ const LoyalityCard = (
   return (
     <div className="mix-h-screen">
       <div
-        className={`min-h-screen w-full bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[10px] box-border gap-[15px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
+        className={`min-h-screen w-full bg-white flex flex-col items-center py-4 justify-start box-border gap-[35px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
       >
         {/* Greeting Section */}
         <div className="left-0 mr-[140px] flex flex-col items-start justify-start box-border font-rubik font-thin">
