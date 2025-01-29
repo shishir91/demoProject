@@ -241,7 +241,10 @@ const App = () => {
             <Route path=":pointsId" element={<GetPoints url={subdomain} />} />
           </Route>
           <Route path="/rewards" element={<Rewards />} />
-          <Route path="/reservation" element={<Reservation />} />
+          <Route
+            path="/reservation"
+            element={<Reservation url={subdomain} />}
+          />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Router>

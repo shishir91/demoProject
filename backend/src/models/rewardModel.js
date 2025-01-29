@@ -19,13 +19,11 @@ const rewardSchema = new mongoose.Schema(
       required: true,
     },
     name: { type: String, required: true },
-    expiry: { type: Boolean, required: true },
-    expiryDate: { type: Date },
     description: { type: String },
     validity: { type: String, required: true },
     points: { type: String, required: true },
     evergreen: { type: Boolean, required: true },
-    template: { type: templateSchema, default: () => ({}) }, // Use the embedded schema
+    template: { type: templateSchema, default: () => ({}) },
   },
   {
     timestamps: true,

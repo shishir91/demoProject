@@ -2,12 +2,12 @@ import { Coffee, Smile, ThumbsUp } from "lucide-react";
 import React from "react";
 
 const L2 = ({
-  points = 3,
+  points = 0,
   totalShapes = 9,
-  stampColor = "#22C55E",
-  cardColor = "#016e49",
-  textColor = "#000",
-  stamp = "coffee",
+  stampColor = "#ffffff",
+  cardColor = "#ffffff",
+  textColor = "#ffffff",
+  stamp = "",
   customStamp = null,
 }) => {
   const availableIcons = {
@@ -40,7 +40,8 @@ const L2 = ({
               style={{
                 border: "1px solid",
                 backgroundColor: index < points ? stampColor : "transparent",
-                borderColor: textColor,
+                borderColor:
+                  index >= points ? "rgba(255, 255, 255, 0.3)" : textColor, // 20% opacity border
               }}
             >
               <div className="relative z-10 flex items-center justify-center">

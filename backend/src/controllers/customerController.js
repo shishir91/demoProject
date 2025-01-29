@@ -8,6 +8,8 @@ import validator from "validator";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import rewardModel from "../models/rewardModel.js";
+import redemptionModel from "../models/redemptionModel.js";
+import reservationModel from "../models/reservationModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -232,6 +234,25 @@ export default class CustomerController {
   };
 
   //CUSTOMER REDEEM REWARD
+  async getStoreData(req, res) {
+    try {
+      const { storeURL } = req.params;
+      const store = await storeModel.findOne({ url: storeURL });
+      const getObjectParams = {
+        Bucket: "samparkabucket",
+        Key: store.logo,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      store.logo = url;
+      return res.json({ success: true, store });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  //CUSTOMER REDEEM REWARD
   async redeemReward(req, res) {
     try {
       const { rewardID } = req.params;
@@ -241,11 +262,11 @@ export default class CustomerController {
         return res.json({ success: false, message: "Reward not found" });
       }
       const customer = await customerModel.findById(req.user);
-      if (customer.points < reward.points) {
-        return res.json({ success: false, message: "Not enough points" });
-      }
       if (customer.rewards.includes(rewardID)) {
         return res.json({ success: false, message: "Reward already redeemed" });
+      }
+      if (customer.points < reward.points) {
+        return res.json({ success: false, message: "Not enough points" });
       }
 
       const redeemReward = await customerModel.findByIdAndUpdate(
@@ -256,12 +277,74 @@ export default class CustomerController {
         },
         { new: true }
       );
+      const redemption = await redemptionModel.create({
+        customer: req.user,
+        reward: rewardID,
+      });
 
       return res.json({
         success: true,
         message: "Reward redeemed successful",
         redeemReward,
+        redemption,
       });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  //CUSTOMER GET MY REWARDS
+  async getMyRewards(req, res) {
+    try {
+      const myRewards = await redemptionModel
+        .find({ customer: req.user })
+        .populate("reward");
+      console.log(myRewards);
+      return res.json({ success: true, myRewards });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  //CUSTOMER RESERVATION
+  async reservation(req, res) {
+    try {
+      const { tableNumber, numberofGuests, name, phone, date } = req.body;
+      if (!tableNumber || !name || !phone || !numberofGuests || !date) {
+        return res.json({ success: false, message: "All fields are required" });
+      }
+      const { storeURL } = req.params;
+      const store = await storeModel.findOne({ url: storeURL });
+      if (!store) {
+        return res.json({ success: false, message: "Store Not Found" });
+      }
+      const reserve = await reservationModel.create({
+        customer: req.user,
+        store: store,
+        tableNumber,
+        numberofGuests,
+        name,
+        phone,
+        date,
+      });
+      return res.json({
+        success: true,
+        message: "Reservation Successful",
+        reserve,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  //CUSTOMER GET MYRESERVATION
+  async getReservations(req, res) {
+    try {
+      const reservations = await reservationModel.find({ customer: req.user });
+      return res.json({ success: true, reservations });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

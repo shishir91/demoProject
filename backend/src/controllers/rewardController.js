@@ -56,31 +56,20 @@ export default class RewardController {
       if (!store) {
         return res.json({ success: false, message: "Cannot find the store" });
       }
-      if (req.user.role == "admin" || req.user.id == store.user[0]) {
-        console.log(store);
-
-        const rewards = await rewardModel.find({ store: store._id });
-        console.log(rewards);
-
-        for (const reward of rewards) {
-          // Skip processing if the image already starts with "https://"
-          if (reward.template.image.startsWith("https://")) {
-            continue;
-          }
-
-          const getObjectParams = {
-            Bucket: "samparkabucket",
-            Key: reward.template.image,
-          };
-          const command = new GetObjectCommand(getObjectParams);
-          const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-          reward.template.image = url;
+      const rewards = await rewardModel.find({ store: store._id });
+      for (const reward of rewards) {
+        if (reward.template.image.startsWith("https://")) {
+          continue;
         }
-
-        return res.json({ success: true, rewards });
-      } else {
-        return res.json({ success: false, message: "You don't have access" });
+        const getObjectParams = {
+          Bucket: "samparkabucket",
+          Key: reward.template.image,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        reward.template.image = url;
       }
+      return res.json({ success: true, rewards });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

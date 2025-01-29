@@ -81,12 +81,6 @@ const CreateReward = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (formData.expiry === false) {
-        setFormData((prev) => ({
-          ...prev,
-          expiryDate: undefined,
-        }));
-      }
       const response = await api.post(
         `/reward/createReward?storeId=${formData.store}`,
         { ...formData },
@@ -249,69 +243,6 @@ const CreateReward = () => {
                 )}
               </select>
             </div>
-
-            {/* Schedule Reward */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <label className="text-gray-400">Schedule Reward</label>
-                <HelpCircle size={16} className="text-gray-500" />
-              </div>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="expiry"
-                    required
-                    className="w-4 h-4 rounded-full border"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        expiry: false,
-                      }))
-                    }
-                  />
-                  <span>Never Expire</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="expiry"
-                    className="w-4 h-4 rounded-full border"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        expiry: true,
-                      }))
-                    }
-                  />
-                  <span>Validity</span>
-                </label>
-              </div>
-            </div>
-            {/* Expiry Date */}
-            {formData.expiry && formData.expiry == true && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-gray-400">Expiry Date</label>
-                  <span className="text-red-500">*</span>
-                  <HelpCircle size={16} className="text-gray-500" />
-                </div>
-                <div className="relative">
-                  <Calendar
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                  />
-                  <input
-                    type="date"
-                    placeholder="Enter Expiry Date"
-                    name="expiryDate"
-                    onChange={handleChange}
-                    required
-                    className="w-full bg-[#2A1F1F] rounded-lg pl-10 p-3 focus:outline-none focus:ring-1 focus:ring-emerald-400"
-                  />
-                </div>
-              </div>
-            )}
 
             {/* Reward Name */}
             <div className="space-y-2">

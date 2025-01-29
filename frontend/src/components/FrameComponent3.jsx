@@ -1,6 +1,24 @@
 import PropTypes from "prop-types";
+import { useState } from "react";
 
-const FrameComponent3 = ({ className = "" }) => {
+const FrameComponent3 = ({ className = "", redemption }) => {
+  const [status, setStatus] = useState("");
+  console.log(redemption);
+
+  switch (redemption.status) {
+    case "pending":
+      setStatus("Pending Approval");
+      break;
+    case "clamed":
+      setStatus("Reward Clamed");
+      break;
+    case "expired":
+      setStatus("Reward Expired");
+      break;
+
+    default:
+      break;
+  }
   return (
     <div className="self-stretch flex flex-row items-center justify-center flex-wrap content-center gap-[53px] text-left text-xs-4 text-black font-poppins">
       {/* Add your Reward component content here */}
@@ -8,16 +26,11 @@ const FrameComponent3 = ({ className = "" }) => {
         <div className="self-stretch flex flex-row items-center justify-center gap-[3px]">
           <div className="w-2.5 relative rounded-62xl1 bg-lime border-whitesmoke-200 border-[1px] border-solid box-border h-2.5" />
           <div className="flex flex-row items-center justify-center">
-            <div className="relative font-medium">{`Pending Approval `}</div>
+            <div className="relative font-medium">{status}</div>
           </div>
         </div>
         <div className="self-stretch flex-1 flex flex-col items-start justify-center gap-2.5 text-left">
           <div className="self-stretch flex flex-col items-start justify-center py-0 px-3.5 gap-px">
-            <div className="self-stretch flex flex-row items-center justify-start">
-              <div className="w-[125.9px] relative font-medium inline-block shrink-0">
-                #1123
-              </div>
-            </div>
             <div className="self-stretch flex flex-row items-center justify-start">
               <div className="w-[125.9px] relative font-medium inline-block shrink-0">
                 Grape Flavoured Latte

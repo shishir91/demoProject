@@ -21,10 +21,18 @@ router.put(
   customerController.getPoints
 );
 
+router.get("/store/:storeURL", customerController.getStoreData);
+router.get("/myRewards", customerMiddleware, customerController.getMyRewards);
 router.put(
   "/redeemReward/:rewardID",
   customerMiddleware,
   customerController.redeemReward
 );
+router.get(
+  "/getReservations",
+  customerMiddleware,
+  customerController.getReservations
+);
+router.post("/reservation/:storeURL", customerMiddleware, customerController.reservation);
 
 export default router;

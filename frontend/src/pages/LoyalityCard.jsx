@@ -51,8 +51,6 @@ const LoyalityCard = (
         setUser(response.data);
       } catch (error) {
         console.error(error);
-      } finally {
-        setLoading(false);
       }
     };
 
@@ -69,6 +67,7 @@ const LoyalityCard = (
             store: response.data.store.name,
             logo: response.data.store.logo,
             location: response.data.store.location,
+            storeId: response.data.store._id,
           });
         }
       } catch (error) {
@@ -77,8 +76,8 @@ const LoyalityCard = (
         setLoading(false);
       }
     };
-    getStore();
     getCustomerData();
+    getStore();
   }, [token]);
 
   useEffect(() => {
@@ -100,6 +99,7 @@ const LoyalityCard = (
 
   return (
     <div className="mix-h-screen">
+      {loading && <LoadingSpinner />}
       <div
         className={`min-h-screen w-full bg-white flex flex-col items-center py-4 justify-start box-border gap-[35px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
       >
@@ -146,14 +146,14 @@ const LoyalityCard = (
         {/* Navigation Buttons */}
         <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
           <div
-            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
+            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
             onClick={handleNavigate(navigationPaths.game)}
           >
-            <img
+            {/* <img
               className="w-6 relative h-[22px]"
               alt="Game Icon"
               src="/joysticksvgrepocom-1.svg"
-            />
+            /> */}
           </div>
           <div
             className={`w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
@@ -175,7 +175,11 @@ const LoyalityCard = (
           placement="Bottom"
           onOutsideClick={closeFrame}
         >
-          <Reward onClose={closeFrame} />
+          <Reward
+            onClose={closeFrame}
+            storeId={cardData.storeId}
+            token={token}
+          />
         </PortalDrawer>
       )}
     </div>

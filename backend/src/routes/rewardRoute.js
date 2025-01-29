@@ -11,7 +11,7 @@ const upload = multer({ storage: storage });
 const rewardController = new RewardController();
 
 router.post("/createReward", authMiddleware, rewardController.createReward);
-router.get("/getRewards/:storeId", authMiddleware, rewardController.getRewards);
+router.get("/getRewards/:storeId", rewardController.getRewards);
 router.delete(
   "/deleteReward/:rewardID",
   authMiddleware,
