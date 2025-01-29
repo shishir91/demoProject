@@ -33,6 +33,12 @@ router.put(
   storeController.editStore
 );
 router.put(
+  "/customizeLoyaltyCard",
+  authMiddleware,
+  upload.single("image"),
+  storeController.customizeLoyaltyCard
+);
+router.put(
   "/changeStoreStatus/:storeId",
   authMiddleware,
   storeController.editStoreStatus

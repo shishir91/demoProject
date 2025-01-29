@@ -85,6 +85,17 @@ export default class StoreController {
         const command = new GetObjectCommand(getObjectParams);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
         store.logo = url;
+        if (store.loyaltyCard.customStamp) {
+          const getObjectParams1 = {
+            Bucket: "samparkabucket",
+            Key: store.loyaltyCard.customStamp,
+          };
+          const command1 = new GetObjectCommand(getObjectParams1);
+          const url1 = await getSignedUrl(s3, command1, { expiresIn: 3600 });
+          store.loyaltyCard.customStamp = url1;
+        } else {
+          store.loyaltyCard.customStamp = null; // or set a default value
+        }
       }
 
       return res.json({ success: true, stores });
@@ -104,6 +115,17 @@ export default class StoreController {
         const command = new GetObjectCommand(getObjectParams);
         const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
         store.logo = url;
+        if (store.loyaltyCard.customStamp) {
+          const getObjectParams1 = {
+            Bucket: "samparkabucket",
+            Key: store.loyaltyCard.customStamp,
+          };
+          const command1 = new GetObjectCommand(getObjectParams1);
+          const url1 = await getSignedUrl(s3, command1, { expiresIn: 3600 });
+          store.loyaltyCard.customStamp = url1;
+        } else {
+          store.loyaltyCard.customStamp = null; // or set a default value
+        }
       }
       return res.json({ success: true, stores });
     } catch (error) {
@@ -111,9 +133,62 @@ export default class StoreController {
     }
   }
 
-  async editStore(req, res) {
+  async customizeLoyaltyCard(req, res) {
     try {
       console.log("req.file: ", req.file);
+      console.log("req.body: ", req.body);
+      const { storeId } = req.query;
+      const store = await storeModel.findById(storeId);
+      if (!store) {
+        return res.json({ success: false, message: "Cannot find the store" });
+      }
+      if (req.user.role == "admin" || req.user.id == store.user[0]) {
+        if (req.file) {
+          const oldLogoKey = store.loyaltyCard.customStamp;
+          if (oldLogoKey && !oldLogoKey.startsWith("https://")) {
+            const deleteObjectParams = {
+              Bucket: "samparkabucket",
+              Key: oldLogoKey,
+            };
+            const deleteCommand = new DeleteObjectCommand(deleteObjectParams);
+            await s3.send(deleteCommand);
+          }
+
+          // S3 upload
+          const imageName = Date.now().toString() + "-" + req.file.originalname;
+          const putObjectParams = {
+            Bucket: "samparkabucket",
+            Key: imageName,
+            Body: req.file.buffer,
+            ContentType: req.file.mimetype,
+          };
+          const putCommand = new PutObjectCommand(putObjectParams);
+          await s3.send(putCommand);
+          console.log(imageName);
+
+          store.loyaltyCard.customStamp = imageName;
+          await store.save();
+        }
+
+        Object.assign(store.loyaltyCard, req.body);
+
+        await store.save();
+
+        return res.json({
+          success: true,
+          message: "Loyalty Card Saved",
+          store,
+        });
+      } else {
+        return res.json({ success: false, message: "You don't have access" });
+      }
+    } catch (error) {
+      return res.status(500).send(error);
+    }
+  }
+
+  async editStore(req, res) {
+    try {
       const { storeId } = req.query;
       const store = await storeModel.findById(storeId);
       if (!store) {

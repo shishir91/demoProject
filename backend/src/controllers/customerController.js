@@ -121,6 +121,11 @@ export default class CustomerController {
     try {
       const { storeURL } = req.params;
       const store = await storeModel.findOne({ url: storeURL });
+      if (!store) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Store not found" });
+      }
       const getObjectParams = {
         Bucket: "samparkabucket",
         Key: store.logo,
@@ -128,6 +133,18 @@ export default class CustomerController {
       const command = new GetObjectCommand(getObjectParams);
       const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
       store.logo = url;
+
+      if (store.loyaltyCard.customStamp) {
+        const getObjectParams1 = {
+          Bucket: "samparkabucket",
+          Key: store.loyaltyCard.customStamp,
+        };
+        const command1 = new GetObjectCommand(getObjectParams1);
+        const url1 = await getSignedUrl(s3, command1, { expiresIn: 3600 });
+        store.loyaltyCard.customStamp = url1;
+      } else {
+        store.loyaltyCard.customStamp = null; // or set a default value
+      }
       return res.json({ success: true, store });
     } catch (error) {
       console.log(error);

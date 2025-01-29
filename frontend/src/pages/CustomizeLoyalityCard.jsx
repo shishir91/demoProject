@@ -17,6 +17,7 @@ const CustomizeLoyaltyCard = () => {
 
   console.log(store.loyaltyCard);
 
+  const [imageData, setImageData] = useState();
   const [cardData, setCardData] = useState({
     ...store.loyaltyCard,
     store: store.name,
@@ -33,11 +34,39 @@ const CustomizeLoyaltyCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    console.log("Submitting Form...");
+    console.log("Card Data:", cardData);
+    console.log("Image Data:", imageData);
+    console.log("Format:", format);
+
+    const formDataToSend = new FormData();
+
+    // Append each field to the FormData object
+    formDataToSend.append("format", format);
+    formDataToSend.append("totalShapes", cardData.totalShapes);
+    formDataToSend.append("stampColor", cardData.stampColor);
+    formDataToSend.append("cardColor", cardData.cardColor);
+    formDataToSend.append("textColor", cardData.textColor);
+    formDataToSend.append("stamp", cardData.stamp);
+
+    // Append the file (image)
+    if (imageData) {
+      formDataToSend.append("image", imageData);
+    }
     try {
+      for (let [key, value] of formDataToSend.entries()) {
+        console.log(`${key}:`, value);
+      }
+
       const response = await api.put(
-        `/store/editStore?storeId=${store._id}`,
-        { loyaltyCard: { ...cardData, format } },
-        { headers: { token } }
+        `/store/customizeLoyaltyCard?storeId=${store._id}`,
+        formDataToSend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            token,
+          },
+        }
       );
 
       if (response.data.success) {
@@ -92,7 +121,11 @@ const CustomizeLoyaltyCard = () => {
           <h1 className="text-xl font-bold text-green-300 mb-4">
             Customize Your Loyalty Card
           </h1>
-          <form className="space-y-4">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4"
+            encType="multipart/form-data"
+          >
             {format == "L2" && (
               // {/* Number of Stamps */}
               <div>
@@ -215,18 +248,18 @@ const CustomizeLoyaltyCard = () => {
                 type="file"
                 name="customStamp"
                 accept="image/*"
-                onChange={(e) =>
+                onChange={(e) => {
                   setCardData((prev) => ({
                     ...prev,
                     customStamp: URL.createObjectURL(e.target.files[0]),
-                  }))
-                }
+                  }));
+                  setImageData(e.target.files[0]);
+                }}
                 className="w-full px-4 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
               />
             </div>
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-500 transition"
             >
               Save
