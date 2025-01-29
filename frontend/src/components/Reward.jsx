@@ -223,7 +223,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import Description from "./Description";
-import MyRewards from "./MyRewards";
+import MyRewards from "./Myrewards";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { toast } from "react-toastify";
