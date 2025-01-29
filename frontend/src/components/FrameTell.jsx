@@ -36,7 +36,7 @@ const FrameTell = ({ className = "", onClose }) => {
       <img
         className="w-auto h-full object-fill z-[0]" // Ensure it covers the div properly
         alt=""
-        src="/frame-1410103897@2x.png"
+        src="/pic.png"
       />
       {/* Close button positioned at the top-right corner */}
       <img

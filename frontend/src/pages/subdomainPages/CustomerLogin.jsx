@@ -64,17 +64,22 @@ const CustomerLogin = (storeURL) => {
       if (response.data.success) {
         setLoading(false);
         console.log(response.data);
-
+        localStorage.setItem(
+          "userInfo",
+          JSON.stringify(response.data.customer)
+        );
+        localStorage.setItem("token", response.data.token);
         toast.success(response.data.message, {
           autoClose: 1000,
           theme: "colored",
-          onClose: () =>
-            navigate("/verification", {
-              state: {
-                userInfo: JSON.stringify(response.data.customer),
-                token: response.data.token,
-              },
-            }),
+          // onClose: () =>
+          //   navigate("/verification", {
+          //     state: {
+          //       userInfo: JSON.stringify(response.data.customer),
+          //       token: response.data.token,
+          //     },
+          //   }),
+          onClose: () => navigate("/loyality"),
         });
       } else {
         setLoading(false);

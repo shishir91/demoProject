@@ -29,8 +29,7 @@ import StoreSide from "./pages/subdomainPages/StoreSide";
 import NotFound from "./components/NotFound";
 import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
-import L2 from "./components/L2";
-import L1 from "./components/L1";
+import PoweredBySamparka from "./components/PoweredBySamparka";
 
 const App = () => {
   // Use state to track auth status
@@ -39,40 +38,22 @@ const App = () => {
     token: localStorage.getItem("token"),
   });
 
-  // Listen for storage changes
   useEffect(() => {
-    const handleStorageChange = () => {
-      setAuthState({
-        userInfo: JSON.parse(localStorage.getItem("userInfo")),
-        token: localStorage.getItem("token"),
-      });
+    const handleStorageChange = (event) => {
+      if (event.key === "userInfo" || event.key === "token") {
+        setAuthState({
+          userInfo: JSON.parse(localStorage.getItem("userInfo")),
+          token: localStorage.getItem("token"),
+        });
+      }
     };
 
-    // Listen for custom event from login component
-    window.addEventListener("auth-change", handleStorageChange);
+    window.addEventListener("storage", handleStorageChange);
 
     return () => {
-      window.removeEventListener("auth-change", handleStorageChange);
+      window.removeEventListener("storage", handleStorageChange);
     };
   }, []);
-
-  const ProtectedRoute = ({ children }) => {
-    if (!authState.userInfo || !authState.token) {
-      return <Navigate to="/" replace />;
-    }
-    return children;
-  };
-
-  const PublicRoute = ({ children }) => {
-    if (authState.userInfo && authState.token) {
-      if (authState.userInfo.role === "admin") {
-        return <Navigate to="/dashboard" replace />;
-      } else {
-        return <Navigate to="/store" replace />;
-      }
-    }
-    return children;
-  };
 
   //HANDLE SUBDOMAIN
   const [subdomain, setSubdomain] = useState("");
@@ -107,15 +88,24 @@ const App = () => {
     checkStore();
   }, [subdomain]);
 
-  // return (
-  //   <Router>
-  //     <Routes>
-  //       <Route index element={<L1/>} />
-  //     </Routes>
-  //   </Router>
-  // );
-
   if (!subdomain || subdomain == "" || subdomain == "www") {
+    const ProtectedRoute = ({ children }) => {
+      if (!authState.userInfo || !authState.token) {
+        return <Navigate to="/" replace />;
+      }
+      return children;
+    };
+
+    const PublicRoute = ({ children }) => {
+      if (authState.userInfo && authState.token) {
+        if (authState.userInfo.role === "admin") {
+          return <Navigate to="/dashboard" replace />;
+        } else {
+          return <Navigate to="/store" replace />;
+        }
+      }
+      return children;
+    };
     return (
       <Router>
         <Navbar />
@@ -226,31 +216,101 @@ const App = () => {
       </Router>
     );
   } else if (storeStatus) {
+    const StoreProtectedRoute = ({ children }) => {
+      const storeUser = JSON.parse(localStorage.getItem("userInfo"));
+      const storeToken = localStorage.getItem("token");
+
+      if (!storeUser || !storeToken) {
+        return <Navigate to="/" replace />;
+      }
+
+      return children;
+    };
+
+    const StorePublicRoute = ({ children }) => {
+      const storeUser = JSON.parse(localStorage.getItem("storeUser"));
+      const storeToken = localStorage.getItem("storeToken");
+
+      if (storeUser && storeToken) {
+        return <Navigate to="/loyality" replace />;
+      }
+
+      return children;
+    };
+
     return (
       <Router>
         <ToastContainer />
         <Routes>
-          <Route index element={<CustomerLogin url={subdomain} />} />
+          {/* Public Route: Only accessible if NOT logged in */}
+          <Route
+            index
+            element={
+              <StorePublicRoute>
+                <CustomerLogin url={subdomain} />
+              </StorePublicRoute>
+            }
+          />
+
+          {/* Protected Routes: Require store login */}
           <Route
             path="/points_distribution"
-            element={<StoreSide url={subdomain} />}
+            element={
+              <StoreProtectedRoute>
+                <StoreSide url={subdomain} />
+              </StoreProtectedRoute>
+            }
           />
-          <Route path="/verification" element={<Verification />} />
+          <Route
+            path="/verification"
+            element={
+              <StoreProtectedRoute>
+                <Verification />
+              </StoreProtectedRoute>
+            }
+          />
           <Route path="/loyality">
-            <Route index element={<LoyalityCard url={subdomain} />} />
-            <Route path=":pointsId" element={<GetPoints url={subdomain} />} />
+            <Route
+              index
+              element={
+                <StoreProtectedRoute>
+                  <LoyalityCard url={subdomain} />
+                </StoreProtectedRoute>
+              }
+            />
+            <Route
+              path=":pointsId"
+              element={
+                <StoreProtectedRoute>
+                  <GetPoints url={subdomain} />
+                </StoreProtectedRoute>
+              }
+            />
           </Route>
-          <Route path="/rewards" element={<Rewards />} />
+          <Route
+            path="/rewards"
+            element={
+              <StoreProtectedRoute>
+                <Rewards />
+              </StoreProtectedRoute>
+            }
+          />
           <Route
             path="/reservation"
-            element={<Reservation url={subdomain} />}
+            element={
+              <StoreProtectedRoute>
+                <Reservation url={subdomain} />
+              </StoreProtectedRoute>
+            }
           />
-          <Route path="*" element={<NotFound />} />
+
+          {/* Catch-all Route */}
+          <Route path="*" element={<PoweredBySamparka />} />
         </Routes>
       </Router>
     );
   } else {
-    return <NotFound />;
+    return <PoweredBySamparka />;
   }
 };
 

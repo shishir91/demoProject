@@ -190,7 +190,7 @@ const Reservation = (store) => {
         <img
           className="w-[270px] relative h-[195px] object-cover cursor-pointer z-[1]"
           alt="Frame"
-          src="/frame-1410103897@2x.png"
+          src="/pic.png"
           onClick={openFrameTellPopup}
         />
         <form
