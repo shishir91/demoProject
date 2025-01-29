@@ -26,13 +26,27 @@
       // Dynamically set the manifest link
       const manifestLink = document.createElement("link");
       manifestLink.rel = "manifest";
-      manifestLink.href = `http://localhost:5173/manifest.json?subdomain=${subdomain}`;
+      manifestLink.href = `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`;
       document.head.appendChild(manifestLink);
       // Dynamic for Apple Devices
-      fetch(`http://localhost:5173/manifest.json?subdomain=${subdomain}`)
+      fetch(
+        `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`
+      )
         .then((response) => response.json())
         .then((store) => {
           console.log(store.icons[0].src);
+
+          // Update document title
+          document.title = store.name;
+
+          // Update favicon (logo)
+          let favicon = document.querySelector("link[rel='icon']");
+          if (!favicon) {
+            favicon = document.createElement("link");
+            favicon.rel = "icon";
+            document.head.appendChild(favicon);
+          }
+          favicon.href = store.icons[0].src;
 
           // Dynamically set Apple-specific meta tags
           const metaTitle = document.createElement("meta");
