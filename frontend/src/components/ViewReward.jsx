@@ -14,10 +14,10 @@ const ViewReward = ({ className = "", location, group1410103762, vector }) => {
       className={`self-stretch flex flex-row items-center justify-center py-2 px-0 text-left text-xs-41 text-black font-poppins lg1:pl-0 lg1:pr-0 lg1:box-border ${className}`}
     >
       <div className="flex-1 h-[46px]" />
-      <div className="flex-1 flex flex-col items-center justify-center">
+      <div className="flex-1 flex flex-col items-center justify-center gap-[8px]">
         <div className="h-[74px] flex flex-col items-center justify-center">
           <img
-            className="w-auto relative h-[75px]"
+            className="w-auto relative h-[70px]"
             alt=""
             src={group1410103762}
           />

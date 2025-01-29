@@ -101,15 +101,15 @@ const LoyalityCard = (
   return (
     <div className="mix-h-screen">
       <div
-        className={`min-h-screen w-full bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[12px] box-border gap-[12px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
+        className={`min-h-screen w-full bg-white flex flex-col items-center justify-start pt-6 px-0 pb-[10px] box-border gap-[15px] text-left text-5xl1 ${textConfig.fontColor} font-poppins`}
       >
         {/* Greeting Section */}
-        <div className="w-80 flex flex-col items-start justify-start box-border text-center font-rubik font-thin fontSize-mini1">
-          <div className="relative tracking-[0.01em] text-black ">
-            <span className="font-thin text-3xl">{greeting}</span>
+        <div className="left-0 mr-[140px] flex flex-col items-start justify-start box-border font-rubik font-thin">
+          <div className="relative tracking-[0.01em] text-black text-lg ">
+            <span className="font-thin ">{greeting}</span>
             <span className="font-medium font-Poppins">👋🏼</span>
           </div>
-          <div className="relative text-xl tracking-[0.01em] font-semibold font-poppins mt-[-5px] mq350small1:font-poppins mq350small1:text-mini1">
+          <div className="relative tracking-[0.01em] font-semibold font-poppins mt-[-5px] text-sm">
             {user.name}
           </div>
         </div>
@@ -130,25 +130,17 @@ const LoyalityCard = (
         )}
 
         {/* View Rewards Button */}
-        <div className="self-stretch flex flex-row items-center justify-center py-2 px-0 gap-1 text-mini1">
-          <div className="w-5 h-5 overflow-hidden shrink-0 flex flex-row items-center justify-center p-px box-border">
-            <img
-              className="w-4 relative h-[15px]"
-              alt="View Rewards Icon"
-              src="/vector.svg"
-            />
+        <div className="self-stretch flex flex-row items-center justify-center py-2 px-0 gap-1 text-sm">
+          <div className="overflow-hidden shrink-0 flex flex-row items-center justify-center p-px box-border">
+            <img alt="View Rewards Icon" src="/vector.svg" />
           </div>
           <div
-            className="relative tracking-[0.01em] font-medium cursor-pointer mq350small1:text-smi1"
+            className="relative tracking-[0.01em] font-medium cursor-pointer"
             onClick={openFrame}
           >
             View Rewards
           </div>
-          <img
-            className="w-5 relative h-5"
-            alt="Frame Icon"
-            src="/frame-1410103878.svg"
-          />
+          <img alt="Frame Icon" src="/frame-1410103878.svg" />
         </div>
 
         {/* Navigation Buttons */}

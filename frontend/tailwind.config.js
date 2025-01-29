@@ -60,7 +60,7 @@ export default {
         sm1: "14px",
         "3xs1": "10px",
         xl1: "20px",
-        base1: "16px",
+        base1: "13px",
         "5xl1": "24px",
         "11xl1": "30px",
         "2xs1": "11px",
