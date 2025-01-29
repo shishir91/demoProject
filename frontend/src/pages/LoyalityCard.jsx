@@ -146,7 +146,7 @@ const LoyalityCard = (
         {/* Navigation Buttons */}
         <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
           <div
-            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
+            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
             onClick={handleNavigate(navigationPaths.game)}
           >
             {/* <img
