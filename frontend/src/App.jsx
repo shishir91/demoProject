@@ -30,6 +30,7 @@ import NotFound from "./components/NotFound";
 import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
+import TextEditor from "./components/TextEditor";
 
 const App = () => {
   // Use state to track auth status
@@ -87,6 +88,8 @@ const App = () => {
     };
     checkStore();
   }, [subdomain]);
+
+  // return <TextEditor/>
 
   if (!subdomain || subdomain == "" || subdomain == "www") {
     const ProtectedRoute = ({ children }) => {

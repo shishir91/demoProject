@@ -82,13 +82,15 @@ const LoyalityCard = (
 
   useEffect(() => {
     let index = 0;
+    setGreeting(greetings[index]);
+
     const interval = setInterval(() => {
       index = (index + 1) % greetings.length;
       setGreeting(greetings[index]);
     }, textConfig.greetingInterval);
 
     return () => clearInterval(interval);
-  }, [greetings, textConfig.greetingInterval]);
+  }, [textConfig.greetingInterval]);
 
   const openFrame = useCallback(() => setFrameOpen(true), []);
   const closeFrame = useCallback(() => setFrameOpen(false), []);
@@ -146,8 +148,8 @@ const LoyalityCard = (
         {/* Navigation Buttons */}
         <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
           <div
-            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
-            onClick={handleNavigate(navigationPaths.game)}
+            // className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
+            // onClick={handleNavigate(navigationPaths.game)}
           >
             {/* <img
               className="w-6 relative h-[22px]"
