@@ -13,8 +13,8 @@ export default class MailController {
     console.log(userEmail);
     try {
       const mailOptions = {
-        from: process.env.EMAIL_USER,
-        to: "shreeyanch86@gmail.com",
+        from: "shreeyanch86@gmail.com",
+        to: "shresthashishir91@gmail.com",
         subject: "New Message Scheduled",
         html: `
          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
@@ -51,7 +51,7 @@ export default class MailController {
     }
   }
 
-  async mailCustomers(user, pass, email, points, storeURL) {
+  async mailCustomers(user, pass, email, subject, message, points, storeURL) {
     try {
       let transport = nodemailer.createTransport({
         service: "gmail",
@@ -63,19 +63,24 @@ export default class MailController {
       const mailOptions = {
         from: user,
         to: email,
-        subject: "Loyalty Point Received",
+        subject: subject,
         html: `
          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
-            <h2 style="color: #333;">Congratulation 🎉 </h2>
-            <p style="color: #555;">You have received ${points} points.</p>
-            <div style="text-align: center; margin-top: 20px;">
-                <a href="http://${storeURL}.samparka.co/loyality" 
-                style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
-                View Points
-                </a>
-            </div>
+            ${message}
         </div>
         `,
+        // html: `
+        //  <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
+        //     <h2 style="color: #333;">Congratulation 🎉 </h2>
+        //     <p style="color: #555;">You have received ${points} points.</p>
+        //     <div style="text-align: center; margin-top: 20px;">
+        //         <a href="http://${storeURL}.samparka.co/loyality"
+        //         style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
+        //         View Points
+        //         </a>
+        //     </div>
+        // </div>
+        // `,
       };
       await new Promise((resolve, reject) => {
         transport.sendMail(mailOptions, (error, info) => {

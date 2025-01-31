@@ -29,12 +29,12 @@ const Login = () => {
         // Navigate immediately
         const redirectPath =
           response.data.userData.role === "admin" ? "/dashboard" : "/store";
-        navigate(redirectPath);
 
         // Show toast after navigation
         toast.success(response.data.message, {
           autoClose: 1000,
           theme: "colored",
+          onClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {

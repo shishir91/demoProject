@@ -31,33 +31,32 @@
 // export default TextEditor;
 
 import { Editor } from "@tinymce/tinymce-react";
-import { useState } from "react";
 
-const TextEditor = () => {
-  const [content, setContent] = useState("");
+const TextEditor = ({ message, setMessage }) => {
+  console.log(message);
 
   return (
     <Editor
       apiKey="gon41w7lxzbzh065i62yy0r2hr61x156mb6vs2z5cuxinj0n"
-      initialValue="Hi there, <br/><br/> Congratulations, you have earned [points_earned] points."
+      initialValue="Hi there, <br/><br/> Congratulations, you have earned 1 points.<br/> Shishir Store"
       init={{
         height: 400,
         menubar: true, // Enable menu bar for full features
-        // plugins: [
-        //   "advlist autolink lists link image charmap preview anchor",
-        //   "searchreplace visualblocks code fullscreen",
-        //   "insertdatetime media table paste code help wordcount",
-        // ],
+        plugins: [
+          "advlist autolink lists link image charmap preview anchor",
+          "searchreplace visualblocks code fullscreen",
+          "insertdatetime media table paste code help wordcount",
+        ],
         toolbar:
           "undo redo | formatselect | bold italic underline strikethrough | forecolor backcolor | " +
           "alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | " +
           "blockquote code | link image media table | preview fullscreen help",
         image_title: true,
         automatic_uploads: false,
-        // file_picker_types: "image",
+        file_picker_types: "image",
         image_advtab: true, // Enables the "Insert Image via URL" option
       }}
-    //   onEditorChange={(newContent) => setContent(newContent)}
+      onEditorChange={(newContent) => setMessage(newContent)}
     />
   );
 };

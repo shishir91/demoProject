@@ -24,7 +24,7 @@ const Navbar = () => {
     toast.success("User Logged Out", {
       autoClose: 1000,
       theme: "colored",
-      onClose: () => navigate("/"),
+      onClose: () => window.location.reload(),
     });
   };
 

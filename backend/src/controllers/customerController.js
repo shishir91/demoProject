@@ -10,6 +10,7 @@ import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
 import rewardModel from "../models/rewardModel.js";
 import redemptionModel from "../models/redemptionModel.js";
 import reservationModel from "../models/reservationModel.js";
+import mailSMSModel from "../models/mailSMSModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -233,13 +234,15 @@ export default class CustomerController {
         .findOne({ url: storeURL })
         .select("email pass");
       console.log(store);
-
+      const getMessage = await mailSMSModel.findOne({ store });
+      let subject = getMessage.messageAfterLogin.subject;
+      let message = getMessage.messageAfterLogin.message;
       const mailResponse = await mailController.mailCustomers(
         store.email,
         store.pass,
         customer.email,
-        1,
-        storeURL
+        subject,
+        message
       );
       console.log(mailResponse);
 

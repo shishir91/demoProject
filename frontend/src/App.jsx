@@ -30,7 +30,9 @@ import NotFound from "./components/NotFound";
 import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
-import TextEditor from "./components/TextEditor";
+// import TextEditor from "./components/TextEditor";
+import EmailSetting from "./pages/EmailSetting";
+import ConfigSMTP from "./pages/ConfigSMTP";
 
 const App = () => {
   // Use state to track auth status
@@ -164,6 +166,24 @@ const App = () => {
                 <ProtectedRoute>
                   <Sidebar />
                   <Loyality />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="config"
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <ConfigSMTP />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="emailSetting"
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <EmailSetting />
                 </ProtectedRoute>
               }
             />

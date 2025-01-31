@@ -2,7 +2,7 @@
 import storeModel from "../models/storeModel.js";
 import pointsModel from "../models/pointsModel.js";
 import customerModel from "../models/customerModel.js";
-import userModel from "../models/userModel.js";
+import validator from "validator";
 
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import {
@@ -11,6 +11,7 @@ import {
   PutObjectCommand,
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
+import mailSMSModel from "../models/mailSMSModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -260,6 +261,8 @@ export default class StoreController {
           success: true,
           message: "Store Deleted Successfully",
         });
+      } else {
+        return res.json({ success: false, message: "Access Denied" });
       }
     } catch (error) {
       return res.status(500).send(error);
@@ -306,6 +309,42 @@ export default class StoreController {
         message: "Error updating store status",
         error: error.message,
       });
+    }
+  }
+
+  async configSMTP(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { email, pass } = req.body;
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store Not Found" });
+      }
+      if (!validator.isEmail(email)) {
+        return res.json({ success: false, message: "Invalid email address" });
+      }
+      if (req.user.role == "admin" || req.user.id == store.user[0]) {
+        const config = await storeModel.findByIdAndUpdate(
+          storeID,
+          { email, pass },
+          { new: true }
+        );
+        const mailSMS = await mailSMSModel.findOne({ store });
+        if (!mailSMS) {
+          await mailSMSModel.create({ store });
+        }
+        await mailSMSModel.create();
+        return res.json({
+          success: true,
+          message: "SMTP Configured Successfully.",
+          config,
+        });
+      } else {
+        return res.json({ success: false, message: "Access Denied" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
     }
   }
 

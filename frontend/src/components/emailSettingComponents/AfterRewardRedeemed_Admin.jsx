@@ -1,0 +1,54 @@
+import React, { useState } from "react";
+import TextEditor from "./TextEditor";
+import { toast } from "react-toastify";
+import config from "../../api/config";
+
+const AfterRewardRedeemed_Admin = (state) => {
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+  };
+  return (
+    <form className="mx-20" onSubmit={handleSubmit}>
+      {/* Subject */}
+      <div className="relative">
+        <label
+          htmlFor="pass"
+          className="block text-md font-medium text-gray-200"
+        >
+          Subject:
+        </label>
+        <div className="relative">
+          <input
+            id="subject"
+            name="subject"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            required
+            className="my-2 block w-full px-4 py-2 bg-stone-800 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
+          />
+        </div>
+      </div>
+      <label
+        htmlFor="textEditor"
+        className="block text-md font-medium text-gray-200"
+      >
+        Message:
+      </label>
+      <div className="my-2">
+        <TextEditor message={message} setMessage={setMessage} />
+      </div>
+      <button
+        type="submit"
+        className="px-6 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+      >
+        Submit
+      </button>
+    </form>
+  );
+};
+
+export default AfterRewardRedeemed_Admin;

@@ -10,6 +10,7 @@ import {
   IdCard,
   Plus,
   Mail,
+  Settings,
 } from "lucide-react";
 import Switch from "../components/Switch";
 import { useNavigate } from "react-router-dom";
@@ -224,13 +225,28 @@ const Store = () => {
                       </button>
                       <button
                         onClick={() =>
-                          navigate("/store/loyalityCard", { state: { store } })
+                          navigate("/store/config", {
+                            state: { store },
+                          })
                         }
                         className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
                       >
-                        <Mail className="h-5 w-5 mr-2 text-gray-500" />
-                        Email Setting
+                        <Settings className="h-5 w-5 mr-2 text-gray-500" />
+                        SMTP Config
                       </button>
+                      {store.email && store.pass && (
+                        <button
+                          onClick={() =>
+                            navigate("/store/emailSetting", {
+                              state: { store },
+                            })
+                          }
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                        >
+                          <Mail className="h-5 w-5 mr-2 text-gray-500" />
+                          Email Setting
+                        </button>
+                      )}
                       {user.role == "admin" && (
                         // {/* delete */}
                         <button

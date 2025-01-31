@@ -3,10 +3,12 @@ import StoreController from "../controllers/storeController.js";
 import adminMiddleware from "../middlewares/adminMiddleware.js";
 import authMiddleware from "../middlewares/authMiddleware.js";
 import multer from "multer";
+import MailSMSController from "../controllers/mailSMSController.js";
 
 const router = new Router();
 
 const storeController = new StoreController();
+const mailSMSController = new MailSMSController();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -26,6 +28,13 @@ router.get("/checkStore/:storeURL", storeController.checkStore);
 router.get("/getPointsDetail/:storeURL", storeController.getPointsDetail);
 router.put("/changePoints/:storeURL", storeController.changePoints);
 router.get("/myStores", authMiddleware, storeController.getMyStore);
+router.put("/config/:storeID", authMiddleware, storeController.configSMTP);
+router.put("/getMessage/:storeID", storeController.configSMTP);
+router.put(
+  "/configMessage/:storeID",
+  authMiddleware,
+  mailSMSController.configMessage
+);
 router.put(
   "/editStore",
   authMiddleware,
