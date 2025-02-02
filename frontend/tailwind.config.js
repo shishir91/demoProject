@@ -6,17 +6,26 @@ export default {
       animation: {
         pulseCircle: "pulseCircle 2s infinite",
         spinCircle: "spinCircle 2s linear infinite",
+        glow: "glow 1.5s infinite alternate",
       },
       keyframes: {
         spinCircle: {
           "0%": { transform: "rotate(0deg)" },
           "100%": { transform: "rotate(360deg)" },
         },
+        glow: {
+          "0%": { boxShadow: "0 0 5px #2ecc71" },
+          "100%": { boxShadow: "0 0 15px #2ecc71" },
+        },
         pulseCircle: {
           "0%": { transform: "scale(1)", opacity: "1" },
           "50%": { transform: "scale(1.2)", opacity: "0.5" },
           "100%": { transform: "scale(1)", opacity: "1" },
         },
+      },
+      dropShadow: {
+        glow: "0 0 10px #2ecc71",
+        neon: "0 0 8px #2ecc71, 0 0 16px #2ecc71",
       },
       colors: {
         white: "#fff",

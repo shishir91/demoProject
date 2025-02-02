@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
+import { Info } from "lucide-react";
 
 const ViewReward = ({ className = "", location, group1410103762, vector }) => {
   const navigate = useNavigate();
@@ -25,12 +26,17 @@ const ViewReward = ({ className = "", location, group1410103762, vector }) => {
         <div className="relative tracking-[0.01em] font-medium">{location}</div>
       </div>
       <div className="flex-1 flex flex-col items-end justify-center">
-        {/* <div
-          className="w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 bg-seagreen-100 border-whitesmoke-100 border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5"
+        <div
+          className="w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 
+    bg-seagreen-100 border-whitesmoke-100 border-[1px] border-solid box-border flex flex-row 
+    items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5 
+    animate-glow transition-all duration-300 hover:scale-110"
           onClick={onFrameContainerClick}
         >
-          <img className="w-5 relative h-5" alt="" src={vector} />
-        </div> */}
+          <Info className="w-7 h-7 text-white animate-pulse hover:animate-spin transition-all duration-500 ease-in-out drop-shadow-neon" />
+        </div>
+
+        {/* <img className="w-5 relative h-5" alt="" src={vector} /> */}
       </div>
     </div>
   );

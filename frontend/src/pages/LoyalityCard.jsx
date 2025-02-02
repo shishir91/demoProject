@@ -8,7 +8,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import api from "../api/config";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { toast } from "react-toastify";
-import { getUserInfo } from "../config/idb";
+import { getUserInfo, saveUserInfo } from "../config/idb";
 
 const LoyalityCard = (
   store,
@@ -44,7 +44,7 @@ const LoyalityCard = (
       const data = await getUserInfo();
       if (data.userInfo && data.token) {
         localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
-        localStorage.setItem("token", JSON.stringify(data.token));
+        localStorage.setItem("token", data.token);
       } else {
         if (!user || !token) {
           navigate("/");
@@ -57,6 +57,7 @@ const LoyalityCard = (
       try {
         const response = await api.get("/customer", { headers: { token } });
         localStorage.setItem("userInfo", JSON.stringify(response.data));
+        await saveUserInfo(response.data, token);
         setUser(response.data);
       } catch (error) {
         console.error(error);
