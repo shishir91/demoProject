@@ -245,17 +245,25 @@ export default class CustomerController {
         .findOne({ url: storeURL })
         .select("email pass");
       console.log(store);
-      const getMessage = await mailSMSModel.findOne({ store });
-      let subject = getMessage.messageAfterLogin.subject;
-      let message = getMessage.messageAfterLogin.message;
-      const mailResponse = await mailController.mailCustomers(
-        store.email,
-        store.pass,
-        customer.email,
-        subject,
-        message
-      );
-      console.log(mailResponse);
+      if (store.email && store.pass) {
+        const getMessage = await mailSMSModel.findOne({ store });
+        if (
+          getMessage &&
+          getMessage.messageAfterLogin &&
+          getMessage.messageAfterLogin.subject
+        ) {
+          let subject = getMessage.messageAfterLogin.subject;
+          let message = getMessage.messageAfterLogin.message;
+          const mailResponse = await mailController.mailCustomers(
+            store.email,
+            store.pass,
+            customer.email,
+            subject,
+            message
+          );
+          console.log(mailResponse);
+        }
+      }
 
       return updatedCustomer;
     } catch (error) {
