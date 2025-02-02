@@ -29,7 +29,9 @@
       // manifestLink.href = `http://localhost:8080/manifest.json?subdomain=${subdomain}`;
       // document.head.appendChild(manifestLink);
       // Dynamic for Apple Devices
-      fetch(`http://localhost:8080/manifest.json?subdomain=${subdomain}`)
+      fetch(
+        `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`
+      )
         .then((response) => response.json())
         .then((store) => {
           console.log(store);
