@@ -1,69 +1,74 @@
-import React, { useState, useEffect } from "react";
-import { Share, SquarePlus, ChevronRight, Store, X, EllipsisVertical } from "lucide-react";
+import React from "react";
+import {
+  Share,
+  SquarePlus,
+  ChevronRight,
+  Store,
+  X,
+  EllipsisVertical,
+} from "lucide-react";
+import PropTypes from "prop-types";
 
-const InstallationGuide = () => {
-  const [isAppleDevice, setIsAppleDevice] = useState(false);
-  const [showGuide, setShowGuide] = useState(true); // State to handle visibility
-
-  useEffect(() => {
-    // Check if the user is on an Apple device
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    if (/iPad|iPhone|iPod|Macintosh/.test(userAgent) && !window.MSStream) {
-      setIsAppleDevice(true);
-    }
-  }, []);
+const InstallationGuide = ({ showGuide, setShowGuide }) => {
+  if (!showGuide) return null; // Don't render if guide is hidden
 
   // Close the guide
   const handleClose = () => setShowGuide(false);
 
-  if (!showGuide) return null; // If guide is dismissed, don't render it
+  // Detect Apple Device
+  const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+  const isAppleDevice =
+    /iPad|iPhone|iPod|Macintosh/.test(userAgent) && !window.MSStream;
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-white p-4 shadow-lg z-50 text-gray-500">
-      <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold text-center flex-1">
-          {isAppleDevice
-            ? "How to Install this app on iOS"
-            : "How to Install this app on Android"}
-        </h3>
-        {/* Close Button */}
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 transition-opacity duration-300">
+      <div className="bg-white p-6 rounded-xl shadow-xl w-[90%] max-w-md text-center relative animate-fadeIn">
         <button
           onClick={handleClose}
-          className="text-gray-500 hover:text-gray-700 transition"
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700 transition"
         >
           <X className="w-6 h-6" />
         </button>
-      </div>
 
-      {isAppleDevice ? (
-        // Apple Device Layout
-        <div className="flex items-center justify-center space-x-4">
-          <div className="flex flex-col items-center text-center">
-            <Share className="w-8 h-8 text-gray-500" />
-            <p className="text-sm text-gray-600 mt-2">Tap Share</p>
+        <h3 className="text-lg font-semibold mb-6">
+          {isAppleDevice
+            ? "How to Install this App on iOS"
+            : "How to Install this App on Android"}
+        </h3>
+
+        {isAppleDevice ? (
+          <div className="flex items-center justify-center space-x-4">
+            <div className="flex flex-col items-center text-center">
+              <Share className="w-8 h-8 text-gray-600" />
+              <p className="text-sm text-gray-600 mt-2">Tap Share</p>
+            </div>
+            <ChevronRight className="w-6 h-6 text-gray-400" />
+            <div className="flex flex-col items-center text-center">
+              <SquarePlus className="w-8 h-8 text-gray-600" />
+              <p className="text-sm text-gray-600 mt-2">Add to Home Screen</p>
+            </div>
           </div>
-          <ChevronRight className="w-6 h-6 text-gray-400" />
-          <div className="flex flex-col items-center text-center">
-            <SquarePlus className="w-8 h-8 text-gray-500" />
-            <p className="text-sm text-gray-600 mt-2">Add to Home Screen</p>
+        ) : (
+          <div className="flex items-center justify-center space-x-4">
+            <div className="flex flex-col items-center text-center">
+              <EllipsisVertical className="w-8 h-8 text-gray-600" />
+              <p className="text-sm text-gray-600 mt-2">Tap Menu</p>
+            </div>
+            <ChevronRight className="w-6 h-6 text-gray-400" />
+            <div className="flex flex-col items-center text-center">
+              <SquarePlus className="w-8 h-8 text-gray-600" />
+              <p className="text-sm text-gray-600 mt-2">Add to Home Screen</p>
+            </div>
           </div>
-        </div>
-      ) : (
-        // Android Device Layout
-        <div className="flex items-center justify-center space-x-4">
-          <div className="flex flex-col items-center text-center">
-            <EllipsisVertical className="w-8 h-8 text-gray-500" />
-            <p className="text-sm text-gray-600 mt-2">Tap Menu</p>
-          </div>
-          <ChevronRight className="w-6 h-6 text-gray-400" />
-          <div className="flex flex-col items-center text-center">
-            <SquarePlus className="w-8 h-8 text-gray-500" />
-            <p className="text-sm text-gray-600 mt-2">Add to Home Screen</p>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
+};
+
+InstallationGuide.propTypes = {
+  showGuide: PropTypes.bool.isRequired,
+  setShowGuide: PropTypes.func.isRequired,
 };
 
 export default InstallationGuide;
