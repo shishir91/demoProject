@@ -28,10 +28,7 @@ const MessageForm = () => {
       const response = await api.get("/user/getMessages", {
         headers: { token },
       });
-      console.log(response);
       if (response.data.success) {
-        console.log(response);
-
         setMessageHistory(response.data.messages);
       }
     };

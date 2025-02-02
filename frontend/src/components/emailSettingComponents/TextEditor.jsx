@@ -33,8 +33,6 @@
 import { Editor } from "@tinymce/tinymce-react";
 
 const TextEditor = ({ message, setMessage }) => {
-  console.log(message);
-
   return (
     <Editor
       apiKey="gon41w7lxzbzh065i62yy0r2hr61x156mb6vs2z5cuxinj0n"

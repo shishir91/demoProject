@@ -18,7 +18,6 @@ const Dashboard = () => {
     const fetchUsers = async () => {
       setLoading(true);
       const response = await api.get("/admin/getUsers", { headers: { token } });
-      console.log(response);
       if (response.data.success) {
         setUsers(response.data.users);
       }
@@ -43,7 +42,6 @@ const Dashboard = () => {
         { newUser },
         { headers: { token } }
       );
-      console.log(response);
       if (response.data.success) {
         toast.success(response.data.message, {
           autoClose: 1000,

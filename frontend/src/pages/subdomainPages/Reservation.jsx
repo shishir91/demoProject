@@ -149,10 +149,8 @@ const Reservation = (store) => {
         },
         { headers: { token } }
       );
-      console.log(response);
       if (response.data.success) {
         setLoading(false);
-        console.log(response.data);
 
         toast.success(response.data.message, {
           autoClose: 1000,

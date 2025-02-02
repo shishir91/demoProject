@@ -33,8 +33,6 @@ const Store = () => {
     try {
       const response = await api.get("/store", { headers: { token } });
       if (response.data.success) {
-        console.log(response);
-
         setStores(response.data.stores);
       }
     } catch (error) {
@@ -48,8 +46,6 @@ const Store = () => {
     try {
       const response = await api.get("/store/myStores", { headers: { token } });
       if (response.data.success) {
-        console.log(response);
-
         setStores(response.data.stores);
       }
     } catch (error) {
@@ -75,7 +71,6 @@ const Store = () => {
           headers: { token },
         }
       );
-      console.log(response);
       if (response.data.success) {
         setShowModal(false);
         toast.success(response.data.message, {

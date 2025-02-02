@@ -16,7 +16,6 @@ const MyRewards = ({ className = "", onClose, token }) => {
       const response = await api.get("/customer/myRewards", {
         headers: { token },
       });
-      console.log(response);
 
       if (response.data.success) {
         setRewards(response.data.myRewards);
@@ -93,7 +92,6 @@ const MyRewards = ({ className = "", onClose, token }) => {
               <div className="self-stretch flex flex-row items-center justify-center gap-[3px]">
                 <div className="w-2.5 relative rounded-62xl1 bg-lime border-whitesmoke-200 border-[1px] border-solid box-border h-2.5" />
                 <div className="flex flex-row items-center justify-center">
-                  {console.log(status)}
                   <div className="relative font-medium">{statuses[index]}</div>
                 </div>
               </div>

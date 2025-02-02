@@ -39,7 +39,6 @@ const EditStore = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData);
     // Create a new FormData object
     const formDataToSend = new FormData();
 
@@ -64,7 +63,6 @@ const EditStore = () => {
         }
       );
       setIsLoading(false);
-      console.log("Response:", response.data);
       if (response.data.success) {
         toast.success(response.data.message, {
           autoClose: 1000,

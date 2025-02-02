@@ -124,7 +124,6 @@ const EmailSetting = () => {
         </button>
       </div>
       <div>
-        {console.log(mailMessage)}
         {status === "afterLogin" && mailMessage.messageAfterLogin && (
           <AfterLogin
             store={store}

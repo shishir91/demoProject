@@ -24,8 +24,6 @@ const StoreSide = (subdomain) => {
     try {
       const response = await api.get(`/store/getPointsDetail/${subdomain.url}`);
       if (response.data.success) {
-        console.log(response.data.points._id);
-
         setQrCodeUrl(
           `https://${subdomain.url}.samparka.co/loyality/${response.data.points._id}`
         );

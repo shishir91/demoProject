@@ -6,7 +6,6 @@ const Verification = () => {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
 
   const { userInfo, token } = location.state;
 

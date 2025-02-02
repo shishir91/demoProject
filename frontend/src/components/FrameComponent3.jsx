@@ -3,7 +3,6 @@ import { useState } from "react";
 
 const FrameComponent3 = ({ className = "", redemption }) => {
   const [status, setStatus] = useState("");
-  console.log(redemption);
 
   switch (redemption.status) {
     case "pending":

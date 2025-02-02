@@ -15,8 +15,6 @@ const CustomizeLoyaltyCard = () => {
   const [format, setFormat] = useState(store.loyaltyCard.format);
   const navigate = useNavigate();
 
-  console.log(store.loyaltyCard);
-
   const [imageData, setImageData] = useState();
   const [cardData, setCardData] = useState({
     ...store.loyaltyCard,
@@ -34,10 +32,6 @@ const CustomizeLoyaltyCard = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    console.log("Submitting Form...");
-    console.log("Card Data:", cardData);
-    console.log("Image Data:", imageData);
-    console.log("Format:", format);
 
     const formDataToSend = new FormData();
 
@@ -54,10 +48,6 @@ const CustomizeLoyaltyCard = () => {
       formDataToSend.append("image", imageData);
     }
     try {
-      for (let [key, value] of formDataToSend.entries()) {
-        console.log(`${key}:`, value);
-      }
-
       const response = await api.put(
         `/store/customizeLoyaltyCard?storeId=${store._id}`,
         formDataToSend,

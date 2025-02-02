@@ -143,7 +143,6 @@ const EditReward = () => {
   const handleSaveTemplate = async (e) => {
     setLoading(true);
     try {
-      console.log(templateData);
       // Create a new FormData object
       const formDataToSend = new FormData();
 
@@ -443,8 +442,6 @@ const EditReward = () => {
           {/* Right: Preview */}
           <div className="flex-1 flex justify-center">
             <div className="w-full max-w-md">
-              {console.log(templateData)}
-
               <RewardTemplate
                 {...templateData}
                 image={

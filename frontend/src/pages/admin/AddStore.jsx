@@ -80,9 +80,6 @@ const AddStore = () => {
           token,
         },
       });
-
-      console.log(response);
-
       if (response.data.success) {
         toast.success(response.data.message, {
           autoClose: 1000,

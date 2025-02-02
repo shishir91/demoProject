@@ -12,10 +12,8 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
     try {
       const response = await api.post("/user/login", { email, password });
-      console.log(response);
       if (response.data.success) {
         localStorage.setItem(
           "userInfo",

@@ -25,7 +25,6 @@ const CustomerLogin = (storeURL) => {
     setLoading(true);
     try {
       const response = await api.get(`/customer/store/${storeURL.url}`);
-      console.log(response);
       if (response.data.success) {
         setStore(response.data.store);
       }
@@ -61,10 +60,8 @@ const CustomerLogin = (storeURL) => {
       const response = await api.post(`/customer/register/${store.url}`, {
         ...formData,
       });
-      console.log(response);
       if (response.data.success) {
         setLoading(false);
-        console.log(response.data);
         localStorage.setItem(
           "userInfo",
           JSON.stringify(response.data.customer)

@@ -156,7 +156,6 @@ const MyReservation = ({ className = "", onClose, token }) => {
       const response = await api.get("/customer/getReservations", {
         headers: { token },
       });
-      console.log(response);
       if (response.data.success) {
         setReservations(response.data.reservations);
       }
@@ -219,7 +218,6 @@ const MyReservation = ({ className = "", onClose, token }) => {
             </div>
           </div>
           <div className="self-stretch flex flex-row items-center justify-center flex-wrap content-center gap-[53px] text-left text-xs-4 text-black font-poppins">
-            {console.log(reservations)} {/* Debugging */}
             {reservations.length > 0 ? (
               reservations.map((reservation, index) => (
                 <div

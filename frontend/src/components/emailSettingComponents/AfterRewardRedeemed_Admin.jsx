@@ -16,7 +16,6 @@ const AfterRewardRedeemed_Admin = (state) => {
         { subject, message, status: state.status },
         { headers: { token } }
       );
-      console.log(response);
       if (response.data.success) {
         toast.success(response.data.message, {
           autoClose: 1000,

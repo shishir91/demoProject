@@ -78,17 +78,14 @@ const App = () => {
 
   useEffect(() => {
     const host = window.location.hostname.split(".");
-    console.log(host);
 
     const sub = host.length > 1 ? host[0] : null;
-    console.log(sub);
     setSubdomain(sub);
   }, []);
 
   useEffect(() => {
     const checkStore = async () => {
       if (subdomain && subdomain !== "" && subdomain !== "www") {
-        console.log(subdomain);
 
         try {
           const response = await api.get(`/store/checkStore/${subdomain}`);

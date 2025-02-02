@@ -24,7 +24,6 @@ const LoyalityCard = (store) => {
     const getCustomerData = async () => {
       try {
         const response = await api.get("/customer", { headers: { token } });
-        console.log(response);
         localStorage.setItem("userInfo", JSON.stringify(response.data));
         setUser(response.data);
       } catch (error) {
@@ -39,8 +38,6 @@ const LoyalityCard = (store) => {
         const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
           headers: { token },
         });
-        console.log(response.data);
-        
         if (response.data.success) {
           setCardData({
             ...response.data.store.loyaltyCard,
