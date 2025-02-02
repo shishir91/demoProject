@@ -24,17 +24,25 @@
       subdomain !== "localhost"
     ) {
       // Dynamically set the manifest link
-      const manifestLink = document.createElement("link");
-      manifestLink.rel = "manifest";
-      manifestLink.href = `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`;
-      document.head.appendChild(manifestLink);
+      // const manifestLink = document.createElement("link");
+      // manifestLink.rel = "manifest";
+      // manifestLink.href = `http://localhost:8080/manifest.json?subdomain=${subdomain}`;
+      // document.head.appendChild(manifestLink);
       // Dynamic for Apple Devices
-      fetch(
-        `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`
-      )
+      fetch(`http://localhost:8080/manifest.json?subdomain=${subdomain}`)
         .then((response) => response.json())
         .then((store) => {
-          console.log(store.icons[0].src);
+          console.log(store);
+
+          const blob = new Blob([JSON.stringify(store)], {
+            type: "application/json",
+          });
+          const url = URL.createObjectURL(blob);
+
+          const link = document.createElement("link");
+          link.rel = "manifest";
+          link.href = url;
+          document.head.appendChild(link);
 
           // Update document title
           document.title = store.name;

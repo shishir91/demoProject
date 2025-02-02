@@ -8,6 +8,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import api from "../api/config";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { toast } from "react-toastify";
+import { getUserInfo } from "../config/idb";
 
 const LoyalityCard = (
   store,
@@ -27,6 +28,7 @@ const LoyalityCard = (
   }
 ) => {
   const greetings = ["Namaste!", "Jwojwolapa!", "Sewaro!", "Tashi Delek!"];
+
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("userInfo"))
@@ -38,10 +40,18 @@ const LoyalityCard = (
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user || !token) {
-      navigate("/");
-      return;
-    }
+    const initial = async () => {
+      const data = await getUserInfo();
+      if (data.userInfo && data.token) {
+        localStorage.setItem("userInfo", JSON.stringify(data.userInfo));
+        localStorage.setItem("token", JSON.stringify(data.token));
+      } else {
+        if (!user || !token) {
+          navigate("/");
+          return;
+        }
+      }
+    };
 
     const getCustomerData = async () => {
       try {
@@ -76,6 +86,7 @@ const LoyalityCard = (
         setLoading(false);
       }
     };
+    initial();
     getCustomerData();
     getStore();
   }, [token]);
@@ -148,8 +159,8 @@ const LoyalityCard = (
         {/* Navigation Buttons */}
         <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
           <div
-            // className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
-            // onClick={handleNavigate(navigationPaths.game)}
+          // className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
+          // onClick={handleNavigate(navigationPaths.game)}
           >
             {/* <img
               className="w-6 relative h-[22px]"

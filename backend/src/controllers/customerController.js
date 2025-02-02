@@ -47,11 +47,22 @@ export default class CustomerController {
 
       if (existingCustomer) {
         console.log("yes");
+        const token = generateToken(existingCustomer._id);
+        res.cookie("authToken", token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Strict",
+        });
+        res.cookie("user", existingCustomer, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "Strict",
+        });
         return res.json({
           success: true,
           message: "Login Successful",
           customer: existingCustomer,
-          token: generateToken(existingCustomer._id),
+          token,
         });
         // If customer exists, send OTP and return login response
         // const smsResponse = await smsController.sendOTP(phone);

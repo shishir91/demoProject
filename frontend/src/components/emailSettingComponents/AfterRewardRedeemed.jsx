@@ -4,12 +4,37 @@ import { toast } from "react-toastify";
 import config from "../../api/config";
 
 const AfterRewardRedeemed = (state) => {
-  const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [subject, setSubject] = useState(state.mailMessage.subject);
+  const [message, setMessage] = useState(state.mailMessage.message);
   const token = localStorage.getItem("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      const response = await config.put(
+        `/store/configMessage/${state.store._id}`,
+        { subject, message, status: state.status },
+        { headers: { token } }
+      );
+      console.log(response);
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+      } else {
+        toast.error(response.data.message, {
+          autoClose: 1000,
+          theme: "colored",
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message, {
+        theme: "colored",
+        autoClose: 2000,
+      });
+    }
   };
   return (
     <form className="mx-20" onSubmit={handleSubmit}>
@@ -28,7 +53,7 @@ const AfterRewardRedeemed = (state) => {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             required
-            className="my-2 block w-full px-4 py-2 bg-stone-800 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
+            className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
           />
         </div>
       </div>

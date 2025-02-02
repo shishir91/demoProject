@@ -38,10 +38,12 @@ const TextEditor = ({ message, setMessage }) => {
   return (
     <Editor
       apiKey="gon41w7lxzbzh065i62yy0r2hr61x156mb6vs2z5cuxinj0n"
-      initialValue="Hi there, <br/><br/> Congratulations, you have earned 1 points.<br/> Shishir Store"
+      value={message}
+      onEditorChange={(newContent) => setMessage(newContent)}
       init={{
         height: 400,
-        menubar: true, // Enable menu bar for full features
+        menubar: true,
+        directionality: "ltr",
         plugins: [
           "advlist autolink lists link image charmap preview anchor",
           "searchreplace visualblocks code fullscreen",
@@ -54,9 +56,8 @@ const TextEditor = ({ message, setMessage }) => {
         image_title: true,
         automatic_uploads: false,
         file_picker_types: "image",
-        image_advtab: true, // Enables the "Insert Image via URL" option
+        image_advtab: true,
       }}
-      onEditorChange={(newContent) => setMessage(newContent)}
     />
   );
 };

@@ -4,29 +4,49 @@ import { Award, FileEdit, Mail, Settings } from "lucide-react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import TextEditor from "../components/emailSettingComponents/TextEditor";
 import AfterLogin from "../components/emailSettingComponents/AfterLogin";
+import AfterPointEarned from "../components/emailSettingComponents/AfterPointEarned";
+import AfterRewardRedeemed from "../components/emailSettingComponents/AfterRewardRedeemed";
+import AfterRewardRedeemed_Admin from "../components/emailSettingComponents/AfterRewardRedeemed_Admin";
 import { toast } from "react-toastify";
+import config from "../api/config";
 
 const EmailSetting = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const store = location.state?.store;
   const [loading, setLoading] = useState(false);
+  const [mailMessage, setMailMessage] = useState({});
+  const token = localStorage.getItem("token");
   const queryParams = new URLSearchParams(location.search);
   let status = queryParams.get("status");
   !status && (status = "afterLogin");
 
   useEffect(() => {
     const getMessages = async () => {
+      setLoading(true);
       try {
+        const response = await config.get(`/store/getMessage/${store._id}`, {
+          headers: { token },
+        });
+        if (response.data.success) {
+          setMailMessage(response.data.mailSMS);
+        } else {
+          toast.error(response.data.message, {
+            autoClose: 2000,
+            theme: "colored",
+          });
+        }
       } catch (error) {
         console.log(error);
         toast.error(error.message, {
           autoClose: 2000,
           theme: "colored",
         });
+      } finally {
+        setLoading(false);
       }
     };
-    // getMessages();
+    getMessages();
   }, []);
 
   return (
@@ -104,7 +124,36 @@ const EmailSetting = () => {
         </button>
       </div>
       <div>
-        <AfterLogin store={store} status={status} />
+        {console.log(mailMessage)}
+        {status === "afterLogin" && mailMessage.messageAfterLogin && (
+          <AfterLogin
+            store={store}
+            status={status}
+            mailMessage={mailMessage.messageAfterLogin}
+          />
+        )}
+        {status === "afterPointEarned" && mailMessage.messageAfterLogin && (
+          <AfterPointEarned
+            store={store}
+            status={status}
+            mailMessage={mailMessage.messageAfterPointEarned}
+          />
+        )}
+        {status === "afterRewardRedeemed" && mailMessage.messageAfterLogin && (
+          <AfterRewardRedeemed
+            store={store}
+            status={status}
+            mailMessage={mailMessage.messageAfterRewardRedeemed}
+          />
+        )}
+        {status === "afterRewardRedeemed_admin" &&
+          mailMessage.messageAfterLogin && (
+            <AfterRewardRedeemed_Admin
+              store={store}
+              status={status}
+              mailMessage={mailMessage.messageAfterRewardRedeemed_Admin}
+            />
+          )}
       </div>
     </div>
   );

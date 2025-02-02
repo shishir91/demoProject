@@ -19,6 +19,9 @@ router.get("/manifest.json", async (req, res) => {
 
     // Find store by subdomain
     const store = await Store.findOne({ url: subdomain });
+    if (!store) {
+      return res.status(404).json({ error: "Store not found" });
+    }
     const getObjectParams = {
       Bucket: "samparkabucket",
       Key: store.logo,
@@ -26,9 +29,6 @@ router.get("/manifest.json", async (req, res) => {
     const command = new GetObjectCommand(getObjectParams);
     const url = await getSignedUrl(s3, command);
     store.logo = url;
-    if (!store) {
-      return res.status(404).json({ error: "Store not found" });
-    }
 
     // Generate dynamic manifest
     const manifest = {

@@ -29,7 +29,11 @@ router.get("/getPointsDetail/:storeURL", storeController.getPointsDetail);
 router.put("/changePoints/:storeURL", storeController.changePoints);
 router.get("/myStores", authMiddleware, storeController.getMyStore);
 router.put("/config/:storeID", authMiddleware, storeController.configSMTP);
-router.put("/getMessage/:storeID", storeController.configSMTP);
+router.get(
+  "/getMessage/:storeID",
+  authMiddleware,
+  mailSMSController.getConfigMessage
+);
 router.put(
   "/configMessage/:storeID",
   authMiddleware,
