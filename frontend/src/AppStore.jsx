@@ -93,26 +93,26 @@ const AppStore = () => {
           <Route
             path=":pointsId"
             element={
-              <GetPoints url={subdomain} />
-              // <StoreProtectedRoute>
-              // </StoreProtectedRoute>
+              <StoreProtectedRoute>
+                <GetPoints url={subdomain} />
+              </StoreProtectedRoute>
             }
           />
         </Route>
-        <Route
+        {/* <Route
           path="/rewards"
           element={
-            <Rewards />
-            // <StoreProtectedRoute>
-            // </StoreProtectedRoute>
+            <StoreProtectedRoute>
+              <Rewards />
+            </StoreProtectedRoute>
           }
-        />
+        /> */}
         <Route
           path="/reservation"
           element={
-            <Reservation url={subdomain} />
-            // <StoreProtectedRoute>
-            // </StoreProtectedRoute>
+            <StoreProtectedRoute>
+              <Reservation url={subdomain} />
+            </StoreProtectedRoute>
           }
         />
 
