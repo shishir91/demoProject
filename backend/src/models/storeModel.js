@@ -13,6 +13,13 @@ const loyaltySchema = new mongoose.Schema({
   stamp: { type: String },
   customStamp: { type: String },
 });
+const servicesSchema = new mongoose.Schema({
+  loyalty: { type: Boolean, default: true },
+  reservation: { type: Boolean, default: false },
+  catalogue: { type: Boolean, default: false },
+  games: { type: Boolean, default: false },
+  share: { type: Boolean, default: false },
+});
 
 const storeSchema = new mongoose.Schema(
   {
@@ -24,6 +31,7 @@ const storeSchema = new mongoose.Schema(
     email: { type: String },
     pass: { type: String },
     loyaltyCard: { type: loyaltySchema, default: () => ({}) },
+    services: { type: servicesSchema, default: () => ({}) },
     status: {
       type: String,
       enum: ["active", "deactive"],

@@ -15,8 +15,6 @@ export default class SmsController {
       text: `Hello, welcome to our service! Your OTP is 277353.`,
     };
 
-    console.log(payload);
-
     try {
       const response = await axios.post(
         "https://api.sparrowsms.com/v2/sms/",

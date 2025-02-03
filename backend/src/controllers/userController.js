@@ -12,7 +12,6 @@ export default class UserController {
   async login(req, res) {
     try {
       const { email, password } = req.body;
-      console.log(req.body);
 
       //check empty fields
       if (!email || !password) {
@@ -55,9 +54,6 @@ export default class UserController {
   //Message Scheduling
   async scheduleMessage(req, res) {
     try {
-      console.log(req.body);
-      console.log(req.user);
-
       const { title, message, dateandtime } = req.body;
       if (!title || !message || !dateandtime) {
         return res.json({ success: false, message: "All fields are required" });
@@ -75,8 +71,6 @@ export default class UserController {
 
       const mailResponse = await mailcontroller.notifyAdmin(req.user.email);
 
-      console.log(mailResponse);
-      console.log(messageSchedule);
       return res.json({
         success: true,
         message: "Message submitted successfully",
@@ -91,10 +85,7 @@ export default class UserController {
   async fetchMessageHistory(req, res) {
     try {
       const messages = await messageModel.find({ createdBy: req.user });
-      console.log(req.user);
-
-      console.log(messages);
-
+     
       return res.json({ success: true, messages });
     } catch (error) {
       console.log(error);

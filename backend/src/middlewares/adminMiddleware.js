@@ -12,9 +12,6 @@ export default async (req, res, next) => {
             .status(403)
             .json({ success: false, message: "Invalid Token" });
         }
-        console.log("Token Valid");
-        console.log(decoded);
-        console.log(decoded.id);
         req.user = await userModel.findById(decoded.id).select("-password");
         if (req.user.role == "admin") {
           next();

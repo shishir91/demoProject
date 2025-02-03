@@ -39,8 +39,6 @@ export default class StoreController {
 
   async createStore(req, res) {
     try {
-      console.log("req.body: ", req.body);
-      console.log("req.file: ", req.file);
       const { name, location, phone, url, user } = req.body;
       if (!req.file || !name || !location || !phone || !url || !user) {
         return res.json({ success: false, message: "All fields are required" });
@@ -136,8 +134,6 @@ export default class StoreController {
 
   async customizeLoyaltyCard(req, res) {
     try {
-      console.log("req.file: ", req.file);
-      console.log("req.body: ", req.body);
       const { storeId } = req.query;
       const store = await storeModel.findById(storeId);
       if (!store) {
@@ -165,7 +161,6 @@ export default class StoreController {
           };
           const putCommand = new PutObjectCommand(putObjectParams);
           await s3.send(putCommand);
-          console.log(imageName);
 
           store.loyaltyCard.customStamp = imageName;
           await store.save();
@@ -217,7 +212,6 @@ export default class StoreController {
           };
           const putCommand = new PutObjectCommand(putObjectParams);
           await s3.send(putCommand);
-          console.log(imageName);
 
           store.logo = imageName;
           await store.save();
@@ -240,7 +234,6 @@ export default class StoreController {
   async deleteStore(req, res) {
     try {
       const { storeId } = req.query;
-      console.log(storeId);
 
       const store = await storeModel.findById(storeId);
 
@@ -255,7 +248,6 @@ export default class StoreController {
         const command = new DeleteObjectCommand(deleteObjectParams);
         await s3.send(command);
         const deleteStore = await storeModel.findByIdAndDelete(storeId);
-        console.log(deleteStore);
 
         return res.json({
           success: true,
@@ -352,11 +344,8 @@ export default class StoreController {
   async changePoints(req, res) {
     try {
       const { storeURL } = req.params;
-      console.log(storeURL);
       const store = await storeModel.findOne({ url: storeURL });
-      console.log(store._id);
       const { points } = req.body;
-      console.log(points);
       const changedPoints = await pointsModel.findOneAndUpdate(
         { store: store._id },
         { points },
@@ -376,11 +365,8 @@ export default class StoreController {
   async getPointsDetail(req, res) {
     try {
       const { storeURL } = req.params;
-      console.log(storeURL);
       const store = await storeModel.findOne({ url: storeURL });
-      console.log(store);
       const points = await pointsModel.findOne({ store });
-      console.log(points);
 
       return res.json({
         success: true,
@@ -397,7 +383,6 @@ export default class StoreController {
     try {
       const { storeID } = req.params;
       const customers = await customerModel.find({ store: storeID });
-      console.log(customers);
       return res.json({ success: true, customers });
     } catch (error) {
       console.log(error);

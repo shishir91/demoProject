@@ -37,8 +37,6 @@ export default class CustomerController {
         return res.json({ success: false, message: "Invalid email address" });
       }
 
-      console.log(store, email, phone);
-
       // Check if a customer already exists in the specific store
       const existingCustomer = await customerModel.findOne({
         store,
@@ -46,7 +44,6 @@ export default class CustomerController {
       });
 
       if (existingCustomer) {
-        console.log("yes");
         const token = generateToken(existingCustomer._id);
         res.cookie("authToken", token, {
           httpOnly: true,
@@ -227,8 +224,6 @@ export default class CustomerController {
 
   getOnePoint = async (customerId, storeURL) => {
     try {
-      console.log("Function Called");
-
       const customer = await customerModel.findById(customerId);
       if (!customer) {
         throw new Error("Customer not found");
@@ -240,11 +235,9 @@ export default class CustomerController {
         { new: true }
       );
 
-      console.log(storeURL);
       const store = await storeModel
         .findOne({ url: storeURL })
         .select("email pass");
-      console.log(store);
       if (store.email && store.pass) {
         const getMessage = await mailSMSModel.findOne({ store });
         if (
@@ -261,7 +254,6 @@ export default class CustomerController {
             subject,
             message
           );
-          console.log(mailResponse);
         }
       }
 
@@ -339,7 +331,6 @@ export default class CustomerController {
       const myRewards = await redemptionModel
         .find({ customer: req.user })
         .populate("reward");
-      console.log(myRewards);
       return res.json({ success: true, myRewards });
     } catch (error) {
       console.log(error);

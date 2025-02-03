@@ -10,7 +10,6 @@ var transport = nodemailer.createTransport({
 
 export default class MailController {
   async notifyAdmin(userEmail) {
-    console.log(userEmail);
     try {
       const mailOptions = {
         from: "shreeyanch86@gmail.com",
@@ -37,7 +36,7 @@ export default class MailController {
             console.error("Error sending email:", error);
             return reject(error);
           } else {
-            console.log("Email sent successfully:", info.response);
+            console.log("Email sent successfully");
             resolve(info);
           }
         });
@@ -88,7 +87,7 @@ export default class MailController {
             console.error("Error sending email:", error);
             return reject(error);
           } else {
-            console.log("Email sent successfully:", info.response);
+            console.log("Email sent successfully");
             resolve(info);
           }
         });

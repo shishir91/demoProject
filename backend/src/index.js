@@ -8,6 +8,7 @@ import storeRoute from "./routes/storeRoute.js";
 import rewardRoute from "./routes/rewardRoute.js";
 import customerRoute from "./routes/customerRoute.js";
 import manifestRoute from "./routes/manifestRoute.js";
+import storeModel from "./models/storeModel.js";
 
 const app = express();
 
@@ -60,13 +61,43 @@ app.get("/", (req, res) => {
 
 const port = process.env.PORT || 8000;
 
-app.listen(port, async () => {
-  console.log(`Server is Running in http://localhost:${port}`);
+// Function to connect to MongoDB
+async function connectDB() {
   try {
-    const conn = await mongoose.connect(process.env.MONGODBCONNECTIONSTRING);
-    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    const conn = await mongoose.connect(process.env.MONGODBCONNECTIONSTRING, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
+
+    // Run migration after connecting
+    await runMigration();
   } catch (error) {
-    console.log(`Error: ${error}`);
-    process.exit();
+    console.error("❌ MongoDB Connection Failed:", error);
+    process.exit(1); // Stop the app if connection fails
   }
-});
+}
+
+// Migration function
+async function runMigration() {
+  try {
+    await storeModel.updateMany(
+      {},
+      { $set: { owner: "Unknown", establishedYear: 2000 } }
+    );
+    console.log("✅ Migration complete!");
+  } catch (error) {
+    console.error("❌ Migration failed:", error);
+  }
+}
+
+// Start the app after database connection
+async function startServer() {
+  await connectDB();
+  app.listen(port, () => {
+    console.log(`🚀 Server is Running at http://localhost:${port}`);
+  });
+}
+
+// Run the server
+startServer();

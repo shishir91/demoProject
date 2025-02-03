@@ -8,10 +8,6 @@ export default class AdminController {
   async registerUser(req, res) {
     try {
       const { email, password, confirm_password } = req.body.newUser;
-      console.log(email);
-
-      console.log(req.body);
-
       if (!email || !password || !confirm_password) {
         return res.json({ success: false, message: "All fields are required" });
       }
@@ -33,9 +29,7 @@ export default class AdminController {
           email,
           password: hashedPassword,
         });
-        console.log(newUser);
         newUser = await userModel.findById(newUser._id).select("-password");
-        console.log(newUser);
         res.status(200).json({
           success: true,
           message: "User Registered Successful",
@@ -68,7 +62,6 @@ export default class AdminController {
         .find()
         .sort({ createdAt: -1 })
         .populate("createdBy", "email");
-      console.log(messages);
 
       return res.status(200).json({ success: true, messages });
     } catch (error) {
@@ -82,7 +75,6 @@ export default class AdminController {
       let updatedMessage = await messageModel.findByIdAndUpdate(messageId, {
         status,
       });
-      console.log(updatedMessage);
       updatedMessage = await messageModel.populate(updatedMessage, {
         path: "createdBy",
         select: "email",

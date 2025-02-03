@@ -44,7 +44,6 @@ export default class MailSMSController {
           default:
             break;
         }
-        console.log(mailSMS);
 
         return res.json({ success: true, message: "Message Saved", mailSMS });
       } else {

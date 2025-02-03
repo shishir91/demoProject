@@ -20,7 +20,6 @@ export default class RewardController {
     try {
       const { storeId } = req.query;
       const { name, expiry, validity, points, evergreen } = req.body;
-      console.log(req.body);
 
       if (!name || !validity || !points) {
         return res.json({ success: false, message: "All fields are required" });
@@ -30,8 +29,6 @@ export default class RewardController {
         return res.json({ success: false, message: "Cannot find the store" });
       }
       if (req.user.role == "admin" || req.user.id == store.user[0]) {
-        console.log("access granted");
-
         const reward = await rewardModel.create({
           ...req.body,
         });
@@ -80,8 +77,6 @@ export default class RewardController {
     try {
       const { rewardId } = req.query;
       const { storeId } = req.params;
-      console.log("req.body: ", req.body);
-      console.log("req.file:", req.file);
 
       const store = await storeModel.findById(storeId);
       if (!store) {
@@ -159,7 +154,6 @@ export default class RewardController {
         const command = new DeleteObjectCommand(deleteObjectParams);
         await s3.send(command);
         const deleteReward = await rewardModel.findByIdAndDelete(rewardID);
-        console.log(deleteReward);
 
         return res.json({
           success: true,

@@ -34,8 +34,6 @@
       )
         .then((response) => response.json())
         .then((store) => {
-          console.log(store);
-
           const blob = new Blob([JSON.stringify(store)], {
             type: "application/json",
           });
