@@ -41,20 +41,18 @@ export default class CustomerController {
       const existingCustomer = await customerModel.findOne({
         store,
         phone,
+        email,
       });
+
+      if (!existingCustomer) {
+        return res.json({
+          success: false,
+          message: "Invalid Email ID or Phone Number",
+        });
+      }
 
       if (existingCustomer) {
         const token = generateToken(existingCustomer._id);
-        res.cookie("authToken", token, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "Strict",
-        });
-        res.cookie("user", existingCustomer, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
-          sameSite: "Strict",
-        });
         return res.json({
           success: true,
           message: "Login Successful",
