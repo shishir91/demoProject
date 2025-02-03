@@ -49,7 +49,7 @@ const StoreSide = (subdomain) => {
       });
       if (response.data.success) {
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: window.location.reload(),
         });
@@ -88,7 +88,7 @@ const StoreSide = (subdomain) => {
       console.log(response);
       if (response.data.success) {
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: () => setVerified(true),
         });
@@ -155,13 +155,18 @@ const StoreSide = (subdomain) => {
           <select
             name="new"
             id="new"
-            className=""
+            className="bg-gray-400 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
             onChange={(e) => setIsNew(e.target.value)}
           >
-            <option value="false">Old</option>
-            <option value="true">New</option>
+            <option value="false" className="text-gray-700">
+              Old
+            </option>
+            <option value="true" className="text-gray-700">
+              New
+            </option>
           </select>
         </div>
+
         {isNew == "true" ? (
           <NewCustomer qrCodeUrl={newQR} />
         ) : (

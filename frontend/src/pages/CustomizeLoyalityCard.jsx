@@ -61,7 +61,7 @@ const CustomizeLoyaltyCard = () => {
 
       if (response.data.success) {
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: () => navigate("/store"),
         });

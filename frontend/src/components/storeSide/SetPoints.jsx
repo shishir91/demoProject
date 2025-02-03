@@ -4,7 +4,7 @@ import QRCode from "react-qr-code";
 
 const SetPoints = ({ qrCodeUrl, setPoints, handlePointsChange }) => {
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4 flex-col md:flex-row">
+    <div className="flex items-center justify-center min-h-screen bg-gray-200 p-4 flex-col">
       {/* Points Selection */}
       <form
         className="flex m-10 w-full md:w-auto justify-center md:justify-start"
@@ -15,11 +15,11 @@ const SetPoints = ({ qrCodeUrl, setPoints, handlePointsChange }) => {
           min={0}
           placeholder="Enter Points"
           onChange={(e) => setPoints(e.target.value)}
-          className="bg-emerald-800 rounded-lg h-10 mr-1 text-gray-300"
+          className="bg-emerald-800 rounded-lg px-4 py-2 text-gray-200 focus:ring-2 focus:ring-emerald-500 focus:outline-none w-full sm1:w-32"
         />
         <button
           type="submit"
-          className="bg-stone-800 p-2 text-gray-300 rounded-lg ml-1"
+          className="mt-2 md:mt-0 md:ml-2 bg-emerald-600 hover:bg-emerald-700 transition-all text-white px-4 py-2 rounded-lg shadow-md font-medium"
         >
           Enter
         </button>

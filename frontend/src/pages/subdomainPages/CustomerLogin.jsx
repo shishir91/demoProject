@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form.jsx";
 import LoadingSpinner from "../../components/LoadingSpinner.jsx";
 import image from "/unnamed.jpg";
-import { saveUserInfo } from "../../config/idb.js";
 
 const CustomerLogin = (storeURL) => {
   const [formData, setFormData] = useState({
@@ -67,10 +66,8 @@ const CustomerLogin = (storeURL) => {
           JSON.stringify(response.data.customer)
         );
         localStorage.setItem("token", response.data.token);
-        await saveUserInfo(response.data.customer, response.data.token);
         toast.success(response.data.message, {
           duration: 1000,
-          theme: "colored",
           // onAutoClose: () =>
           //   navigate("/verification", {
           //     state: {

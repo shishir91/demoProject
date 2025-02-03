@@ -89,7 +89,7 @@ const CreateReward = () => {
       if (response.data.success) {
         setReward(response.data.reward);
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: () =>
             navigate("/reward/createReward/customize", {
@@ -157,7 +157,7 @@ const CreateReward = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: () => navigate("/reward"),
         });
@@ -165,7 +165,7 @@ const CreateReward = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        duration: 1000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

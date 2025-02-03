@@ -107,7 +107,7 @@ const Reward = () => {
       if (response.data.success) {
         setShowModal(false);
         toast.success(response.data.message, {
-          duration: 1000,
+          duration: 2000,
           theme: "colored",
           onAutoClose: () => window.location.reload(),
         });
