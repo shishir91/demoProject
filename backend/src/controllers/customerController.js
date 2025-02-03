@@ -40,18 +40,21 @@ export default class CustomerController {
       // Check if a customer already exists in the specific store
       const existingCustomer = await customerModel.findOne({
         store,
-        phone,
-        email,
+        $or: [{ phone }, { email }],
       });
 
-      if (!existingCustomer) {
-        return res.json({
-          success: false,
-          message: "Invalid Email ID or Phone Number",
-        });
-      }
-
       if (existingCustomer) {
+        const checkExistingCustomer = await customerModel.findOne({
+          store,
+          phone,
+          email,
+        });
+        if (!checkExistingCustomer) {
+          return res.json({
+            success: false,
+            message: "Invalid Email ID or Phone Number",
+          });
+        }
         const token = generateToken(existingCustomer._id);
         return res.json({
           success: true,
