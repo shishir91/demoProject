@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../api/config";
 
 const MyRewards = ({ className = "", onClose, token }) => {
@@ -39,7 +39,7 @@ const MyRewards = ({ className = "", onClose, token }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

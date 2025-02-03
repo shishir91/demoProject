@@ -4,7 +4,7 @@
 // import MyRewards from "./Myrewards";
 // import PropTypes from "prop-types";
 // import LoadingSpinner from "../components/LoadingSpinner";
-// import { toast } from "react-toastify";
+// import { toast } from "sonner";
 // import api from "../api/config";
 
 // const Reward = ({ className = "", onClose, storeId, token }) => {
@@ -39,7 +39,7 @@
 //     } catch (error) {
 //       console.log(error);
 //       toast.error(error.message, {
-//         autoClose: 2000,
+//         duration: 2000,
 //         theme: "colored",
 //       });
 //     } finally {
@@ -86,19 +86,19 @@
 //       console.log(response);
 //       if (response.data.success) {
 //         toast.success(response.data.message, {
-//           autoClose: 2000,
+//           duration: 2000,
 //           theme: "colored",
 //         });
 //       } else {
 //         toast.error(response.data.message, {
-//           autoClose: 2000,
+//           duration: 2000,
 //           theme: "colored",
 //         });
 //       }
 //     } catch (error) {
 //       console.log(error);
 //       toast.error(error.message, {
-//         autoClose: 2000,
+//         duration: 2000,
 //         theme: "colored",
 //       });
 //     }
@@ -226,7 +226,7 @@ import Description from "./Description";
 import MyRewards from "./Myrewards";
 import PropTypes from "prop-types";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../api/config";
 import { ArrowUpRight } from "lucide-react";
 
@@ -261,7 +261,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {
@@ -308,19 +308,19 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }

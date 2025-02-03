@@ -61,5 +61,6 @@ router.get(
   authMiddleware,
   storeController.getCustomers
 );
+router.post("/verifyPIN/:storeURL", storeController.verifyPIN);
 
 export default router;

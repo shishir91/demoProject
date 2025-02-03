@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { Mail, Lock } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../api/config.js";
 import { useNavigate } from "react-router-dom";
 
@@ -30,21 +30,18 @@ const Login = () => {
 
         // Show toast after navigation
         toast.success(response.data.message, {
-          autoClose: 1000,
-          theme: "colored",
-          onClose: () => window.location.reload(),
+          duration: 1000,
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
-          theme: "colored",
+          duration: 2000,
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error, {
-        autoClose: 2000,
-        theme: "colored",
+        duration: 2000,
       });
     }
   };

@@ -15,7 +15,7 @@ import {
 import Switch from "../components/Switch";
 import { useNavigate } from "react-router-dom";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import LoadingSpinner from "../components/LoadingSpinner";
 
 const Store = () => {
@@ -74,13 +74,13 @@ const Store = () => {
       if (response.data.success) {
         setShowModal(false);
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => window.location.reload(),
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
@@ -88,7 +88,7 @@ const Store = () => {
       console.log(e);
       setShowModal(false);
       toast.error(e.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {
@@ -115,19 +115,19 @@ const Store = () => {
         );
 
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

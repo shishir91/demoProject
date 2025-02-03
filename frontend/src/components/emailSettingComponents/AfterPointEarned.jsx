@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TextEditor from "./TextEditor";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import config from "../../api/config";
 
 const AfterPointEarned = (state) => {
@@ -18,12 +18,12 @@ const AfterPointEarned = (state) => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
         });
       }
@@ -31,7 +31,7 @@ const AfterPointEarned = (state) => {
       console.log(error);
       toast.error(error.message, {
         theme: "colored",
-        autoClose: 2000,
+        duration: 2000,
       });
     }
   };

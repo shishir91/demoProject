@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "/images.jpeg";
 import { User, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -22,9 +22,8 @@ const Navbar = () => {
     // Dispatch custom event to notify App component
     window.dispatchEvent(new Event("auth-change"));
     toast.success("User Logged Out", {
-      autoClose: 1000,
-      theme: "colored",
-      onClose: () => window.location.reload(),
+      duration: 1000,
+      onAutoClose: () => window.location.reload(),
     });
   };
 
@@ -67,13 +66,11 @@ const Navbar = () => {
             {/* Dropdown Menu */}
             {dropdownOpen && (
               <div className="absolute right-0 mt-2 w-40 bg-white rounded-md shadow-md">
-                <button
-                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
-                >
+                <button className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:rounded-md">
                   User Profile
                 </button>
                 <button
-                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100"
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:rounded-md"
                   onClick={handleLogout}
                 >
                   Logout

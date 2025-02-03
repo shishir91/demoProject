@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { ArrowBigLeft, ArrowBigRight } from "lucide-react";
 import LoadingSpinner from "../components/LoadingSpinner";
 
@@ -62,13 +62,13 @@ const MessageForm = () => {
       setIsLoading(false);
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => window.location.reload(),
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
@@ -76,7 +76,7 @@ const MessageForm = () => {
       setIsLoading(false);
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }

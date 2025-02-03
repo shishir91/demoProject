@@ -2,6 +2,7 @@
 import storeModel from "../models/storeModel.js";
 import pointsModel from "../models/pointsModel.js";
 import customerModel from "../models/customerModel.js";
+import bcrypt from "bcrypt";
 import validator from "validator";
 
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
@@ -12,6 +13,7 @@ import {
   DeleteObjectCommand,
 } from "@aws-sdk/client-s3";
 import mailSMSModel from "../models/mailSMSModel.js";
+import messageModel from "../models/messageModel.js";
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -334,6 +336,25 @@ export default class StoreController {
       } else {
         return res.json({ success: false, message: "Access Denied" });
       }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+
+  async verifyPIN(req, res) {
+    try {
+      const { pin } = req.body;
+      const { storeURL } = req.params;
+      const store = await storeModel.findOne({ url: storeURL });
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      const isPINValid = bcrypt.compareSync(pin, store.pin);
+      if (!isPINValid) {
+        return res.json({ success: false, message: "Invalid PIN" });
+      }
+      return res.json({ success: true, message: "PIN Verified" });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

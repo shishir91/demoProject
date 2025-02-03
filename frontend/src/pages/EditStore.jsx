@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import api from "../api/config.js";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CircleX } from "lucide-react";
 
 const EditStore = () => {
@@ -65,15 +65,15 @@ const EditStore = () => {
       setIsLoading(false);
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => {
+          onAutoClose: () => {
             navigate("/store");
           },
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
         });
       }
@@ -81,7 +81,7 @@ const EditStore = () => {
       setIsLoading(false);
       console.error("Error submitting form:", error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }

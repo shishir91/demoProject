@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { useLocation, useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../api/config";
 
 const ConfigSMTP = () => {
@@ -34,23 +34,23 @@ const ConfigSMTP = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () =>
+          onAutoClose: () =>
             navigate("/store/emailSetting", {
               state: { store },
             }),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

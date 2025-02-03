@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import api from "../../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { CheckCircle } from "lucide-react";
 
 const GetPoints = (store) => {
@@ -31,9 +31,9 @@ const GetPoints = (store) => {
         if (response.data.success) {
           setPoints(response.data.points);
           toast.success(response.data.message, {
-            autoClose: 2000,
+            duration: 2000,
             theme: "colored",
-            onClose: () => navigate("/loyality"),
+            onAutoClose: () => navigate("/loyality"),
           });
         } else {
           navigate("/loyality");

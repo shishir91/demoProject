@@ -7,7 +7,7 @@ import AfterLogin from "../components/emailSettingComponents/AfterLogin";
 import AfterPointEarned from "../components/emailSettingComponents/AfterPointEarned";
 import AfterRewardRedeemed from "../components/emailSettingComponents/AfterRewardRedeemed";
 import AfterRewardRedeemed_Admin from "../components/emailSettingComponents/AfterRewardRedeemed_Admin";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import config from "../api/config";
 
 const EmailSetting = () => {
@@ -32,14 +32,14 @@ const EmailSetting = () => {
           setMailMessage(response.data.mailSMS);
         } else {
           toast.error(response.data.message, {
-            autoClose: 2000,
+            duration: 2000,
             theme: "colored",
           });
         }
       } catch (error) {
         console.log(error);
         toast.error(error.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       } finally {

@@ -9,6 +9,7 @@ import api from "./api/config";
 import Login from "./pages/Login";
 import Navbar from "./components/Navbar";
 import Dashboard from "./pages/admin/Dashboard";
+import { Toaster } from "sonner";
 import { ToastContainer } from "react-toastify";
 import MessageForm from "./pages/MessageForm";
 import ScheduledMessage from "./pages/admin/ScheduledMessage";
@@ -86,7 +87,6 @@ const App = () => {
   useEffect(() => {
     const checkStore = async () => {
       if (subdomain && subdomain !== "" && subdomain !== "www") {
-
         try {
           const response = await api.get(`/store/checkStore/${subdomain}`);
           if (response.data) {
@@ -104,7 +104,7 @@ const App = () => {
     return (
       <Router>
         <Navbar />
-        <ToastContainer />
+        <Toaster richColors expand={false} position="top-right" />
         <Routes>
           {/* Public Route with Protection */}
           <Route
@@ -213,7 +213,7 @@ const App = () => {
   } else if (storeStatus) {
     return (
       <Router>
-        <ToastContainer />
+        <Toaster richColors expand={false} position="top-right" />
         <Routes>
           <Route index element={<CustomerLogin url={subdomain} />} />
           <Route

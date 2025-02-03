@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Info, ArrowLeft, Gift } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../api/config";
 
 const Rewards = () => {

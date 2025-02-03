@@ -100,7 +100,7 @@ import Myreservation from "../../components/Myreservation";
 import PortalDrawer from "../../components/PortalDrawer";
 import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../api/config";
 import LoadingSpinner from "../../components/LoadingSpinner";
 const Reservation = (store) => {
@@ -153,14 +153,14 @@ const Reservation = (store) => {
         setLoading(false);
 
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => window.location.reload(),
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         setLoading(false);
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
@@ -168,7 +168,7 @@ const Reservation = (store) => {
       setLoading(false);
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }

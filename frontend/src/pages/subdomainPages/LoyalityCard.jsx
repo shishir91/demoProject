@@ -4,7 +4,7 @@ import api from "../../api/config";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import InstallationGuide from "../../components/InstallationGuide";
 import LoyalityCardComponent from "../../components/LoyalityCardComponent";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const LoyalityCard = (store) => {
   const token = localStorage.getItem("token");

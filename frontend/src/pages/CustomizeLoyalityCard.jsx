@@ -4,7 +4,7 @@ import LoyalityCard from "../components/LoyalityCardComponent";
 import LoadingSpinner from "../components/LoadingSpinner";
 import image from "/unnamed.jpg";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import L2 from "../components/L2";
 import L1 from "../components/L1";
 
@@ -61,20 +61,20 @@ const CustomizeLoyaltyCard = () => {
 
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => navigate("/store"),
+          onAutoClose: () => navigate("/store"),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

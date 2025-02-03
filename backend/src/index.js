@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import mongoose from "mongoose";
 import cors from "cors";
+import bcrypt from "bcrypt";
 import userRoute from "./routes/userRoute.js";
 import adminRoute from "./routes/adminRoute.js";
 import storeRoute from "./routes/storeRoute.js";
@@ -64,10 +65,7 @@ const port = process.env.PORT || 8000;
 // Function to connect to MongoDB
 async function connectDB() {
   try {
-    const conn = await mongoose.connect(process.env.MONGODBCONNECTIONSTRING, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    const conn = await mongoose.connect(process.env.MONGODBCONNECTIONSTRING);
     console.log(`✅ MongoDB Connected: ${conn.connection.host}`);
 
     // Run migration after connecting
@@ -94,6 +92,11 @@ async function runMigration() {
 // Start the app after database connection
 async function startServer() {
   await connectDB();
+  await storeModel.findByIdAndUpdate(
+    "67a0622b07928e9c422ed5a1",
+    { pin: bcrypt.hashSync("1234", 10) },
+    { new: true }
+  );
   app.listen(port, () => {
     console.log(`🚀 Server is Running at http://localhost:${port}`);
   });

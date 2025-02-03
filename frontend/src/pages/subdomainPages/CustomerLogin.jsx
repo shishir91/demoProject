@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Mail, User, Phone } from "lucide-react";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "sonner";
 import api from "../../api/config.js";
 import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form.jsx";
@@ -31,7 +31,7 @@ const CustomerLogin = (storeURL) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {
@@ -69,21 +69,21 @@ const CustomerLogin = (storeURL) => {
         localStorage.setItem("token", response.data.token);
         await saveUserInfo(response.data.customer, response.data.token);
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          // onClose: () =>
+          // onAutoClose: () =>
           //   navigate("/verification", {
           //     state: {
           //       userInfo: JSON.stringify(response.data.customer),
           //       token: response.data.token,
           //     },
           //   }),
-          onClose: () => navigate("/loyality"),
+          onAutoClose: () => navigate("/loyality"),
         });
       } else {
         setLoading(false);
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
@@ -91,7 +91,7 @@ const CustomerLogin = (storeURL) => {
       setLoading(false);
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }

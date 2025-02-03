@@ -7,7 +7,7 @@ import L2 from "../components/L2";
 import { Outlet, useNavigate } from "react-router-dom";
 import api from "../api/config";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { getUserInfo, saveUserInfo } from "../config/idb";
 
 const LoyalityCard = (

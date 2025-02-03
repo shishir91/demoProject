@@ -135,7 +135,7 @@ import PortalPopup from "./PortalPopup";
 import PropTypes from "prop-types";
 import ReservationDetails from "./ReservationDetails";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import LoadingSpinner from "./LoadingSpinner";
 
 const MyReservation = ({ className = "", onClose, token }) => {
@@ -162,7 +162,7 @@ const MyReservation = ({ className = "", onClose, token }) => {
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

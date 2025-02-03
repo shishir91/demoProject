@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../../components/LoadingSpinner";
 import api from "../../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { EllipsisVertical } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -38,12 +38,12 @@ const ScheduledMessage = () => {
         if (response.data.success) {
           setMessages(response.data.messages);
         } else {
-          toast.error(response.data.message, { autoClose: 2000 });
+          toast.error(response.data.message, { duration: 2000 });
         }
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch scheduled messages.", {
-          autoClose: 2000,
+          duration: 2000,
         });
       } finally {
         setLoading(false);
@@ -58,12 +58,12 @@ const ScheduledMessage = () => {
         if (response.data.success) {
           setCurrentFee(response.data.fee);
         } else {
-          toast.error(response.data.message, { autoClose: 2000 });
+          toast.error(response.data.message, { duration: 2000 });
         }
       } catch (error) {
         console.error(error);
         toast.error("Failed to fetch scheduled messages.", {
-          autoClose: 2000,
+          duration: 2000,
         });
       }
     };
@@ -93,9 +93,9 @@ const ScheduledMessage = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => {
+          onAutoClose: () => {
             navigate(`/work?status=${status}`);
             window.location.reload();
           },
@@ -103,7 +103,7 @@ const ScheduledMessage = () => {
       }
     } catch (error) {
       toast.error("Error Changing Status", {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {
@@ -122,20 +122,20 @@ const ScheduledMessage = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          autoClose: 1000,
+          duration: 1000,
           theme: "colored",
-          onClose: () => window.location.reload(),
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
-          autoClose: 2000,
+          duration: 2000,
           theme: "colored",
         });
       }
     } catch (error) {
       console.log(error);
       toast.error("Failed to change SMS fee.", {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

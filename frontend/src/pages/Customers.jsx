@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { Search } from "lucide-react";
 
@@ -23,7 +23,7 @@ const Customers = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }
@@ -38,7 +38,7 @@ const Customers = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }
@@ -54,7 +54,7 @@ const Customers = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     }
@@ -73,7 +73,7 @@ const Customers = () => {
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
-        autoClose: 2000,
+        duration: 2000,
         theme: "colored",
       });
     } finally {

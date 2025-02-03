@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Toaster } from "sonner";
 import {
   BrowserRouter as Router,
   Routes,
@@ -72,7 +73,6 @@ const App = () => {
   useEffect(() => {
     const checkStore = async () => {
       if (subdomain && subdomain !== "" && subdomain !== "www") {
-
         try {
           const response = await api.get(`/store/checkStore/${subdomain}`);
 
@@ -110,7 +110,7 @@ const App = () => {
     return (
       <Router>
         <Navbar />
-        <ToastContainer />
+        <Toaster richColors expand={false} position="top-right" />
         <Routes>
           {/* Public Route with Protection */}
           <Route
@@ -259,7 +259,7 @@ const App = () => {
 
     return (
       <Router>
-        <ToastContainer />
+        <Toaster richColors expand={false} position="top-right" />
         <Routes>
           {/* Public Route: Only accessible if NOT logged in */}
           <Route
@@ -275,9 +275,9 @@ const App = () => {
           <Route
             path="/points_distribution"
             element={
-              <StoreProtectedRoute>
+              <StorePublicRoute>
                 <StoreSide url={subdomain} />
-              </StoreProtectedRoute>
+              </StorePublicRoute>
             }
           />
           <Route
