@@ -21,57 +21,19 @@ const EditReward = () => {
   const { status } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
-  const [stores, setStores] = useState([]);
-  const [reward, setReward] = useState({});
+  const [reward, setReward] = useState(location.state.reward);
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const token = localStorage.getItem("token");
 
-  //Create Reward
-  const getStoresAdmin = async () => {
-    try {
-      const response = await api.get("/store", { headers: { token } });
-      if (response.data.success) {
-        setStores(response.data.stores);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  const getStoresClient = async () => {
-    try {
-      const response = await api.get("/store/myStores", { headers: { token } });
-      if (response.data.success) {
-        setStores(response.data.stores);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    setLoading(true);
-    if (user.role == "admin") {
-      getStoresAdmin();
-    } else {
-      getStoresClient();
-    }
-  }, []);
-  useEffect(() => {
-    if (stores.length > 0) {
-      setFormData((prevData) => ({
-        ...prevData,
-        store: stores[0]._id,
-        evergreen: false,
-      }));
-    }
-  }, [stores]);
+  //Reward Details
   const handleChange = (e) => {
     const { name, value } = e.target;
+    setReward((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
@@ -81,12 +43,6 @@ const EditReward = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      if (formData.expiry === false) {
-        setFormData((prev) => ({
-          ...prev,
-          expiryDate: undefined,
-        }));
-      }
       const response = await api.post(
         `/reward/createReward?storeId=${formData.store}`,
         { ...formData },
@@ -120,18 +76,9 @@ const EditReward = () => {
   };
 
   //Customize Template
-  const [templateData, setTemplateData] = useState({
-    image:
-      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Latte_and_dark_coffee.jpg/1200px-Latte_and_dark_coffee.jpg",
-    bgColor: "#111827",
-    textColor: "#10B981",
-    buttonColor: "#1F2937",
-  });
-  useEffect(() => {
-    if (location.state) {
-      setReward(location.state);
-    }
-  }, [location.state]);
+  const [templateData, setTemplateData] = useState(
+    location.state.reward.template
+  );
   // Handle updating state dynamically
   const handleUpdate = (field, value) => {
     setTemplateData((prev) => ({
@@ -164,7 +111,6 @@ const EditReward = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
           onAutoClose: () => navigate("/reward"),
         });
       }
@@ -172,7 +118,6 @@ const EditReward = () => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
       });
     } finally {
       setLoading(false);
@@ -186,7 +131,7 @@ const EditReward = () => {
       <div className="flex items-center gap-2 text-emerald-400 mb-6">
         <div className="flex items-center gap-2 text-emerald-400">
           <PlusCircle size={20} />
-          <h1 className="text-xl font-medium">CREATE NEW REWARD</h1>
+          <h1 className="text-xl font-medium">EDIT REWARD</h1>
         </div>
         <button
           onClick={() => navigate("/reward")}
@@ -200,6 +145,9 @@ const EditReward = () => {
       {/* Navigation Tabs */}
       <div className="flex flex-wrap gap-4 border-b border-gray-700 mb-8">
         <button
+          onClick={() =>
+            navigate("/reward/editReward/create", { state: { reward } })
+          }
           className={`flex items-center gap-2 px-4 py-2 ${
             status === "create"
               ? "border-b-2 border-emerald-400 text-emerald-400"
@@ -210,6 +158,9 @@ const EditReward = () => {
           <span>Reward Details</span>
         </button>
         <button
+          onClick={() =>
+            navigate("/reward/editReward/customize", { state: { reward } })
+          }
           className={`flex items-center gap-2 px-4 py-2 ${
             status === "customize"
               ? "border-b-2 border-emerald-400 text-emerald-400"
@@ -233,84 +184,20 @@ const EditReward = () => {
                 <HelpCircle size={16} className="text-gray-500" />
               </div>
               <select
+                disabled
                 onChange={handleChange}
                 name="store"
                 className="w-full bg-[#2A1F1F] rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-emerald-400"
               >
-                {stores.length > 0 ? (
-                  stores.map((store) => (
-                    <option value={store._id} key={store._id}>
-                      {store.name}
-                    </option>
-                  ))
-                ) : (
-                  <option disabled>No stores available</option>
-                )}
+                <option
+                  selected
+                  value={reward.store._id}
+                  key={reward.store._id}
+                >
+                  {reward.store.name}
+                </option>
               </select>
             </div>
-
-            {/* Schedule Reward */}
-            <div className="space-y-2">
-              <div className="flex items-center gap-2">
-                <label className="text-gray-400">Schedule Reward</label>
-                <HelpCircle size={16} className="text-gray-500" />
-              </div>
-              <div className="flex gap-4">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="expiry"
-                    required
-                    className="w-4 h-4 rounded-full border"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        expiry: false,
-                      }))
-                    }
-                  />
-                  <span>Never Expire</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input
-                    type="radio"
-                    name="expiry"
-                    className="w-4 h-4 rounded-full border"
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        expiry: true,
-                      }))
-                    }
-                  />
-                  <span>Validity</span>
-                </label>
-              </div>
-            </div>
-            {/* Expiry Date */}
-            {formData.expiry && formData.expiry == true && (
-              <div className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <label className="text-gray-400">Expiry Date</label>
-                  <span className="text-red-500">*</span>
-                  <HelpCircle size={16} className="text-gray-500" />
-                </div>
-                <div className="relative">
-                  <Calendar
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
-                  />
-                  <input
-                    type="date"
-                    placeholder="Enter Expiry Date"
-                    name="expiryDate"
-                    onChange={handleChange}
-                    required
-                    className="w-full bg-[#2A1F1F] rounded-lg pl-10 p-3 focus:outline-none focus:ring-1 focus:ring-emerald-400"
-                  />
-                </div>
-              </div>
-            )}
 
             {/* Reward Name */}
             <div className="space-y-2">
@@ -329,6 +216,7 @@ const EditReward = () => {
                   placeholder="Enter Reward Name"
                   name="name"
                   required
+                  value={reward.name}
                   onChange={handleChange}
                   className="w-full bg-[#2A1F1F] rounded-lg pl-10 p-3 focus:outline-none focus:ring-1 focus:ring-emerald-400"
                 />
@@ -345,6 +233,7 @@ const EditReward = () => {
                 placeholder="Reward Description"
                 name="description"
                 required
+                value={reward.description}
                 onChange={handleChange}
                 className="w-full bg-[#2A1F1F] rounded-lg p-3 min-h-[100px] focus:outline-none focus:ring-1 focus:ring-emerald-400"
               />
@@ -361,6 +250,7 @@ const EditReward = () => {
               <select
                 onChange={handleChange}
                 name="validity"
+                value={reward.validity}
                 className="w-full bg-[#2A1F1F] rounded-lg p-3 focus:outline-none focus:ring-1 focus:ring-emerald-400"
               >
                 <option selected value="instant">
@@ -390,6 +280,7 @@ const EditReward = () => {
                   type="number"
                   name="points"
                   required
+                  value={reward.points}
                   onChange={handleChange}
                   placeholder="Enter Reward Points"
                   min={1}
@@ -403,6 +294,7 @@ const EditReward = () => {
               <input
                 type="checkbox"
                 name="evergreen"
+                checked={reward.evergreen}
                 onChange={(e) =>
                   setFormData((prev) => ({
                     ...prev,

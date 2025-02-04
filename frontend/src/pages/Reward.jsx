@@ -108,13 +108,11 @@ const Reward = () => {
         setShowModal(false);
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
           onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
         });
       }
     } catch (e) {
@@ -122,7 +120,6 @@ const Reward = () => {
       setShowModal(false);
       toast.error(e.message, {
         duration: 2000,
-        theme: "colored",
       });
     } finally {
       setLoading(false);
@@ -225,7 +222,9 @@ const Reward = () => {
                     {/* edit */}
                     <button
                       onClick={() =>
-                        navigate("/editReward", { state: { reward } })
+                        navigate("/reward/editReward/create", {
+                          state: { reward },
+                        })
                       }
                       className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 hover:rounded-lg flex items-center"
                     >
@@ -250,7 +249,7 @@ const Reward = () => {
               <div className="w-full mx-auto flex justify-center">
                 <img
                   src={reward.template.image}
-                  alt="Coffee Shop Logo"
+                  alt={reward.name}
                   className="w-auto h-32 object-fit"
                 />
               </div>

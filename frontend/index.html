@@ -5,18 +5,15 @@
     <meta name="theme-color" content="#ffffff" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <!-- <meta name="apple-mobile-web-app-status-bar-style" content="default" /> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="manifest" href="http://localhost:8080/manifest.json" /> -->
-    <!-- <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" /> -->
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <title>Your Logo</title>
+    <title>Samparka Services</title>
   </head>
   <script>
     // Extract subdomain
-    const host = window.location.hostname; // e.g., shishirstore.localhost
-    const subdomain = host.split(".")[0]; // Get 'shishirstore'
+    const host = window.location.hostname.split(".");
+    const subdomain = host.length > 2 ? host[0] : null;
     if (
       subdomain &&
       subdomain !== "" &&
@@ -29,6 +26,7 @@
       // manifestLink.href = `http://localhost:8080/manifest.json?subdomain=${subdomain}`;
       // document.head.appendChild(manifestLink);
       // Dynamic for Apple Devices
+      // fetch(`http://localhost:8080/manifest.json?subdomain=${subdomain}`)
       fetch(
         `https://demoproject-api.onrender.com/manifest.json?subdomain=${subdomain}`
       )
@@ -47,14 +45,19 @@
           // Update document title
           document.title = store.name;
 
-          // Update favicon (logo)
-          let favicon = document.querySelector("link[rel='icon']");
-          if (!favicon) {
-            favicon = document.createElement("link");
-            favicon.rel = "icon";
-            document.head.appendChild(favicon);
+          // Add new favicon
+          if (store.icons && store.icons.length > 0) {
+            // Remove existing favicons
+            document
+              .querySelectorAll("link[rel='icon']")
+              .forEach((el) => el.remove());
+            const newFavicon = document.createElement("link");
+            newFavicon.rel = "icon";
+            newFavicon.type = "image/png";
+            newFavicon.sizes = "16x16";
+            newFavicon.href = store.icons[0].src;
+            document.head.appendChild(newFavicon);
           }
-          favicon.href = store.icons[0].src;
 
           // Dynamically set Apple-specific meta tags
           const metaTitle = document.createElement("meta");

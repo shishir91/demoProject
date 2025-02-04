@@ -20,6 +20,7 @@ import Reward from "./pages/Reward";
 import CreateReward from "./pages/CreateReward";
 import Customers from "./pages/Customers";
 import EmailSetting from "./pages/EmailSetting";
+import EditReward from "./pages/EditReward";
 import ConfigSMTP from "./pages/ConfigSMTP";
 import PoweredBySamparka from "./components/PoweredBySamparka";
 
@@ -177,6 +178,15 @@ const MainApp = () => {
               <ProtectedRoute>
                 <Sidebar />
                 <CreateReward />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="editReward/:status"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <EditReward />
               </ProtectedRoute>
             }
           />

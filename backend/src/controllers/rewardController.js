@@ -53,7 +53,9 @@ export default class RewardController {
       if (!store) {
         return res.json({ success: false, message: "Cannot find the store" });
       }
-      const rewards = await rewardModel.find({ store: store._id });
+      const rewards = await rewardModel
+        .find({ store: store._id })
+        .populate("store", "name");
       for (const reward of rewards) {
         if (reward.template.image.startsWith("https://")) {
           continue;
