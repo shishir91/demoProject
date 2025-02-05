@@ -35,7 +35,7 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -51,7 +51,7 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -67,7 +67,7 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -84,14 +84,14 @@ const Reward = () => {
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(false);

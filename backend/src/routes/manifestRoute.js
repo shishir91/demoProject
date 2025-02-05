@@ -1,7 +1,11 @@
-import express from "express";
-import Store from "../models/storeModel.js";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+// import express from "express";
+// import Store from "../models/storeModel.js";
+// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+const express = require("express");
+const Store = require("../models/storeModel");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -61,4 +65,5 @@ router.get("/manifest.json", async (req, res) => {
   }
 });
 
-export default router;
+// export default router;
+module.exports = router;

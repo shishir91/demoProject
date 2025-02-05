@@ -1,7 +1,13 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const redemptionSchema = new mongoose.Schema(
   {
+    store: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Store",
+      required: true,
+    },
     customer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Customer",
@@ -37,4 +43,5 @@ redemptionSchema.pre("save", async function (next) {
   next();
 });
 
-export default mongoose.model("Redemption", redemptionSchema);
+// export default mongoose.model("Redemption", redemptionSchema);
+module.exports = mongoose.model("Redemption", redemptionSchema);

@@ -8,12 +8,13 @@ import {
 } from "react-router-dom";
 import CustomerLogin from "./pages/subdomainPages/CustomerLogin";
 import Verification from "./pages/subdomainPages/Verification";
-import Rewards from "./pages/subdomainPages/Rewards";
 import Reservation from "./pages/subdomainPages/Reservation";
 import StoreSide from "./pages/subdomainPages/StoreSide";
 import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
+import StoreSidebar from "./components/storeSide/StoreSidebar";
+import ViewRewards from "./components/storeSide/ViewRewards";
 
 const AppStore = () => {
   const [authState, setAuthState] = useState({
@@ -65,14 +66,25 @@ const AppStore = () => {
         />
 
         {/* Protected Routes: Require store login */}
-        <Route
-          path="/points_distribution"
-          element={
-            <StoreSide url={subdomain} />
-            // <StorePublicRoute>
-            // </StorePublicRoute>
-          }
-        />
+        <Route path="/store">
+          <Route
+            path="points"
+            element={
+              <>
+                <StoreSide url={subdomain} />
+              </>
+            }
+          />
+          <Route
+            path="viewRewards"
+            element={
+              <>
+                <StoreSidebar />
+                <ViewRewards url={subdomain} />
+              </>
+            }
+          />
+        </Route>
         <Route
           path="/verification"
           element={

@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const reservationSchema = new mongoose.Schema(
   {
@@ -23,4 +24,5 @@ const reservationSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Reservation", reservationSchema);
+// export default mongoose.model("Reservation", reservationSchema);
+module.exports = mongoose.model("Reservation", reservationSchema);

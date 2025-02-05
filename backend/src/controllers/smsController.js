@@ -1,6 +1,7 @@
-import axios from "axios";
+// import axios from "axios";
+const axios = require("axios");
 
-export default class SmsController {
+class SmsController {
   async sendOTP(phoneNumber) {
     if (!phoneNumber) {
       return res
@@ -77,3 +78,4 @@ export default class SmsController {
     }
   }
 }
+module.exports = new SmsController();

@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const smsFeeSchema = new mongoose.Schema(
   {
@@ -11,4 +12,5 @@ const smsFeeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("SMSFee", smsFeeSchema);
+// export default mongoose.model("SMSFee", smsFeeSchema);
+module.exports = mongoose.model("SMSFee", smsFeeSchema);

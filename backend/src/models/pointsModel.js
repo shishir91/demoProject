@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const pointsSchema = new mongoose.Schema(
   {
@@ -17,4 +18,5 @@ const pointsSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("Points", pointsSchema);
+// export default mongoose.model("Points", pointsSchema);
+module.exports = mongoose.model("Points", pointsSchema);

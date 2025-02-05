@@ -33,14 +33,14 @@ const EmailSetting = () => {
         } else {
           toast.error(response.data.message, {
             duration: 2000,
-            theme: "colored",
+            
           });
         }
       } catch (error) {
         console.log(error);
         toast.error(error.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       } finally {
         setLoading(false);

@@ -1,7 +1,9 @@
-import mailSMSModel from "../models/mailSMSModel.js";
-import storeModel from "../models/storeModel.js";
+// import mailSMSModel from "../models/mailSMSModel.js";
+// import storeModel from "../models/storeModel.js";
+const mailSMSModel = require("../models/mailSMSModel");
+const storeModel = require("../models/storeModel");
 
-export default class MailSMSController {
+class MailSMSController {
   async configMessage(req, res) {
     try {
       const { storeID } = req.params;
@@ -74,3 +76,5 @@ export default class MailSMSController {
     }
   }
 }
+
+module.exports = new MailSMSController();

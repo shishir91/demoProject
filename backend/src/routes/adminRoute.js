@@ -1,10 +1,13 @@
-import { Router } from "express";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
-import AdminController from "../controllers/adminController.js";
+// import { Router } from "express";
+// import adminMiddleware from "../middlewares/adminMiddleware.js";
+// import AdminController from "../controllers/adminController.js";
+const { Router } = require("express");
+const adminMiddleware = require("../middlewares/adminMiddleware");
+const adminController = require("../controllers/adminController");
 
 const router = Router();
 
-const adminController = new AdminController();
+// const adminController = new AdminController();
 
 router.post("/createUser", adminMiddleware, adminController.registerUser);
 router.get("/getUsers", adminMiddleware, adminController.fetchUsers);
@@ -16,4 +19,5 @@ router.put(
   adminController.changeMessageStatus
 );
 
-export default router;
+// export default router;
+module.exports = router;

@@ -1,7 +1,9 @@
-import jwt from "jsonwebtoken";
-import customerModel from "../models/customerModel.js";
+// import jwt from "jsonwebtoken";
+// import customerModel from "../models/customerModel.js";
+const jwt = require("jsonwebtoken");
+const customerModel = require("../models/customerModel");
 
-export default async (req, res, next) => {
+module.exports = async (req, res, next) => {
   let token = req.headers.token;
 
   if (token) {

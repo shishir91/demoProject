@@ -1,14 +1,18 @@
-import { Router } from "express";
-import authMiddleware from "../middlewares/authMiddleware.js";
-import RewardController from "../controllers/rewardController.js";
-import multer from "multer";
+// import { Router } from "express";
+// import authMiddleware from "../middlewares/authMiddleware.js";
+// import RewardController from "../controllers/rewardController.js";
+// import multer from "multer";
+const { Router } = require("express");
+const authMiddleware = require("../middlewares/authMiddleware");
+const rewardController = require("../controllers/rewardController");
+const multer = require("multer");
 
 const router = new Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-const rewardController = new RewardController();
+// const rewardController = new RewardController();
 
 router.post("/createReward", authMiddleware, rewardController.createReward);
 router.get("/getRewards/:storeId", rewardController.getRewards);
@@ -26,4 +30,5 @@ router.put(
   }
 );
 
-export default router;
+// export default router;
+module.exports = router;

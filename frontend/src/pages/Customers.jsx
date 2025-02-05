@@ -24,7 +24,7 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -39,7 +39,7 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -55,7 +55,7 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };
@@ -74,7 +74,7 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(false);

@@ -1,13 +1,17 @@
-import userModel from "../models/userModel.js";
-import generateToken from "../config/generateToken.js";
-import bcrypt from "bcrypt";
-import messageModel from "../models/messageModel.js";
-import MailController from "./mailController.js";
-import smsFeeModel from "../models/smsFeeModel.js";
+// import userModel from "../models/userModel.js";
+// import generateToken from "../config/generateToken.js";
+// import bcrypt from "bcrypt";
+// import messageModel from "../models/messageModel.js";
+// import MailController from "./mailController.js";
+// import smsFeeModel from "../models/smsFeeModel.js";
+const userModel = require("../models/userModel");
+const generateToken = require("../config/generateToken");
+const bcrypt = require("bcrypt");
+const messageModel = require("../models/messageModel");
+const mailcontroller = require("./mailController");
+const smsFeeModel = require("../models/smsFeeModel");
 
-const mailcontroller = new MailController();
-
-export default class UserController {
+class UserController {
   //User Login
   async login(req, res) {
     try {
@@ -85,7 +89,7 @@ export default class UserController {
   async fetchMessageHistory(req, res) {
     try {
       const messages = await messageModel.find({ createdBy: req.user });
-     
+
       return res.json({ success: true, messages });
     } catch (error) {
       console.log(error);
@@ -108,3 +112,5 @@ export default class UserController {
     }
   }
 }
+
+module.exports = new UserController();

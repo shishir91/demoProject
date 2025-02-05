@@ -66,7 +66,7 @@ const EditStore = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => {
             navigate("/store");
           },
@@ -74,7 +74,7 @@ const EditStore = () => {
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
@@ -82,7 +82,7 @@ const EditStore = () => {
       console.error("Error submitting form:", error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };

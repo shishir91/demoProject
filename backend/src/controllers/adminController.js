@@ -1,10 +1,15 @@
-import userModel from "../models/userModel.js";
-import messageModel from "../models/messageModel.js";
-import validator from "validator";
-import bcrypt from "bcrypt";
-import smsFeeModel from "../models/smsFeeModel.js";
+// import userModel from "../models/userModel.js";
+// import messageModel from "../models/messageModel.js";
+// import smsFeeModel from "../models/smsFeeModel.js";
+// import validator from "validator";
+// import bcrypt from "bcrypt";
+const userModel = require("../models/userModel");
+const messageModel = require("../models/messageModel");
+const smsFeeModel = require("../models/smsFeeModel");
+const validator = require("validator");
+const bcrypt = require("bcrypt");
 
-export default class AdminController {
+class AdminController {
   async registerUser(req, res) {
     try {
       const { email, password, confirm_password } = req.body.newUser;
@@ -113,3 +118,5 @@ export default class AdminController {
     }
   }
 }
+
+module.exports = new AdminController();

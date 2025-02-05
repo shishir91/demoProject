@@ -1,12 +1,21 @@
-import rewardModel from "../models/rewardModel.js";
-import storeModel from "../models/storeModel.js";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import {
+// import rewardModel from "../models/rewardModel.js";
+// import storeModel from "../models/storeModel.js";
+// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// import {
+//   S3Client,
+//   GetObjectCommand,
+//   PutObjectCommand,
+//   DeleteObjectCommand,
+// } from "@aws-sdk/client-s3";
+const rewardModel = require("../models/rewardModel");
+const storeModel = require("../models/storeModel");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
   DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
+} = require("@aws-sdk/client-s3");
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -15,7 +24,7 @@ const s3 = new S3Client({
   },
 });
 
-export default class RewardController {
+class RewardController {
   async createReward(req, res) {
     try {
       const { storeId } = req.query;
@@ -168,3 +177,5 @@ export default class RewardController {
     }
   }
 }
+
+module.exports = new RewardController();

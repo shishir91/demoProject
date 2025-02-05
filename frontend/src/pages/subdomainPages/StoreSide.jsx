@@ -6,6 +6,7 @@ import SetPoints from "../../components/storeSide/SetPoints";
 import NewCustomer from "../../components/storeSide/NewCustomer";
 import { QrCode } from "lucide-react";
 import PinInput from "../../components/storeSide/PinInput";
+import StoreSidebar from "../../components/storeSide/StoreSidebar";
 
 const StoreSide = (subdomain) => {
   const [loading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ const StoreSide = (subdomain) => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: window.location.reload(),
         });
       }
@@ -89,19 +90,19 @@ const StoreSide = (subdomain) => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => setVerified(true),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        theme: "colored",
+        
         duration: 2000,
       });
     }
@@ -149,33 +150,34 @@ const StoreSide = (subdomain) => {
     );
   } else {
     return (
-      <div className="bg-gray-200">
-        {loading && <LoadingSpinner />}
-        <div>
-          <select
-            name="new"
-            id="new"
-            className="bg-gray-400 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
-            onChange={(e) => setIsNew(e.target.value)}
-          >
-            <option value="false" className="text-gray-700">
-              Old
-            </option>
-            <option value="true" className="text-gray-700">
-              New
-            </option>
-          </select>
-        </div>
+      <div className="sm:ml-56  min-h-screen">
+        <StoreSidebar />
 
-        {isNew == "true" ? (
-          <NewCustomer qrCodeUrl={newQR} />
-        ) : (
+        {/* Main Content */}
+        <main className="flex-1 bg-gray-200 p-6">
+          {loading && <LoadingSpinner />}
+          {/* <div className="mb-4">
+            <select
+              name="new"
+              id="new"
+              className="bg-gray-400 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
+              onChange={(e) => setIsNew(e.target.value)}
+            >
+              <option value="false">Old</option>
+              <option value="true">New</option>
+            </select>
+          </div> */}
+
+          {/* {isNew === "true" ? (
+            <NewCustomer qrCodeUrl={newQR} />
+          ) : ( */}
           <SetPoints
             qrCodeUrl={qrCodeUrl}
             setPoints={setPoints}
             handlePointsChange={handlePointsChange}
           />
-        )}
+          {/* )} */}
+        </main>
       </div>
     );
   }

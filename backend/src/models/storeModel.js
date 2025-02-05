@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const loyaltySchema = new mongoose.Schema({
   format: {
@@ -28,7 +29,7 @@ const storeSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     logo: { type: String, required: true },
     url: { type: String, required: true, unique: true },
-    pin: { type: String },
+    pin: { type: String, default: "1234" },
     email: { type: String },
     pass: { type: String },
     loyaltyCard: { type: loyaltySchema, default: () => ({}) },
@@ -51,4 +52,5 @@ const storeSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Store", storeSchema);
+// export default mongoose.model("Store", storeSchema);
+module.exports = mongoose.model("Store", storeSchema);

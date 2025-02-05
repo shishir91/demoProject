@@ -90,7 +90,7 @@ const CreateReward = () => {
         setReward(response.data.reward);
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () =>
             navigate("/reward/createReward/customize", {
               state: { ...response.data.reward },
@@ -99,14 +99,14 @@ const CreateReward = () => {
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(false);

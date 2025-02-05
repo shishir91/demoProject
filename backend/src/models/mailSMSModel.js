@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const messageSchema = new mongoose.Schema({
   subject: { type: String, default: "" },
@@ -31,4 +32,5 @@ const mailSMSSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export default mongoose.model("MailSMS", mailSMSSchema);
+// export default mongoose.model("MailSMS", mailSMSSchema);
+module.exports = mongoose.model("MailSMS", mailSMSSchema);

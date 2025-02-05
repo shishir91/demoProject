@@ -1,15 +1,29 @@
-import express from "express";
-import "dotenv/config";
-import mongoose from "mongoose";
-import cors from "cors";
-import bcrypt from "bcrypt";
-import userRoute from "./routes/userRoute.js";
-import adminRoute from "./routes/adminRoute.js";
-import storeRoute from "./routes/storeRoute.js";
-import rewardRoute from "./routes/rewardRoute.js";
-import customerRoute from "./routes/customerRoute.js";
-import manifestRoute from "./routes/manifestRoute.js";
-import storeModel from "./models/storeModel.js";
+// import express from "express";
+// import "dotenv/config";
+// import mongoose from "mongoose";
+// import cors from "cors";
+// import bcrypt from "bcrypt";
+// import userRoute from "./routes/userRoute.js";
+// import adminRoute from "./routes/adminRoute.js";
+// import storeRoute from "./routes/storeRoute.js";
+// import rewardRoute from "./routes/rewardRoute.js";
+// import customerRoute from "./routes/customerRoute.js";
+// import manifestRoute from "./routes/manifestRoute.js";
+// import storeModel from "./models/storeModel.js";
+// import rewardModel from "./models/rewardModel.js";
+const express = require("express");
+require("dotenv/config");
+const mongoose = require("mongoose");
+const cors = require("cors");
+const bcrypt = require("bcrypt");
+const userRoute = require("./routes/userRoute");
+const adminRoute = require("./routes/adminRoute");
+const storeRoute = require("./routes/storeRoute");
+const rewardRoute = require("./routes/rewardRoute");
+const customerRoute = require("./routes/customerRoute");
+const manifestRoute = require("./routes/manifestRoute");
+const storeModel = require("./models/storeModel");
+const rewardModel = require("./models/rewardModel");
 
 const app = express();
 
@@ -79,7 +93,7 @@ async function connectDB() {
 // Migration function
 async function runMigration() {
   try {
-    await storeModel.updateMany(
+    await rewardModel.updateMany(
       {},
       { $set: { owner: "Unknown", establishedYear: 2000 } }
     );

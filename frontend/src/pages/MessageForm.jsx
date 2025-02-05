@@ -63,13 +63,13 @@ const MessageForm = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
@@ -77,7 +77,7 @@ const MessageForm = () => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };

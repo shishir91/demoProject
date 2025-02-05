@@ -40,7 +40,7 @@
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         theme: "colored",
+//         
 //       });
 //     } finally {
 //       setLoading(false);
@@ -87,19 +87,19 @@
 //       if (response.data.success) {
 //         toast.success(response.data.message, {
 //           duration: 2000,
-//           theme: "colored",
+//           
 //         });
 //       } else {
 //         toast.error(response.data.message, {
 //           duration: 2000,
-//           theme: "colored",
+//           
 //         });
 //       }
 //     } catch (error) {
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         theme: "colored",
+//         
 //       });
 //     }
 //   };
@@ -262,7 +262,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(false);
@@ -302,26 +302,26 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
   const redeemReward = async (rewardId) => {
     try {
       const response = await api.put(
-        `/customer/redeemReward/${rewardId}`,
+        `/customer/redeemReward/${rewardId}?storeID=${storeId}`,
         {},
         { headers: { token } }
       );
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };

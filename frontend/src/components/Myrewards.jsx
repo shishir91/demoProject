@@ -25,7 +25,7 @@ const MyRewards = ({ className = "", onClose, token }) => {
           switch (redemption.status) {
             case "pending":
               return "Pending Approval";
-            case "clamed":
+            case "claimed":
               return "Reward Claimed";
             case "expired":
               return "Reward Expired";
@@ -40,7 +40,6 @@ const MyRewards = ({ className = "", onClose, token }) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
       });
     } finally {
       setLoading(false);

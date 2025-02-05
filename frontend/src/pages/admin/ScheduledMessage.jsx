@@ -94,7 +94,7 @@ const ScheduledMessage = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => {
             navigate(`/work?status=${status}`);
             window.location.reload();
@@ -104,7 +104,7 @@ const ScheduledMessage = () => {
     } catch (error) {
       toast.error("Error Changing Status", {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(true);
@@ -123,20 +123,20 @@ const ScheduledMessage = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error("Failed to change SMS fee.", {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(true);

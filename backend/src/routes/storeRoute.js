@@ -1,14 +1,20 @@
-import { Router } from "express";
-import StoreController from "../controllers/storeController.js";
-import adminMiddleware from "../middlewares/adminMiddleware.js";
-import authMiddleware from "../middlewares/authMiddleware.js";
-import multer from "multer";
-import MailSMSController from "../controllers/mailSMSController.js";
+// import { Router } from "express";
+// import StoreController from "../controllers/storeController.js";
+// import adminMiddleware from "../middlewares/adminMiddleware.js";
+// import authMiddleware from "../middlewares/authMiddleware.js";
+// import multer from "multer";
+// import MailSMSController from "../controllers/mailSMSController.js";
+const { Router } = require("express");
+const storeController = require("../controllers/storeController");
+const adminMiddleware = require("../middlewares/adminMiddleware");
+const authMiddleware = require("../middlewares/authMiddleware");
+const multer = require("multer");
+const mailSMSController = require("../controllers/mailSMSController");
 
 const router = new Router();
 
-const storeController = new StoreController();
-const mailSMSController = new MailSMSController();
+// const storeController = new StoreController();
+// const mailSMSController = new MailSMSController();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
@@ -62,5 +68,8 @@ router.get(
   authMiddleware,
   storeController.getCustomers
 );
+router.get("/getRedeemedRewards/:storeURL", storeController.getRedeemedRewards);
+router.put("/claimReward/:storeURL", storeController.claimReward);
 
-export default router;
+// export default router;
+module.exports = router;

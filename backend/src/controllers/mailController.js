@@ -1,4 +1,5 @@
-import nodemailer from "nodemailer";
+// import nodemailer from "nodemailer";
+const nodemailer = require("nodemailer");
 
 var transport = nodemailer.createTransport({
   service: "gmail",
@@ -8,7 +9,7 @@ var transport = nodemailer.createTransport({
   },
 });
 
-export default class MailController {
+class MailController {
   async notifyAdmin(userEmail) {
     try {
       const mailOptions = {
@@ -100,3 +101,5 @@ export default class MailController {
     }
   }
 }
+
+module.exports = new MailController();

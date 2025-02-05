@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const customerModel = mongoose.Schema(
   {
@@ -11,12 +12,6 @@ const customerModel = mongoose.Schema(
       ref: "Store",
       required: true,
     },
-    rewards: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Reward",
-      },
-    ],
   },
   {
     timestamps: true,
@@ -26,4 +21,5 @@ const customerModel = mongoose.Schema(
 customerModel.index({ store: 1, email: 1 }, { unique: true });
 customerModel.index({ store: 1, phone: 1 }, { unique: true });
 
-export default mongoose.model("Customer", customerModel);
+// export default mongoose.model("Customer", customerModel);
+module.exports = mongoose.model("Customer", customerModel);

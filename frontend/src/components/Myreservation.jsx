@@ -163,7 +163,7 @@ const MyReservation = ({ className = "", onClose, token }) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     } finally {
       setLoading(false);

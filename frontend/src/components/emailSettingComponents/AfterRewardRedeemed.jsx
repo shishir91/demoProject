@@ -19,18 +19,18 @@ const AfterRewardRedeemed = (state) => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
-        theme: "colored",
+        
         duration: 2000,
       });
     }

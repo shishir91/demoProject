@@ -154,14 +154,14 @@ const Reservation = (store) => {
 
         toast.success(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
           onAutoClose: () => window.location.reload(),
         });
       } else {
         setLoading(false);
         toast.error(response.data.message, {
           duration: 2000,
-          theme: "colored",
+          
         });
       }
     } catch (error) {
@@ -169,7 +169,7 @@ const Reservation = (store) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        theme: "colored",
+        
       });
     }
   };

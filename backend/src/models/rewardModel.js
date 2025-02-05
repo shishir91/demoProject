@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const templateSchema = new mongoose.Schema({
   image: {
@@ -30,4 +31,5 @@ const rewardSchema = new mongoose.Schema(
   }
 );
 
-export default mongoose.model("Reward", rewardSchema);
+// export default mongoose.model("Reward", rewardSchema);
+module.exports = mongoose.model("Reward", rewardSchema);

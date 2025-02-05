@@ -1,19 +1,35 @@
 // import loyalityModel from "../models/loyalityModel.js";
-import storeModel from "../models/storeModel.js";
-import pointsModel from "../models/pointsModel.js";
-import customerModel from "../models/customerModel.js";
-import bcrypt from "bcrypt";
-import validator from "validator";
-
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import {
+// import storeModel from "../models/storeModel.js";
+// import pointsModel from "../models/pointsModel.js";
+// import customerModel from "../models/customerModel.js";
+// import redemptionModel from "../models/redemptionModel.js";
+// import bcrypt from "bcrypt";
+// import validator from "validator";
+// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// import {
+//   S3Client,
+//   GetObjectCommand,
+//   PutObjectCommand,
+//   DeleteObjectCommand,
+// } from "@aws-sdk/client-s3";
+// import mailSMSModel from "../models/mailSMSModel.js";
+// import messageModel from "../models/messageModel.js";
+const storeModel = require("../models/storeModel.js");
+const pointsModel = require("../models/pointsModel.js");
+const customerModel = require("../models/customerModel.js");
+const redemptionModel = require("../models/redemptionModel.js");
+const bcrypt = require("bcrypt");
+const validator = require("validator");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const {
   S3Client,
   GetObjectCommand,
   PutObjectCommand,
   DeleteObjectCommand,
-} from "@aws-sdk/client-s3";
-import mailSMSModel from "../models/mailSMSModel.js";
-import messageModel from "../models/messageModel.js";
+} = require("@aws-sdk/client-s3");
+const mailSMSModel = require("../models/mailSMSModel.js");
+const messageModel = require("../models/messageModel.js");
+
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -22,7 +38,7 @@ const s3 = new S3Client({
   },
 });
 
-export default class StoreController {
+class StoreController {
   async checkStore(req, res) {
     try {
       const { storeURL } = req.params;
@@ -342,6 +358,7 @@ export default class StoreController {
     }
   }
 
+  //STORE SIDE APIS
   async verifyPIN(req, res) {
     try {
       const { pin } = req.body;
@@ -350,11 +367,76 @@ export default class StoreController {
       if (!store) {
         return res.json({ success: false, message: "Store not found" });
       }
-      const isPINValid = bcrypt.compareSync(pin, store.pin);
-      if (!isPINValid) {
-        return res.json({ success: false, message: "Invalid PIN" });
+      if (store.pin && store.pin !== "1234") {
+        const isPINValid = bcrypt.compareSync(pin, store.pin);
+        if (!isPINValid) {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
+      } else {
+        if (pin !== "1234") {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
       }
       return res.json({ success: true, message: "PIN Verified" });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  async getRedeemedRewards(req, res) {
+    try {
+      const { storeURL } = req.params;
+      const store = await storeModel.findOne({ url: storeURL });
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      const redeemedRewards = await redemptionModel
+        .find({ store })
+        .populate("reward customer");
+
+      if (redeemedRewards.length > 0) {
+        await Promise.all(
+          redeemedRewards.map(async (reward) => {
+            if (reward.expiryDate <= reward.redeemDate) {
+              reward.status = "expired";
+              await reward.save();
+            }
+          })
+        );
+      }
+
+      return res.json({ success: true, redeemedRewards });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  async claimReward(req, res) {
+    try {
+      const { storeURL } = req.params;
+      const { rewardID } = req.query;
+      const store = await storeModel.findOne({ url: storeURL });
+      const redemption = await redemptionModel.findById(rewardID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      if (!redemption) {
+        return res.json({ success: false, message: "Reward not found" });
+      }
+      if (redemption.status == "claimed") {
+        return res.json({ success: false, message: "Reward already claimed" });
+      }
+      if (redemption.status == "expired") {
+        return res.json({ success: false, message: "Reward Expired" });
+      }
+      if (redemption.expiryDate <= redemption.redeemDate) {
+        redemption.status = "expired";
+        await redemption.save();
+        return res.json({ success: false, message: "Reward Expired" });
+      }
+      redemption.status = "claimed";
+      await redemption.save();
+      return res.json({ success: true, message: "Reward Claimed" });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
@@ -411,3 +493,5 @@ export default class StoreController {
     }
   }
 }
+
+module.exports = new StoreController();

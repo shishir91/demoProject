@@ -1,16 +1,29 @@
-import generateToken from "../config/generateToken.js";
-import customerModel from "../models/customerModel.js";
-import pointsModel from "../models/pointsModel.js";
-import storeModel from "../models/storeModel.js";
-import MailController from "./mailController.js";
-import SmsController from "./smsController.js";
-import validator from "validator";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
-import rewardModel from "../models/rewardModel.js";
-import redemptionModel from "../models/redemptionModel.js";
-import reservationModel from "../models/reservationModel.js";
-import mailSMSModel from "../models/mailSMSModel.js";
+// import generateToken from "../config/generateToken.js";
+// import customerModel from "../models/customerModel.js";
+// import pointsModel from "../models/pointsModel.js";
+// import storeModel from "../models/storeModel.js";
+// import MailController from "./mailController.js";
+// import SmsController from "./smsController.js";
+// import validator from "validator";
+// import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
+// import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+// import rewardModel from "../models/rewardModel.js";
+// import redemptionModel from "../models/redemptionModel.js";
+// import reservationModel from "../models/reservationModel.js";
+// import mailSMSModel from "../models/mailSMSModel.js";
+const generateToken = require("../config/generateToken");
+const customerModel = require("../models/customerModel");
+const pointsModel = require("../models/pointsModel");
+const storeModel = require("../models/storeModel");
+const mailController = require("./mailController");
+const smsController = require("./smsController");
+const validator = require("validator");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
+const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const rewardModel = require("../models/rewardModel");
+const redemptionModel = require("../models/redemptionModel");
+const reservationModel = require("../models/reservationModel");
+const mailSMSModel = require("../models/mailSMSModel");
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
   credentials: {
@@ -19,10 +32,10 @@ const s3 = new S3Client({
   },
 });
 
-const smsController = new SmsController();
-const mailController = new MailController();
+// const smsController = new SmsController();
+// const mailController = new MailController();
 
-export default class CustomerController {
+class CustomerController {
   //Customer Register
   register = async (req, res) => {
     try {
@@ -288,15 +301,26 @@ export default class CustomerController {
   async redeemReward(req, res) {
     try {
       const { rewardID } = req.params;
-      // req.user
+      const { storeID } = req.query;
+      console.log(rewardID, storeID);
+
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
       const reward = await rewardModel.findById(rewardID);
       if (!reward) {
         return res.json({ success: false, message: "Reward not found" });
       }
-      const customer = await customerModel.findById(req.user);
-      if (customer.rewards.includes(rewardID)) {
+      const isAlreadyRedeemed = await redemptionModel.findOne({
+        customer: req.user,
+        reward: rewardID,
+        store: storeID,
+      });
+      if (isAlreadyRedeemed) {
         return res.json({ success: false, message: "Reward already redeemed" });
       }
+      const customer = await customerModel.findById(req.user);
       if (customer.points < reward.points) {
         return res.json({ success: false, message: "Not enough points" });
       }
@@ -305,11 +329,11 @@ export default class CustomerController {
         req.user,
         {
           $inc: { points: -reward.points },
-          $push: { rewards: rewardID },
         },
         { new: true }
       );
       const redemption = await redemptionModel.create({
+        store: storeID,
         customer: req.user,
         reward: rewardID,
       });
@@ -382,3 +406,5 @@ export default class CustomerController {
     }
   }
 }
+
+module.exports = new CustomerController();

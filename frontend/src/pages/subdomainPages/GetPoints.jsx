@@ -32,7 +32,7 @@ const GetPoints = (store) => {
           setPoints(response.data.points);
           toast.success(response.data.message, {
             duration: 2000,
-            theme: "colored",
+            
             onAutoClose: () => navigate("/loyality"),
           });
         } else {

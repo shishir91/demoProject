@@ -1,10 +1,13 @@
-import { Router } from "express";
-import customerMiddleware from "../middlewares/customerMiddleware.js";
-import CustomerController from "../controllers/customerController.js";
+// import { Router } from "express";
+// import customerMiddleware from "../middlewares/customerMiddleware.js";
+// import CustomerController from "../controllers/customerController.js";
+const { Router } = require("express");
+const customerMiddleware = require("../middlewares/customerMiddleware");
+const customerController = require("../controllers/customerController");
 
 const router = Router();
 
-const customerController = new CustomerController();
+// const customerController = new CustomerController();
 
 router.get("/", customerMiddleware, customerController.getCustomerData);
 router.post("/register/:storeURL", customerController.register);
@@ -35,4 +38,5 @@ router.get(
 );
 router.post("/reservation/:storeURL", customerMiddleware, customerController.reservation);
 
-export default router;
+// export default router;
+module.exports = router;
