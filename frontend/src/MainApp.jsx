@@ -23,6 +23,8 @@ import EmailSetting from "./pages/EmailSetting";
 import EditReward from "./pages/EditReward";
 import ConfigSMTP from "./pages/ConfigSMTP";
 import PoweredBySamparka from "./components/PoweredBySamparka";
+import Products from "./pages/Products";
+import AddProducts from "./pages/AddProducts";
 
 const MainApp = () => {
   const [authState, setAuthState] = useState({
@@ -197,6 +199,24 @@ const MainApp = () => {
             <ProtectedRoute>
               <Sidebar />
               <Customers />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Sidebar />
+              <Products />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addProducts"
+          element={
+            <ProtectedRoute>
+              <Sidebar />
+              <AddProducts />
             </ProtectedRoute>
           }
         />

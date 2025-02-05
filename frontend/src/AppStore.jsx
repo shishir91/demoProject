@@ -15,6 +15,10 @@ import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
 import StoreSidebar from "./components/storeSide/StoreSidebar";
 import ViewRewards from "./components/storeSide/ViewRewards";
+import HomePageStore from "./pages/user/HomePageStore";
+import SingleProduct from "./pages/user/SingleProduct";
+import Checkout from "./pages/user/Checkout";
+import { CartProvider } from "./context/CartProvider";
 
 const AppStore = () => {
   const [authState, setAuthState] = useState({
@@ -122,9 +126,34 @@ const AppStore = () => {
         <Route
           path="/reservation"
           element={
-            <StoreProtectedRoute>
-              <Reservation url={subdomain} />
-            </StoreProtectedRoute>
+            <Reservation url={subdomain} />
+            // <StoreProtectedRoute>
+            // </StoreProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/products/:storeId"
+          element={
+            <CartProvider>
+              <HomePageStore />
+            </CartProvider>
+          }
+        />
+        <Route
+          path="/product/:productId"
+          element={
+            <CartProvider>
+              <SingleProduct />
+            </CartProvider>
+          }
+        />
+        <Route
+          path="/product/checkout"
+          element={
+            <CartProvider>
+              <Checkout />
+            </CartProvider>
           }
         />
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { ShoppingBag, Mail, Users, Award } from "lucide-react";
+import { ShoppingBag, Mail, Users, Award, ShoppingBasket } from "lucide-react";
 
 const Sidebar = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -66,6 +66,15 @@ const Sidebar = () => {
               >
                 <Users className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
                 <span className="flex-1 ms-3 whitespace-nowrap">Customers</span>
+              </a>
+            </li>
+            <li>
+              <a
+                href="/products"
+                className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group"
+              >
+                <ShoppingBasket className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
+                <span className="flex-1 ms-3 whitespace-nowrap">Products</span>
               </a>
             </li>
           </ul>

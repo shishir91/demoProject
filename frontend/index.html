@@ -13,7 +13,7 @@
   <script>
     // Extract subdomain
     const host = window.location.hostname.split(".");
-    const subdomain = host.length > 2 ? host[0] : null;
+    const subdomain = host.length > 1 ? host[0] : null;
     if (
       subdomain &&
       subdomain !== "" &&

@@ -24,6 +24,10 @@ const productSchema = new mongoose.Schema({
     type: Number, // Optional discount
     default: 0,
   },
+  calculatedPrice:{
+    type:Number,
+    required:true,
+  },
   category: {
     type: String,
     required: true,
