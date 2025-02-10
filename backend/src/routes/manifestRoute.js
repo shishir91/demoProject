@@ -38,7 +38,10 @@ router.get("/manifest.json", async (req, res) => {
     const manifest = {
       name: store.name,
       short_name: store.name,
-      start_url: "/loyality",
+      start_url: `https://${subdomain}.samparka.co/loyality`, 
+      theme_color: "#ffffff",
+      background_color: "#ffffff",
+      display: "standalone",
       icons: [
         {
           src: store.logo,
@@ -51,9 +54,6 @@ router.get("/manifest.json", async (req, res) => {
           type: "image/png",
         },
       ],
-      theme_color: "#ffffff",
-      background_color: "#ffffff",
-      display: "standalone",
     };
 
     // Send manifest

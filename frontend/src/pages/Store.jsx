@@ -190,6 +190,7 @@ const Store = () => {
                       {/* visit */}
                       <a
                         href={`http://${store.url}.localhost:5173/store/points`}
+                        // href={`https://${store.url}.samparka.co/store/points`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

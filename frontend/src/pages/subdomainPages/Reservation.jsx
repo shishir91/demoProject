@@ -92,13 +92,13 @@
 
 // export default Reservation;
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import FrameTell from "../../components/FrameTell";
 import PortalPopup from "../../components/PortalPopup";
 import FrameComponent from "../../components/FrameComponent";
 import Myreservation from "../../components/Myreservation";
 import PortalDrawer from "../../components/PortalDrawer";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { toast } from "sonner";
 import api from "../../api/config";
@@ -109,7 +109,15 @@ const Reservation = (store) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({});
   const token = localStorage.getItem("token");
+  const location = useLocation();
+  const state = location.state;
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!token) {
+      navigate("/");
+    }
+  }, [token]);
 
   const openFrameTellPopup = useCallback(() => {
     setFrameTellPopupOpen(true);
@@ -154,14 +162,13 @@ const Reservation = (store) => {
 
         toast.success(response.data.message, {
           duration: 2000,
-          
+
           onAutoClose: () => window.location.reload(),
         });
       } else {
         setLoading(false);
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
@@ -169,7 +176,6 @@ const Reservation = (store) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -242,6 +248,7 @@ const Reservation = (store) => {
           />
           <button
             type="submit"
+            style={{ backgroundColor: state && state.cardColor }}
             className="cursor-pointer font-poppins border-whitesmoke-100 border-[1px] border-solid py-[9px] px-0 bg-seagreen-100 self-stretch rounded-6xs1 box-border h-[39px] flex flex-row items-end justify-center lg1:gap-2.5"
           >
             <div className="relative text-base1 tracking-[0.01em] leading-[149.7%] font-medium font-poppins text-white text-left">

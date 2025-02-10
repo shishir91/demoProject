@@ -1,5 +1,6 @@
 // import mongoose from "mongoose";
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 
 const loyaltySchema = new mongoose.Schema({
   format: {
@@ -29,7 +30,7 @@ const storeSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     logo: { type: String, required: true },
     url: { type: String, required: true, unique: true },
-    pin: { type: String, default: "1234" },
+    pin: { type: String, default: bcrypt.hashSync("1234", 10) },
     email: { type: String },
     pass: { type: String },
     loyaltyCard: { type: loyaltySchema, default: () => ({}) },

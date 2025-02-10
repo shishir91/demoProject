@@ -123,6 +123,7 @@ const LoyalityCard = (
             location={cardData.location}
             group1410103762={cardData.logo}
             vector="/send.svg"
+            color={cardData.cardColor}
           />
 
           {cardData.format == "L1" ? (
@@ -148,20 +149,23 @@ const LoyalityCard = (
           </div>
 
           {/* Navigation Buttons */}
-          <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
+          {/* <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
             <div
-            // className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
-            // onClick={handleNavigate(navigationPaths.game)}
+            className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
+            onClick={handleNavigate(navigationPaths.game)}
             >
-              {/* <img
+              <img
               className="w-6 relative h-[22px]"
               alt="Game Icon"
               src="/joysticksvgrepocom-1.svg"
-            /> */}
+            />
             </div>
             <div
-              className={`w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
-              onClick={handleNavigate(navigationPaths.reservation)}
+              style={{ backgroundColor: cardData.cardColor }}
+              className={`w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
+              onClick={() =>
+                navigate("/reservation", { state: { ...cardData } })
+              }
             >
               <img
                 className="w-6 relative h-[22px]"
@@ -169,7 +173,7 @@ const LoyalityCard = (
                 src="/icon1.svg"
               />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Reward Modal */}
@@ -183,6 +187,7 @@ const LoyalityCard = (
               onClose={closeFrame}
               storeId={cardData.storeId}
               token={token}
+              color={cardData.cardColor}
             />
           </PortalDrawer>
         )}

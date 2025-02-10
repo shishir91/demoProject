@@ -3,12 +3,18 @@ import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import LoadingSpinner from "../LoadingSpinner";
 import api from "../../api/config";
+import { useNavigate } from "react-router-dom";
 
 const ViewRewards = (subdomain) => {
   const [rewards, setRewards] = useState([]);
   const [loading, setLoading] = useState(false);
+  const token = localStorage.getItem("storeToken");
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate("/store/login");
+    }
     const fetchRewards = async () => {
       setLoading(true);
       try {

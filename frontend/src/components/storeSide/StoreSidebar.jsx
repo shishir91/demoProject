@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Home, UserPlus, Gift, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const StoreSidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,13 +28,13 @@ const StoreSidebar = () => {
         <nav className="flex-1">
           <ul>
             <li className="mb-4">
-              <a
-                href="#"
+              <Link
+                to="/store/points"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-all"
               >
                 <Home size={20} />
-                <span>Dashboard</span>
-              </a>
+                <span>Points</span>
+              </Link>
             </li>
             <li className="mb-4">
               <a
@@ -45,13 +46,13 @@ const StoreSidebar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="/store/viewRewards"
+              <Link
+                to="/store/viewRewards"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-all"
               >
                 <Gift size={20} />
                 <span>Rewards</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

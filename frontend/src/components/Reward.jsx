@@ -40,7 +40,7 @@
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         
+//
 //       });
 //     } finally {
 //       setLoading(false);
@@ -87,19 +87,19 @@
 //       if (response.data.success) {
 //         toast.success(response.data.message, {
 //           duration: 2000,
-//           
+//
 //         });
 //       } else {
 //         toast.error(response.data.message, {
 //           duration: 2000,
-//           
+//
 //         });
 //       }
 //     } catch (error) {
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         
+//
 //       });
 //     }
 //   };
@@ -230,7 +230,7 @@ import { toast } from "sonner";
 import api from "../api/config";
 import { ArrowUpRight } from "lucide-react";
 
-const Reward = ({ className = "", onClose, storeId, token }) => {
+const Reward = ({ className = "", onClose, storeId, token, color }) => {
   const [isRewardView, setIsRewardView] = useState(true);
   const [isDescriptionPopupOpen, setDescriptionPopupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -262,7 +262,6 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -309,19 +308,16 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -396,6 +392,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                         </div>
                         {/* Redeem Button */}
                         <button
+                          style={{ backgroundColor: color }}
                           onClick={() => redeemReward(reward._id)}
                           className="flex items-center gap-2 bg-green-500 text-white text-2xs1 font-medium px-3 py-1 rounded-md shadow-sm hover:bg-green-600 transition"
                         >
@@ -413,7 +410,10 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                     {/* Description Popup */}
                     {activePopup === index && (
                       <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-90 z-50 rounded-3xs1 shadow-lg">
-                        <Description onClose={closeDescriptionPopup} />
+                        <Description
+                          onClose={closeDescriptionPopup}
+                          description={reward.description}
+                        />
                       </div>
                     )}
                   </div>

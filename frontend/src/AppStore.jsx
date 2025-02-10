@@ -19,6 +19,7 @@ import HomePageStore from "./pages/user/HomePageStore";
 import SingleProduct from "./pages/user/SingleProduct";
 import Checkout from "./pages/user/Checkout";
 import { CartProvider } from "./context/CartProvider";
+import StoreLogin from "./pages/subdomainPages/StoreLogin";
 
 const AppStore = () => {
   const [authState, setAuthState] = useState({
@@ -72,9 +73,18 @@ const AppStore = () => {
         {/* Protected Routes: Require store login */}
         <Route path="/store">
           <Route
+            path="login"
+            element={
+              <>
+                <StoreLogin url={subdomain} />
+              </>
+            }
+          />
+          <Route
             path="points"
             element={
               <>
+                <StoreSidebar />
                 <StoreSide url={subdomain} />
               </>
             }
@@ -123,14 +133,14 @@ const AppStore = () => {
             </StoreProtectedRoute>
           }
         /> */}
-        <Route
+        {/* <Route
           path="/reservation"
           element={
             <Reservation url={subdomain} />
             // <StoreProtectedRoute>
             // </StoreProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/products/:storeId"

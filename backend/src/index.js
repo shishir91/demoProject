@@ -70,7 +70,7 @@ app.use("/admin", adminRoute);
 app.use("/store", storeRoute);
 app.use("/reward", rewardRoute);
 app.use("/customer", customerRoute);
-app.use("/product",productRoute);
+app.use("/product", productRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Running...." + process.env.CLIENT_ORIGIN);
@@ -95,7 +95,7 @@ async function connectDB() {
 // Migration function
 async function runMigration() {
   try {
-    await rewardModel.updateMany(
+    await storeModel.updateMany(
       {},
       { $set: { owner: "Unknown", establishedYear: 2000 } }
     );

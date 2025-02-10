@@ -18,6 +18,7 @@ const storeModel = require("../models/storeModel.js");
 const pointsModel = require("../models/pointsModel.js");
 const customerModel = require("../models/customerModel.js");
 const redemptionModel = require("../models/redemptionModel.js");
+const generateToken = require("../config/generateToken.js");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
@@ -377,7 +378,38 @@ class StoreController {
           return res.json({ success: false, message: "Invalid PIN" });
         }
       }
-      return res.json({ success: true, message: "PIN Verified" });
+      return res.json({
+        success: true,
+        message: "PIN Verified",
+        token: generateToken(store._id),
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  async changePIN(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { oldPIN, newPIN } = req.body;
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      if (store.pin && store.pin !== "1234") {
+        const isPINValid = bcrypt.compareSync(oldPIN, store.pin);
+        if (!isPINValid) {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
+      } else {
+        if (oldPIN !== "1234") {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
+      }
+      const hashedPIN = bcrypt.hashSync(newPIN, 10);
+      store.pin = hashedPIN;
+      await store.save();
+      return res.json({ success: true, message: "PIN Changed" });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);
