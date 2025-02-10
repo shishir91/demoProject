@@ -133,10 +133,10 @@ const AppStore = () => {
         />
 
         <Route
-          path="/products/:storeId"
+          path="/products/"
           element={
             <CartProvider>
-              <HomePageStore />
+              <HomePageStore url={subdomain} />
             </CartProvider>
           }
         />

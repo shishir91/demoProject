@@ -3,7 +3,7 @@ import Title from "../../components/user/Title";
 import StoreBody from "./StoreBody";
 import PropTypes from "prop-types";
 
-const HomePageStore = () => {
+const HomePageStore = (store) => {
 
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
@@ -37,14 +37,14 @@ const HomePageStore = () => {
   return (
     <>
       <Title />
-      <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
+      {/* <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
         <img
           className="w-[480px] rounded-xl h-auto max-w-full lg:w-[500px] lg:pl-2.5 lg:box-border sm1:flex-1 sm1:self-stretch sm1:h-auto sm1:pl-[30px] sm1:pr-[30px] sm1:box-border sm1:min-w-[100px]"
           alt=""
           src="/frame-14101039181@2x.png"
         />
-      </div>
-      <StoreBody />
+      </div> */}
+      <StoreBody store={store} />
       {/* <div className="self-stretch flex flex-row items-center justify-center py-5 px-0 gap-[11px]">
         <a
           className="text-decoration-none w-[18px] relative h-[19px] overflow-hidden shrink-0"
@@ -79,7 +79,7 @@ const HomePageStore = () => {
           />
         </a>
       </div> */}
-      <div className="self-stretch flex flex-row items-center justify-start gap-1.5">
+      {/* <div className="self-stretch flex flex-row items-center justify-start gap-1.5">
         <div className="flex-1 relative text-2xs font-poppins text-darkslategray-100 text-right">
           Powered By
         </div>
@@ -88,9 +88,9 @@ const HomePageStore = () => {
             className="text-decoration-none w-[83px] relative h-[11.5px] bg-[url('/samparka-16-5@3x.png')] bg-cover bg-no-repeat bg-[top]"
             href="https://take.app/panipuriz"
             target="_blank"
-          />
-        </div>
-      </div>
+          /> */}
+        {/* </div>
+      </div> */}
     </>
   );
 };

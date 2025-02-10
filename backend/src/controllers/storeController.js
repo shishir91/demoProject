@@ -45,7 +45,7 @@ class StoreController {
       const store = await storeModel.findOne({ url: storeURL });
 
       if (store && store.status == "active") {
-        return res.json({ success: true, message: "Store Available" });
+        return res.json({ success: true, message: "Store Available", storeId :store._id });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
       }

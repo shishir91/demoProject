@@ -12,7 +12,7 @@ import {
   Select,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import api from "../api/config";
 
 function AddProducts() {
@@ -39,7 +39,7 @@ function AddProducts() {
   const handleAddCategory = async () => {
     if (!storeId) {
       toast.error("Please select a store before adding a category", {
-        autoClose: 2000,
+        duration: 2000,
       });
       return;
     }
@@ -105,14 +105,14 @@ function AddProducts() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.message, { autoClose: 2000 });
+      toast.error(error.message, { duration: 2000 });
     }
   };
 
   const fetchCategory = async () => {
     if (!storeId) {
       toast.error("Please select a store before adding a category", {
-        autoClose: 2000,
+        duration: 2000,
       });
       return;
     }
@@ -126,7 +126,7 @@ function AddProducts() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.message, { autoClose: 2000, theme: "colored" });
+      toast.error(error.message, { duration: 2000 });
     }
   };
 
@@ -135,7 +135,7 @@ function AddProducts() {
     const discount = event.target.value;
     if (discount < 0 || discount > 100) {
       toast.error("Discount rate must be 0 or between 0 -100", {
-        autoClose: 200,
+        duration: 200,
       });
     }
     setDiscountRate(discount);
