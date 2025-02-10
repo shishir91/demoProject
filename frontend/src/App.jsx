@@ -21,9 +21,10 @@ const App = () => {
       if (subdomain && subdomain !== "" && subdomain !== "www") {
         try {
           const response = await api.get(`/store/checkStore/${subdomain}`);
-
+          console.log(response.data); 
           if (response.data) {
             setStoreStatus(response.data.success);
+            console.log('Response; ',response.data.success);
           }
         } catch (error) {
           console.log(error);

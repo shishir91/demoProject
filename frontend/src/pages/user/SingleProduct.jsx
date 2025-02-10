@@ -5,7 +5,7 @@ import useFetchSingleProducts from "../../hooks/useFetchSingleProduct";
 import Slider from "react-slick"; // Import react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const SingleProduct = ({ className = "" }) => {
   const navigate = useNavigate();

@@ -70,7 +70,7 @@ app.use("/admin", adminRoute);
 app.use("/store", storeRoute);
 app.use("/reward", rewardRoute);
 app.use("/customer", customerRoute);
-app.use("/product",productRoute);
+app.use("/product", productRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Running...." + process.env.CLIENT_ORIGIN);

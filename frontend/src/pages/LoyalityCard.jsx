@@ -20,6 +20,7 @@ const LoyalityCard = (
   navigationPaths = {
     game: "/game",
     reservation: "/reservation",
+    products:"/products"
   },
   cardStyle = {
     bgColor: "bg-seagreen-100",
@@ -148,26 +149,28 @@ const LoyalityCard = (
           </div>
 
           {/* Navigation Buttons */}
-          <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
-            <div
-            // className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
-            // onClick={handleNavigate(navigationPaths.game)}
-            >
-              {/* <img
-              className="w-6 relative h-[22px]"
-              alt="Game Icon"
-              src="/joysticksvgrepocom-1.svg"
-            /> */}
-            </div>
-            <div
-              className={`w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
-              onClick={handleNavigate(navigationPaths.reservation)}
-            >
-              <img
-                className="w-6 relative h-[22px]"
-                alt="Reservation Icon"
-                src="/icon1.svg"
-              />
+          <div className="relative w-full flex justify-end">
+            <div className="flex flex-col items-center gap-4  z-10">
+              <div
+                className={`w-[70px] h-[50px] flex items-center justify-center cursor-pointer ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border rounded-l-3xl shadow-lg`}
+                onClick={handleNavigate(navigationPaths.reservation)}
+              >
+                <img
+                  className="w-6 h-[22px]"
+                  alt="Reservation Icon"
+                  src="/icon1.svg"
+                />
+              </div>
+              <div
+                className={`w-[70px] h-[50px] flex items-center justify-center cursor-pointer ${cardStyle.bgColor} ${cardStyle.borderColor} border-[1px] border-solid box-border rounded-l-3xl shadow-lg`}
+                onClick={handleNavigate(navigationPaths.products)}
+              >
+                <img
+                  className="w-6 h-[22px]"
+                  alt="Products Icon"
+                  src="/productIcon.svg"
+                />
+              </div>
             </div>
           </div>
         </div>

@@ -180,39 +180,50 @@ class ProductController {
     }
   }
   async getProduct(req, res) {
-    const { storeId } = req.params;
-
-    if (!mongoose.Types.ObjectId.isValid(storeId)) {
-      return res.status(400).json({ message: "Invalid storeId format" });
-    }
+    const { storeName } = req.params;
 
     try {
-      const products = await productModel.find({ storeId });
-      // console.log(products);
+      const checkStore = await storeModel.findOne({ url: storeName });
+      if (checkStore) {
+        console.log("Store Exists");
 
-      for (const product of products) {
-        // Map through the images array and generate a signed URL for each image
-        const imageUrls = await Promise.all(
-          product.images.map(async (image) => {
-            const getObjectParams = {
-              Bucket: "samparkabucket",
-              Key: image, // Assuming image is the name of the file in S3
-            };
-            const command = new GetObjectCommand(getObjectParams);
-            return await getSignedUrl(s3, command, { expiresIn: 3600 * 60 });
-          })
-        );
+        // Use the storeId to fetch the products
+        const storeId = checkStore._id; // Assuming '_id' is the store identifier
+        try {
+          const products = await productModel.find({ storeId });
 
-        // Replace the images array with the generated URLs
-        product.images = imageUrls;
+          // Map through the products and generate signed URLs for images
+          for (const product of products) {
+            const imageUrls = await Promise.all(
+              product.images.map(async (image) => {
+                const getObjectParams = {
+                  Bucket: "samparkabucket",
+                  Key: image, // Assuming image is the name of the file in S3
+                };
+                const command = new GetObjectCommand(getObjectParams);
+                return await getSignedUrl(s3, command, {
+                  expiresIn: 3600 * 60,
+                });
+              })
+            );
+
+            // Replace the images array with the generated URLs
+            product.images = imageUrls;
+          }
+
+          if (!products || products.length === 0) {
+            return res.status(404).json({ message: "No products found" });
+          }
+          return res.status(200).json(products);
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ message: "Server Error" });
+        }
+      } else {
+        return res.status(404).json({ message: "Store not found" });
       }
-
-      if (!products) {
-        return res.status(404).json({ message: "No products found" });
-      }
-      return res.status(200).json(products);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       return res.status(500).json({ message: "Server Error" });
     }
   }
