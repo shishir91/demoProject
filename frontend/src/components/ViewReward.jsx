@@ -4,10 +4,15 @@ import PropTypes from "prop-types";
 import { Info } from "lucide-react";
 import InstallationGuide from "./InstallationGuide";
 
-const ViewReward = ({ className = "", location, group1410103762, vector }) => {
+const ViewReward = ({
+  className = "",
+  location,
+  group1410103762,
+  vector,
+  color,
+}) => {
   const navigate = useNavigate();
   const [showGuide, setShowGuide] = useState(false);
-
   return (
     <div
       className={`self-stretch flex flex-row items-center justify-center py-2 px-0 text-left text-xs-41 text-black font-poppins lg1:pl-0 lg1:pr-0 lg1:box-border ${className}`}
@@ -26,10 +31,8 @@ const ViewReward = ({ className = "", location, group1410103762, vector }) => {
       </div>
       <div className="flex-1 flex flex-col items-end justify-center">
         <div
-          className="w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 
-    bg-seagreen-100 border-whitesmoke-100 border-[1px] border-solid box-border flex flex-row 
-    items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5 
-    animate-glow transition-all duration-300 hover:scale-110"
+          style={{ backgroundColor: color }}
+          className="w-[70px] rounded-tl-3xs1 rounded-bl-3xs1 flex flex-row justify-center py-[9px] px-0 cursor-pointer"
           onClick={() => setShowGuide(true)} // Opens guide
         >
           <Info className="w-7 h-7 text-white animate-pulse hover:animate-spin transition-all duration-500 ease-in-out drop-shadow-neon" />

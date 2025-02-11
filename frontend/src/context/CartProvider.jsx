@@ -9,43 +9,49 @@ export const CartProvider = ({ children }) => {
 
   const fetchCartItems = () => {
     const request = window.indexedDB.open("cartDb", 1);
-
+  
+    request.onupgradeneeded = (e) => {
+      const db = e.target.result;
+      if (!db.objectStoreNames.contains("cartItems")) {
+        db.createObjectStore("cartItems", { keyPath: "productId" });
+      }
+    };
+  
     request.onsuccess = (e) => {
       const db = e.target.result;
+      if (!db.objectStoreNames.contains("cartItems")) {
+        console.error("cartItems store not found in cartDb");
+        return;
+      }
+  
       const transaction = db.transaction("cartItems", "readonly");
       const store = transaction.objectStore("cartItems");
-
       const getAllItemsRequest = store.getAll();
+  
       getAllItemsRequest.onsuccess = (event) => {
         const items = event.target.result;
+        console.log("Fetched Cart Items:", items);
+  
         setCartItems(items);
-
-        // Calculate total price and quantity
-
-        let quantity = 0;
-        items.forEach((item) => {
-          quantity += item.productQuantity;
-        });
-
-        let total = 0;
-        items.forEach((item) => {
-          const price = parseFloat(item.productTotalPrice) || 0;
-          total += price;
-        });
-        setTotalPrice(total);
-
+  
+        const quantity = items.reduce((acc, item) => acc + item.productQuantity, 0);
+        const total = items.reduce((acc, item) => acc + parseFloat(item.productTotalPrice || 0), 0);
+  
         setTotalQuantity(quantity);
+        setTotalPrice(total);
       };
-
+  
       getAllItemsRequest.onerror = () => {
         console.error("Error fetching cart items from IndexedDB");
       };
     };
-
+  
     request.onerror = () => {
       console.error("Error opening IndexedDB");
     };
   };
+  
+  
 
   const addOrUpdateItem = (newItem) => {
     const request = window.indexedDB.open("cartDb", 1);
@@ -134,7 +140,8 @@ export const CartProvider = ({ children }) => {
           if (item.productQuantity <= 0) {
             removeItem(productId); // Remove the item if quantity is zero
           } else {
-            item.productTotalPrice = item.productTotalPrice * item.productQuantity;
+            item.productTotalPrice =
+              item.productTotalPrice * item.productQuantity;
 
             const updateRequest = store.put(item);
             updateRequest.onsuccess = () => {

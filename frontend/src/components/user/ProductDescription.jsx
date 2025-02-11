@@ -1,16 +1,34 @@
-import { useCallback } from "react";
+// import { useCallback } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import PropTypes from "prop-types";
-import useFetchProducts from "../../hooks/useFetchProducts";
+// import useFetchProducts from "../../hooks/useFetchProducts";
+import {useQuery} from "@tanstack/react-query";
+import api from "../../api/config";
 
+
+
+// eslint-disable-next-line react/prop-types
 const ProductDescription = ({ className = "", store }) => {
-  const navigate = useNavigate();
+  const fetchProducts = async ({store}) =>{
+    const response = await api.get(`/product/getProducts/${store.url}`);
+    console.log("REached here");
+    return response.data;
+  }
+  // const navigate = useNavigate();
 
-  const { products, loading, error } = useFetchProducts(store);
+  // const { products, loading, error } = useFetchProducts(store);
 
-  const onProductDescriptionContainerClick = useCallback(() => {
-    navigate("/sp");
-  }, [navigate]);
+  const { data: products, isLoading:loading, error } = useQuery({
+    // eslint-disable-next-line react/prop-types
+    queryKey: ["products"],   // queryKey must be an array or unique string
+    queryFn:()=> fetchProducts(store)  // queryFn must be a function returning a promise
+  });
+  
+  console.log("Products; ",products);
+
+  // const onProductDescriptionContainerClick = useCallback(() => {
+  //   navigate("/sp");
+  // }, [navigate]);
 
   return (
     <div className="w-full max-w-6xl mx-auto rounded-xl border border-gray-300 p-5 text-base1">
@@ -20,10 +38,10 @@ const ProductDescription = ({ className = "", store }) => {
       </div>
       <div className="mt-5">
         {loading && <p>Loading Products...</p>}
-        {error && <p className="text-red-500">{error}</p>}
+        {error && <p className="text-red-500">{error.message}</p>}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
-          {products.map((item, index) => (
+          {products?.map((item, index) => (
             <Link
               key={index}
               to={`/product/${item._id}`}

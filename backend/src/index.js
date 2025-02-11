@@ -95,7 +95,7 @@ async function connectDB() {
 // Migration function
 async function runMigration() {
   try {
-    await rewardModel.updateMany(
+    await storeModel.updateMany(
       {},
       { $set: { owner: "Unknown", establishedYear: 2000 } }
     );

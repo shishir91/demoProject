@@ -189,6 +189,8 @@ class CustomerController {
   //CUSTOMER GET POINTS
   async getPoints(req, res) {
     try {
+      console.log("helo");
+      
       if (!req.user) {
         return res.json({ success: false });
       }

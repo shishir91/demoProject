@@ -21,6 +21,7 @@ const GetPoints = (store) => {
     if (!user && !token) {
       navigate("/");
     }
+
     const getPoints = async () => {
       try {
         const response = await api.put(
@@ -28,13 +29,18 @@ const GetPoints = (store) => {
           {},
           { headers: { token } }
         );
+
         if (response.data.success) {
           setPoints(response.data.points);
-          toast.success(response.data.message, {
-            duration: 2000,
-            
-            onAutoClose: () => navigate("/loyality"),
-          });
+
+          // Show success message
+          toast.success(response.data.message, { duration: 2000 });
+
+          // Delay the URL change by 2 seconds
+          setTimeout(() => {
+            history.replaceState(null, "", "/loyality");
+            navigate("/loyality"); // React Router navigation
+          }, 2000);
         } else {
           navigate("/loyality");
         }
@@ -44,6 +50,7 @@ const GetPoints = (store) => {
         setLoading(false);
       }
     };
+
     getPoints();
   }, [token]);
 

@@ -129,16 +129,14 @@ class RewardController {
         }
 
         // Update reward with the new image in the template
-        const updatedReward = await rewardModel.findByIdAndUpdate(
-          rewardId,
-          { ...req.body },
-          { new: true }
-        );
+        const updatedReward = await rewardModel
+          .findByIdAndUpdate(rewardId, { ...req.body }, { new: true })
+          .populate("store", "name");
 
         return res.json({
           success: true,
           message: "Reward Saved",
-          rewards: updatedReward,
+          reward: updatedReward,
         });
       } else {
         return res.json({ success: false, message: "You don't have access" });

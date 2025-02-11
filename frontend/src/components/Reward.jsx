@@ -40,7 +40,7 @@
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         
+//
 //       });
 //     } finally {
 //       setLoading(false);
@@ -87,19 +87,19 @@
 //       if (response.data.success) {
 //         toast.success(response.data.message, {
 //           duration: 2000,
-//           
+//
 //         });
 //       } else {
 //         toast.error(response.data.message, {
 //           duration: 2000,
-//           
+//
 //         });
 //       }
 //     } catch (error) {
 //       console.log(error);
 //       toast.error(error.message, {
 //         duration: 2000,
-//         
+//
 //       });
 //     }
 //   };
@@ -230,7 +230,7 @@ import { toast } from "sonner";
 import api from "../api/config";
 import { ArrowUpRight } from "lucide-react";
 
-const Reward = ({ className = "", onClose, storeId, token }) => {
+const Reward = ({ className = "", onClose, storeId, token, color }) => {
   const [isRewardView, setIsRewardView] = useState(true);
   const [isDescriptionPopupOpen, setDescriptionPopupOpen] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -262,7 +262,6 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -300,6 +299,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
   }, []);
 
   const redeemReward = async (rewardId) => {
+    setLoading(true);
     try {
       const response = await api.put(
         `/customer/redeemReward/${rewardId}?storeID=${storeId}`,
@@ -309,20 +309,19 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -367,7 +366,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                 rewards.map((reward, index) => (
                   <div
                     key={index}
-                    className="w-[270px] shadow-[0px_4px_12.2px_rgba(0,_0,_0,_0.25)] rounded-3xs1 bg-white h-68 flex flex-col items-center justify-start p-4 mb-4 box-border relative gap-2.5"
+                    className="w-[270px] shadow-[0px_4px_12.2px_rgba(0,_0,_0,_0.25)] rounded-3xs1 bg-white h-68 flex flex-col items-center justify-start p-4 box-border relative gap-2.5"
                   >
                     <img
                       className="w-60 relative rounded-6xs1 h-[130px] object-cover z-[0]"
@@ -384,11 +383,10 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                       {/* Reward Details */}
                       <div className="self-stretch flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col">
-                          <div className="flex flex-row items-center gap-2">
+                          <div className="flex flex-row items-center">
                             <span className="text-2xs1 font-medium">
                               {reward.name}
                             </span>
-                            <div className="w-2.5 h-2.5 bg-red rounded-full border border-whitesmoke-200"></div>
                           </div>
                           <span className="text-xs1 text-gray-500">
                             {reward.points} Points
@@ -396,6 +394,7 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                         </div>
                         {/* Redeem Button */}
                         <button
+                          style={{ backgroundColor: color }}
                           onClick={() => redeemReward(reward._id)}
                           className="flex items-center gap-2 bg-green-500 text-white text-2xs1 font-medium px-3 py-1 rounded-md shadow-sm hover:bg-green-600 transition"
                         >
@@ -413,7 +412,10 @@ const Reward = ({ className = "", onClose, storeId, token }) => {
                     {/* Description Popup */}
                     {activePopup === index && (
                       <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-90 z-50 rounded-3xs1 shadow-lg">
-                        <Description onClose={closeDescriptionPopup} />
+                        <Description
+                          onClose={closeDescriptionPopup}
+                          description={reward.description}
+                        />
                       </div>
                     )}
                   </div>

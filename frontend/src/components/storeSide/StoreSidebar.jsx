@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { Home, UserPlus, Gift, Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
-const StoreSidebar = () => {
+const StoreSidebar = (store) => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(store.store);
 
   return (
     <>
@@ -21,19 +23,26 @@ const StoreSidebar = () => {
         } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="text-2xl font-bold text-center py-6">Brand Logo</div>
+        <div className="text-3xl font-semibold text-center py-6 flex items-center justify-center gap-3">
+          <img
+            src={store.store.logo}
+            alt={store.store.name}
+            className="w-12 h-12 rounded-full object-cover"
+          />
+          <span className="text-white text-xl">{store.store.name}</span>
+        </div>
 
         {/* Navigation */}
         <nav className="flex-1">
           <ul>
             <li className="mb-4">
-              <a
-                href="#"
+              <Link
+                to="/store/points"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-all"
               >
                 <Home size={20} />
-                <span>Dashboard</span>
-              </a>
+                <span>Points</span>
+              </Link>
             </li>
             <li className="mb-4">
               <a
@@ -45,13 +54,13 @@ const StoreSidebar = () => {
               </a>
             </li>
             <li>
-              <a
-                href="/store/viewRewards"
+              <Link
+                to="/store/viewRewards"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-all"
               >
                 <Gift size={20} />
                 <span>Rewards</span>
-              </a>
+              </Link>
             </li>
           </ul>
         </nav>

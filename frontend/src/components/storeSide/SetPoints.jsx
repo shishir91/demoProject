@@ -26,7 +26,7 @@ const SetPoints = ({ qrCodeUrl, setPoints, handlePointsChange }) => {
       </form>
 
       {/* Main */}
-      <div className="max-w-md w-full bg-white rounded-lg overflow-hidden shadow-xl flex-grow md:max-w-lg">
+      <div className="max-w-md w-full bg-white rounded-lg overflow-hidden shadow-xl md:max-w-lg">
         {/* Header Section */}
         <div className="bg-emerald-500 p-6 text-center">
           <div className="flex justify-center mb-4">
