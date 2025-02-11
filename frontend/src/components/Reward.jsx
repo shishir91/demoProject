@@ -299,6 +299,7 @@ const Reward = ({ className = "", onClose, storeId, token, color }) => {
   }, []);
 
   const redeemReward = async (rewardId) => {
+    setLoading(true);
     try {
       const response = await api.put(
         `/customer/redeemReward/${rewardId}?storeID=${storeId}`,
@@ -319,6 +320,8 @@ const Reward = ({ className = "", onClose, storeId, token, color }) => {
       toast.error(error.message, {
         duration: 2000,
       });
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -363,7 +366,7 @@ const Reward = ({ className = "", onClose, storeId, token, color }) => {
                 rewards.map((reward, index) => (
                   <div
                     key={index}
-                    className="w-[270px] shadow-[0px_4px_12.2px_rgba(0,_0,_0,_0.25)] rounded-3xs1 bg-white h-68 flex flex-col items-center justify-start p-4 mb-4 box-border relative gap-2.5"
+                    className="w-[270px] shadow-[0px_4px_12.2px_rgba(0,_0,_0,_0.25)] rounded-3xs1 bg-white h-68 flex flex-col items-center justify-start p-4 box-border relative gap-2.5"
                   >
                     <img
                       className="w-60 relative rounded-6xs1 h-[130px] object-cover z-[0]"
@@ -380,11 +383,10 @@ const Reward = ({ className = "", onClose, storeId, token, color }) => {
                       {/* Reward Details */}
                       <div className="self-stretch flex flex-row items-center justify-between w-full">
                         <div className="flex flex-col">
-                          <div className="flex flex-row items-center gap-2">
+                          <div className="flex flex-row items-center">
                             <span className="text-2xs1 font-medium">
                               {reward.name}
                             </span>
-                            <div className="w-2.5 h-2.5 bg-red rounded-full border border-whitesmoke-200"></div>
                           </div>
                           <span className="text-xs1 text-gray-500">
                             {reward.points} Points

@@ -18,28 +18,28 @@ class MailSMSController {
           case "afterLogin":
             mailSMS = await mailSMSModel.findOneAndUpdate(
               { store },
-              { messageAfterLogin: { ...req.body } },
+              { mailAfterLogin: { ...req.body } },
               { new: true }
             );
             break;
           case "afterPointEarned":
             mailSMS = await mailSMSModel.findOneAndUpdate(
               { store },
-              { messageAfterPointEarned: { ...req.body } },
+              { mailAfterPointEarned: { ...req.body } },
               { new: true }
             );
             break;
           case "afterRewardRedeemed":
             mailSMS = await mailSMSModel.findOneAndUpdate(
               { store },
-              { messageAfterRewardRedeemed: { ...req.body } },
+              { mailAfterRewardRedeemed: { ...req.body } },
               { new: true }
             );
             break;
           case "afterRewardRedeemed_admin":
             mailSMS = await mailSMSModel.findOneAndUpdate(
               { store },
-              { messageAfterRewardRedeemed_Admin: { ...req.body } },
+              { mailAfterRewardRedeemed_Admin: { ...req.body } },
               { new: true }
             );
             break;

@@ -84,12 +84,18 @@ const MyRewards = ({ className = "", onClose, token }) => {
         rewards.map((reward, index) => (
           <div
             key={index}
-            className="self-stretch flex flex-row items-center justify-center flex-wrap content-center gap-[53px] text-left text-xs-4 text-black font-poppins"
+            className="self-stretch flex flex-row items-center justify-center flex-wrap content-center gap-[53px] text-left text-xs-4 text-black font-poppins mb-4"
           >
             {/* Add your Reward component content here */}
             <div className="w-[270px] shadow-[0px_4px_12.2px_rgba(0,_0,_0,_0.25)] rounded-3xs1 bg-white h-58 flex flex-col items-center justify-start py-4 px-4 box-border relative gap-2.5">
               <div className="self-stretch flex flex-row items-center justify-center gap-[3px]">
-                <div className="w-2.5 relative rounded-62xl1 bg-lime border-whitesmoke-200 border-[1px] border-solid box-border h-2.5" />
+                {reward.status === "expired" ? (
+                  <div className="w-2.5 relative rounded-62xl1 bg-red-800 border-red-900 border-[1px] border-solid box-border h-2.5" />
+                ) : reward.status === "claimed" ? (
+                  <div className="w-2.5 relative rounded-62xl1 bg-green-800 border-green-900 border-[1px] border-solid box-border h-2.5" />
+                ) : (
+                  <div className="w-2.5 relative rounded-62xl1 bg-teal-200 border-teal-200 border-[1px] border-solid box-border h-2.5" />
+                )}
                 <div className="flex flex-row items-center justify-center">
                   <div className="relative font-medium">{statuses[index]}</div>
                 </div>

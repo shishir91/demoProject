@@ -75,13 +75,12 @@ const Store = () => {
         setShowModal(false);
         toast.success(response.data.message, {
           duration: 2000,
-          
+
           onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (e) {
@@ -89,7 +88,6 @@ const Store = () => {
       setShowModal(false);
       toast.error(e.message, {
         duration: 2000,
-        
       });
     } finally {
       setIsLoading(false);
@@ -116,19 +114,16 @@ const Store = () => {
 
         toast.success(response.data.message, {
           duration: 2000,
-          
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setIsLoading(false);
@@ -189,8 +184,10 @@ const Store = () => {
                     <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
                       {/* visit */}
                       <a
-                        href={`http://${store.url}.localhost:5173/store/points`}
-                        // href={`https://${store.url}.samparka.co/store/points`}
+                        href={`http://${store.url}.${
+                          import.meta.env.VITE_CLIENT_BASE_URL
+                        }/store/points`}
+                        // href={`http://${store.url}.samparka.co/store/points`}
                         target="_blank"
                         rel="noopener noreferrer"
                       >

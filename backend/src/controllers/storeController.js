@@ -43,10 +43,18 @@ class StoreController {
   async checkStore(req, res) {
     try {
       const { storeURL } = req.params;
-      const store = await storeModel.findOne({ url: storeURL });
-
+      const store = await storeModel
+        .findOne({ url: storeURL })
+        .select("_id name location phone logo url status loyaltyCard");
+      const getObjectParams = {
+        Bucket: "samparkabucket",
+        Key: store.logo,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      store.logo = url;
       if (store && store.status == "active") {
-        return res.json({ success: true, message: "Store Available" });
+        return res.json({ success: true, message: "Store Available", store });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
       }

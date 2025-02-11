@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Home, UserPlus, Gift, Menu, X } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const StoreSidebar = () => {
+const StoreSidebar = (store) => {
   const [isOpen, setIsOpen] = useState(false);
+  console.log(store.store);
 
   return (
     <>
@@ -22,7 +23,14 @@ const StoreSidebar = () => {
         } sm:translate-x-0`}
         aria-label="Sidebar"
       >
-        <div className="text-2xl font-bold text-center py-6">Brand Logo</div>
+        <div className="text-3xl font-semibold text-center py-6 flex items-center justify-center gap-3">
+          <img
+            src={store.store.logo}
+            alt={store.store.name}
+            className="w-12 h-12 rounded-full object-cover"
+          />
+          <span className="text-white text-xl">{store.store.name}</span>
+        </div>
 
         {/* Navigation */}
         <nav className="flex-1">

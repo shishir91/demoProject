@@ -32,10 +32,7 @@ const ViewReward = ({
       <div className="flex-1 flex flex-col items-end justify-center">
         <div
           style={{ backgroundColor: color }}
-          className="w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 
-    border-whitesmoke-100 border-[1px] border-solid box-border flex flex-row 
-    items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5 
-    animate-glow transition-all duration-300 hover:scale-110"
+          className="w-[70px] rounded-tl-3xs1 rounded-bl-3xs1 flex flex-row justify-center py-[9px] px-0 cursor-pointer"
           onClick={() => setShowGuide(true)} // Opens guide
         >
           <Info className="w-7 h-7 text-white animate-pulse hover:animate-spin transition-all duration-500 ease-in-out drop-shadow-neon" />

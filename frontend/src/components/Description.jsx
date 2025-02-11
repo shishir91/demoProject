@@ -30,7 +30,7 @@ import PropTypes from "prop-types";
 const Description = ({ className = "", onClose, description }) => {
   return (
     <div
-      className={`w-[361px] relative rounded-3xs1 bg-seagreen-200 h-48 flex flex-col items-center justify-center py-2.5 px-0 box-border gap-2.5 max-w-full max-h-full overflow-auto text-center text-[12px] text-white ${className}`}
+      className={`w-[361px] relative rounded-3xs1 bg-seagreen-200 h-60 flex flex-col items-center justify-center py-2.5 px-0 box-border gap-2.5 max-w-full max-h-full overflow-auto text-center text-[12px] text-white ${className}`}
     >
       <div className="relative tracking-[0.01em] z-[0] lg:text-black mq350small1:text-xl mq350small1:text-black">
         <span>{description}</span>

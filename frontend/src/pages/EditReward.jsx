@@ -42,33 +42,28 @@ const EditReward = () => {
   const handelSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
-      const response = await api.post(
-        `/reward/createReward?storeId=${formData.store}`,
+      const response = await api.put(
+        `/reward/editReward/${reward.store._id}?rewardId=${reward._id}`,
         { ...formData },
         { headers: { token } }
       );
       if (response.data.success) {
         setReward(response.data.reward);
+        console.log(response.data.reward);
         toast.success(response.data.message, {
           duration: 2000,
-          
-          onAutoClose: () =>
-            navigate("/reward/createReward/customize", {
-              state: { ...response.data.reward },
-            }),
         });
       } else {
-        toast.error(response.data.message, {
+        toast.error("Reward Saved", {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -109,9 +104,8 @@ const EditReward = () => {
         { headers: { token } }
       );
       if (response.data.success) {
-        toast.success(response.data.message, {
+        toast.success("Reward Saved", {
           duration: 2000,
-          onAutoClose: () => navigate("/reward"),
         });
       }
     } catch (error) {
