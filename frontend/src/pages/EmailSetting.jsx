@@ -33,14 +33,12 @@ const EmailSetting = () => {
         } else {
           toast.error(response.data.message, {
             duration: 2000,
-            
           });
         }
       } catch (error) {
         console.log(error);
         toast.error(error.message, {
           duration: 2000,
-          
         });
       } finally {
         setLoading(false);
@@ -61,6 +59,7 @@ const EmailSetting = () => {
           STORE: {store.name}
         </h2>
       </div>
+
       {/* Navigation Tabs */}
       <div className="flex flex-wrap gap-4 border-b border-gray-700 mb-8">
         <button
@@ -122,8 +121,23 @@ const EmailSetting = () => {
           <FileEdit size={18} />
           <span>After Reward Redeemed Admin</span>
         </button>
+        <button
+          // onClick={() =>
+          //   navigate(`${location.pathname}?status=afterRewardRedeemed_admin`, {
+          //     state: { store },
+          //   })
+          // }
+          className={`flex items-center gap-2 px-4 py-2 ${
+            status === "on_birthday" &&
+            "border-b-2 border-emerald-400 text-emerald-400"
+          }`}
+        >
+          <FileEdit size={18} />
+          <span>On Birthday</span>
+        </button>
       </div>
-      <div>
+
+      <div className="flex justify-between">
         {status === "afterLogin" && mailMessage.messageAfterLogin && (
           <AfterLogin
             store={store}
@@ -153,6 +167,29 @@ const EmailSetting = () => {
               mailMessage={mailMessage.messageAfterRewardRedeemed_Admin}
             />
           )}
+
+        {/* Short Code Section */}
+        <div className="bg-stone-900 text-green-300 p-4 rounded-lg shadow-md h-full">
+          <h3 className="text-lg font-semibold mb-3">Short codes</h3>
+          <ul className="space-y-2 text-sm">
+            <li>
+              <span className="font-medium">Points</span> -{" "}
+              <code className="text-blue-400">[points_earned]</code>
+            </li>
+            <li>
+              <span className="font-medium">Store Name</span> -{" "}
+              <code className="text-blue-400">[store_name]</code>
+            </li>
+            <li>
+              <span className="font-medium">Customer Name</span> -{" "}
+              <code className="text-blue-400">[customer_name]</code>
+            </li>
+            <li>
+              <span className="font-medium">Reward Name</span> -{" "}
+              <code className="text-blue-400">[reward_name]</code>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

@@ -51,7 +51,18 @@ class MailController {
     }
   }
 
-  async mailCustomers(user, pass, email, subject, message, points, storeURL) {
+  async mailCustomers(
+    user,
+    pass,
+    email,
+    subject,
+    message,
+    points,
+    storeURL,
+    storeName,
+    customerName,
+    reward
+  ) {
     try {
       let transport = nodemailer.createTransport({
         service: "gmail",
@@ -60,13 +71,19 @@ class MailController {
           pass,
         },
       });
+      const formattedMessage = message
+        .replace("[received_points]", points)
+        .replace("[store_name]", storeName)
+        .replace("[customer_name]", customerName)
+        .replace("[reward_name]", reward);
+
       const mailOptions = {
         from: user,
         to: email,
         subject: subject,
         html: `
          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #ddd; border-radius: 8px; background-color: #f9f9f9;">
-            ${message}
+            ${formattedMessage}
         </div>
         `,
         // html: `
@@ -74,7 +91,7 @@ class MailController {
         //     <h2 style="color: #333;">Congratulation 🎉 </h2>
         //     <p style="color: #555;">You have received ${points} points.</p>
         //     <div style="text-align: center; margin-top: 20px;">
-        //         <a href="http://${storeURL}.samparka.co/loyality"
+        //         <a href="https://${storeURL}.samparka.co/loyality"
         //         style="padding: 10px 20px; background-color: #007BFF; color: white; text-decoration: none; border-radius: 5px;">
         //         View Points
         //         </a>

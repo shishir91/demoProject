@@ -12,6 +12,11 @@ const adminMessageSchema = new mongoose.Schema({
   message: { type: String, default: "" },
 });
 
+const smsSchema = new mongoose.Schema({
+  from: { type: String, default: "" },
+  message: { type: String, default: "" },
+});
+
 // Main schema
 const mailSMSSchema = new mongoose.Schema(
   {
@@ -21,11 +26,18 @@ const mailSMSSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    messageAfterLogin: { type: messageSchema, default: () => ({}) },
-    messageAfterPointEarned: { type: messageSchema, default: () => ({}) },
-    messageAfterRewardRedeemed: { type: messageSchema, default: () => ({}) },
-    messageAfterRewardRedeemed_Admin: {
+    mailAfterLogin: { type: messageSchema, default: () => ({}) },
+    mailAfterPointEarned: { type: messageSchema, default: () => ({}) },
+    mailAfterRewardRedeemed: { type: messageSchema, default: () => ({}) },
+    mailAfterRewardRedeemed_Admin: {
       type: adminMessageSchema,
+      default: () => ({}),
+    },
+    smsAfterLogin: { type: smsSchema, default: () => ({}) },
+    smsAfterPointEarned: { type: smsSchema, default: () => ({}) },
+    smsAfterRewardRedeemed: { type: smsSchema, default: () => ({}) },
+    smsAfterRewardRedeemed_Admin: {
+      type: smsSchema,
       default: () => ({}),
     },
   },

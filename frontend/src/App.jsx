@@ -3,43 +3,48 @@ import api from "./api/config";
 import PoweredBySamparka from "./components/PoweredBySamparka";
 import MainApp from "./MainApp";
 import AppStore from "./AppStore";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const App = () => {
-  //HANDLE SUBDOMAIN
+  // Initialize the QueryClient instance
+  const queryClient = new QueryClient();
+  
+  // Handle subdomain
   const [subdomain, setSubdomain] = useState("");
-  const [storeStatus, setStoreStatus] = useState();
 
   useEffect(() => {
     const host = window.location.hostname.split(".");
-
     const sub = host.length > 1 ? host[0] : null;
     setSubdomain(sub);
   }, []);
 
-  useEffect(() => {
-    const checkStore = async () => {
-      if (subdomain && subdomain !== "" && subdomain !== "www") {
-        try {
-          const response = await api.get(`/store/checkStore/${subdomain}`);
-          console.log(response.data); 
-          if (response.data) {
-            setStoreStatus(response.data.success);
-            console.log('Response; ',response.data.success);
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      }
-    };
-    checkStore();
-  }, [subdomain]);
+  // Optional: Logic for checking store status (commented out for now)
+  // useEffect(() => {
+  //   const checkStore = async () => {
+  //     if (subdomain && subdomain !== "" && subdomain !== "www") {
+  //       try {
+  //         const response = await api.get(`/store/checkStore/${subdomain}`);
+  //         if (response.data) {
+  //           setStoreStatus(response.data.success);
+  //         }
+  //       } catch (error) {
+  //         console.log(error);
+  //       }
+  //     }
+  //   };
+  //   checkStore();
+  // }, [subdomain]);
 
-  if (!subdomain || subdomain == "" || subdomain == "www") {
+  if (!subdomain || subdomain === "" || subdomain === "www") {
     return <MainApp />;
-  } else if (storeStatus) {
-    return <AppStore />;
   } else {
-    return <PoweredBySamparka />;
+    return (
+      <QueryClientProvider client={queryClient}>
+        <AppStore subdomain={subdomain} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </QueryClientProvider>
+    );
   }
 };
 

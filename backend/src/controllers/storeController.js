@@ -18,6 +18,7 @@ const storeModel = require("../models/storeModel.js");
 const pointsModel = require("../models/pointsModel.js");
 const customerModel = require("../models/customerModel.js");
 const redemptionModel = require("../models/redemptionModel.js");
+const generateToken = require("../config/generateToken.js");
 const bcrypt = require("bcrypt");
 const validator = require("validator");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
@@ -42,9 +43,18 @@ class StoreController {
   async checkStore(req, res) {
     try {
       const { storeURL } = req.params;
-      const store = await storeModel.findOne({ url: storeURL });
-
+      const store = await storeModel
+        .findOne({ url: storeURL })
+        .select("_id name location phone logo url status loyaltyCard");
+      const getObjectParams = {
+        Bucket: "samparkabucket",
+        Key: store.logo,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      store.logo = url;
       if (store && store.status == "active") {
+        return res.json({ success: true, message: "Store Available", store });
         return res.json({ success: true, message: "Store Available", storeId :store._id });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
@@ -377,7 +387,38 @@ class StoreController {
           return res.json({ success: false, message: "Invalid PIN" });
         }
       }
-      return res.json({ success: true, message: "PIN Verified" });
+      return res.json({
+        success: true,
+        message: "PIN Verified",
+        token: generateToken(store._id),
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  async changePIN(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { oldPIN, newPIN } = req.body;
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      if (store.pin && store.pin !== "1234") {
+        const isPINValid = bcrypt.compareSync(oldPIN, store.pin);
+        if (!isPINValid) {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
+      } else {
+        if (oldPIN !== "1234") {
+          return res.json({ success: false, message: "Invalid PIN" });
+        }
+      }
+      const hashedPIN = bcrypt.hashSync(newPIN, 10);
+      store.pin = hashedPIN;
+      await store.save();
+      return res.json({ success: true, message: "PIN Changed" });
     } catch (error) {
       console.log(error);
       return res.status(500).send(error);

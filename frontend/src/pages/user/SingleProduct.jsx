@@ -6,11 +6,16 @@ import Slider from "react-slick"; // Import react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { toast } from "sonner";
+// import {useQuery} from "@tanstack/react-query";
+
+
 
 const SingleProduct = ({ className = "" }) => {
   const navigate = useNavigate();
   const { productId } = useParams();
   // console.log("SingleProduct", productId);
+
+  
 
   const { product, loading, error } = useFetchSingleProducts(productId);
   const [quantity, setQuantity] = useState(1);
@@ -56,7 +61,7 @@ const SingleProduct = ({ className = "" }) => {
   // Helper function to open or create IndexedDB
   const openDb = () => {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open("cartDb", 1);
+      const request = indexedDB.open("cartDb", 2);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
@@ -88,8 +93,14 @@ const SingleProduct = ({ className = "" }) => {
   const addToCartDb = async (product, quantity, totalPrice) => {
     try {
       const db = await openDb();
+
+      if (!db.objectStoreNames.contains("cartItems")) {
+        console.error("Object store 'cartItems' not found.");
+        return;
+      }
+
       const transaction = db.transaction("cartItems", "readwrite");
-      const store = transaction.objectStore("cartItems");
+      const store = transaction.objectStore("cartItems",{keyPath:"productId"});
 
       const existingItemRequest = store.get(product._id);
 
@@ -155,13 +166,15 @@ const SingleProduct = ({ className = "" }) => {
 
     navigate("/product/checkout", {
       state: {
-        items: [{
-          id: productId,
-          productImage: product.images[0],
-          productName: product.name,
-          productQuantity: quantity,
-          productTotalPrice:totalPrice,
-        }], 
+        items: [
+          {
+            id: productId,
+            productImage: product.images[0],
+            productName: product.name,
+            productQuantity: quantity,
+            productTotalPrice: totalPrice,
+          },
+        ],
 
         totalPrice: totalPrice,
       },

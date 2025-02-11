@@ -39,16 +39,14 @@ const L1 = ({
           style={{ color: textColor }}
         >
           <div className="relative">Points</div>
-          <div className="self-stretch flex flex-row items-center justify-center text-11xl1 font-h1">
-            {" "}
-            {/* Applied new font size "text-11xl1" */}
-            <div className="flex flex-row items-center justify-center">
-              <div className="w-[39px] relative h-9" id="point">
-                <b className="absolute top-[0px] left-[0px]">{points}</b>
-              </div>
+
+          {/* Applied new font size "text-11xl1" */}
+          <div className="flex items-center space-x-2 px-3 py-1">
+            <div className="flex items-center justify-center">
+              <b className="text-2xl text-gray-200">{points}</b>
               <img
-                className="w-6 relative h-6 overflow-hidden shrink-0"
-                alt=""
+                className="w-6 h-6 mb-1"
+                alt="star icon"
                 src="/interface--star.svg"
               />
             </div>

@@ -19,12 +19,18 @@ import HomePageStore from "./pages/user/HomePageStore";
 import SingleProduct from "./pages/user/SingleProduct";
 import Checkout from "./pages/user/Checkout";
 import { CartProvider } from "./context/CartProvider";
+import StoreLogin from "./pages/subdomainPages/StoreLogin";
+import api from "./api/config";
 
-const AppStore = () => {
+const AppStore = (sub) => {
   const [authState, setAuthState] = useState({
     userInfo: JSON.parse(localStorage.getItem("userInfo")),
     token: localStorage.getItem("token"),
   });
+  const [storeStatus, setStoreStatus] = useState();
+  const [storeData, setStoreData] = useState({});
+  const subdomain = sub.subdomain;
+  console.log(sub);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
@@ -55,67 +61,151 @@ const AppStore = () => {
     return children;
   };
 
-  return (
-    <Router>
-      <Toaster richColors expand={false} position="top-right" />
-      <Routes>
-        {/* Public Route: Only accessible if NOT logged in */}
-        <Route
-          index
-          element={
-            <CustomerLogin url={subdomain} />
-            // <StorePublicRoute>
-            // </StorePublicRoute>
-          }
-        />
+  useEffect(() => {
+    const checkStore = async () => {
+      if (subdomain && subdomain !== "" && subdomain !== "www") {
+        try {
+          fetch(
+            `${
+              import.meta.env.VITE_SERVER_BASE_URL
+            }manifest.json?subdomain=${subdomain}`
+          )
+            .then((res) => res.json())
+            .then((store) => {
+              const blob = new Blob([JSON.stringify(store)], {
+                type: "application/json",
+              });
+              const url = URL.createObjectURL(blob);
 
-        {/* Protected Routes: Require store login */}
-        <Route path="/store">
-          <Route
-            path="points"
-            element={
-              <>
-                <StoreSide url={subdomain} />
-              </>
-            }
-          />
-          <Route
-            path="viewRewards"
-            element={
-              <>
-                <StoreSidebar />
-                <ViewRewards url={subdomain} />
-              </>
-            }
-          />
-        </Route>
-        <Route
-          path="/verification"
-          element={
-            <Verification />
-            // <StoreProtectedRoute>
-            // </StoreProtectedRoute>
+              const link = document.createElement("link");
+              link.rel = "manifest";
+              link.href = url;
+              document.head.appendChild(link);
+
+              // Update document title
+              document.title = store.name;
+
+              // Add new favicon
+              if (store.icons && store.icons.length > 0) {
+                // Remove existing favicons
+                document
+                  .querySelectorAll("link[rel='icon']")
+                  .forEach((el) => el.remove());
+                const newFavicon = document.createElement("link");
+                newFavicon.rel = "icon";
+                newFavicon.type = "image/png";
+                newFavicon.sizes = "16x16";
+                newFavicon.href = store.icons[0].src;
+                document.head.appendChild(newFavicon);
+              }
+
+              // Dynamically set Apple-specific meta tags
+              const metaTitle = document.createElement("meta");
+              metaTitle.name = "apple-mobile-web-app-title";
+              metaTitle.content = store.name;
+
+              const touchIcon = document.createElement("link");
+              touchIcon.rel = "apple-touch-icon";
+              touchIcon.href = store.icons[0].src;
+
+              document.head.appendChild(metaTitle);
+              document.head.appendChild(touchIcon);
+
+              console.log(
+                "Dynamic Apple meta tags and icon added for:",
+                store.name
+              );
+            })
+            .catch((error) =>
+              console.error("Failed to fetch store data:", error)
+            );
+
+          const response = await api.get(`/store/checkStore/${subdomain}`);
+
+          if (response.data.success) {
+            console.log(response);
+            setStoreStatus(response.data.success);
+            setStoreData(response.data.store);
           }
-        />
-        <Route path="/loyality">
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    checkStore();
+  }, [subdomain]);
+
+  if (storeStatus) {
+    return (
+      <Router>
+        <Toaster richColors expand={false} position="top-right" />
+        <Routes>
+          {/* Public Route: Only accessible if NOT logged in */}
           <Route
             index
             element={
-              <LoyalityCard url={subdomain} />
+              <CustomerLogin url={subdomain} />
+              // <StorePublicRoute>
+              // </StorePublicRoute>
+            }
+          />
+
+          {/* Protected Routes: Require store login */}
+          <Route path="/store">
+            <Route
+              path="login"
+              element={
+                <>
+                  <StoreLogin url={subdomain} />
+                </>
+              }
+            />
+            <Route
+              path="points"
+              element={
+                <>
+                  <StoreSidebar store={storeData} />
+                  <StoreSide url={subdomain} />
+                </>
+              }
+            />
+            <Route
+              path="viewRewards"
+              element={
+                <>
+                  <StoreSidebar store={storeData} />
+                  <ViewRewards url={subdomain} />
+                </>
+              }
+            />
+          </Route>
+          <Route
+            path="/verification"
+            element={
+              <Verification />
               // <StoreProtectedRoute>
               // </StoreProtectedRoute>
             }
           />
-          <Route
-            path=":pointsId"
-            element={
-              <StoreProtectedRoute>
-                <GetPoints url={subdomain} />
-              </StoreProtectedRoute>
-            }
-          />
-        </Route>
-        {/* <Route
+          <Route path="/loyality">
+            <Route
+              index
+              element={
+                <LoyalityCard url={subdomain} />
+                // <StoreProtectedRoute>
+                // </StoreProtectedRoute>
+              }
+            />
+            <Route
+              path=":pointsId"
+              element={
+                <StoreProtectedRoute>
+                  <GetPoints url={subdomain} />
+                </StoreProtectedRoute>
+              }
+            />
+          </Route>
+          {/* <Route
           path="/rewards"
           element={
             <StoreProtectedRoute>
@@ -123,14 +213,14 @@ const AppStore = () => {
             </StoreProtectedRoute>
           }
         /> */}
-        <Route
+          {/* <Route
           path="/reservation"
           element={
             <Reservation url={subdomain} />
             // <StoreProtectedRoute>
             // </StoreProtectedRoute>
           }
-        />
+        /> */}
 
         <Route
           path="/products/"
@@ -157,11 +247,14 @@ const AppStore = () => {
           }
         />
 
-        {/* Catch-all Route */}
-        <Route path="*" element={<PoweredBySamparka />} />
-      </Routes>
-    </Router>
-  );
+          {/* Catch-all Route */}
+          <Route path="*" element={<PoweredBySamparka />} />
+        </Routes>
+      </Router>
+    );
+  } else {
+    return <PoweredBySamparka />;
+  }
 };
 
 export default AppStore;
