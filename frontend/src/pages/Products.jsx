@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 // import { Filter } from 'lucide-react';
 import ProductFilter from "../components/ProductFilter";
 import ProductCard from "../components/ProductCard";
@@ -29,7 +29,7 @@ export default function Products() {
         }
       } catch (error) {
         console.error(error);
-        toast.error(error.message, { autoClose: 2000, theme: "colored" });
+        toast.error(error.message, { duration: 2000, theme: "colored" });
       }
     };
 
@@ -50,7 +50,7 @@ export default function Products() {
         }
       } catch (error) {
         console.error(error);
-        toast.error(error.message, { autoClose: 2000, theme: "colored" });
+        toast.error(error.message, { duration: 2000 });
       }
     };
     fetchStoreProducts();

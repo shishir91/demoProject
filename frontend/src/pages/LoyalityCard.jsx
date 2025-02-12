@@ -20,6 +20,7 @@ const LoyalityCard = (
   navigationPaths = {
     game: "/game",
     reservation: "/reservation",
+    products:"/products"
   },
   cardStyle = {
     bgColor: "bg-seagreen-100",

@@ -10,14 +10,14 @@ const Title = ({ className = "" }) => {
           <img
             className="absolute top-[0px] left-[0px] w-5 h-5"
             alt=""
-            src="/icon3.svg"
+            src="/home.svg"
           />
         </button>
         <button className="cursor-pointer [border:none] p-0 bg-[transparent] w-5 relative h-5">
           <img
             className="absolute top-[0px] left-[0px] w-5 h-5"
             alt=""
-            src="/vector5.svg"
+            src="/search.svg"
           />
         </button>
       </div>
@@ -40,16 +40,16 @@ const Title = ({ className = "" }) => {
       <div className="self-stretch flex flex-row items-center justify-center gap-[30px]">
         <button className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-center justify-center gap-[5px]">
           <img
-            className="w-[15px] relative h-[13.9px]"
+            className="w-[20px] relative h-[20px]"
             alt=""
-            src="/homeicon.svg"
+            src="/home.svg"
           />
           <div className="relative text-mini1 tracking-[0.01em] font-medium font-poppins text-darkgray-300 text-center">
             Home
           </div>
         </button>
         <button className="cursor-pointer [border:none] p-0 bg-[transparent] flex flex-row items-center justify-center gap-[5px]">
-          <img className="w-5 relative h-5" alt="" src="/searchicon.svg" />
+          <img className="w-[20px] relative h-[20px]" alt="" src="/search.svg" />
           <div className="relative text-mini1 tracking-[0.01em] font-medium font-poppins text-darkgray-300 text-center">
             Search
           </div>

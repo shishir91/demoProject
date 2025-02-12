@@ -55,6 +55,7 @@ class StoreController {
       store.logo = url;
       if (store && store.status == "active") {
         return res.json({ success: true, message: "Store Available", store });
+        return res.json({ success: true, message: "Store Available", storeId :store._id });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
       }

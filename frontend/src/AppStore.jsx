@@ -222,30 +222,30 @@ const AppStore = (sub) => {
           }
         /> */}
 
-          <Route
-            path="/products/:storeId"
-            element={
-              <CartProvider>
-                <HomePageStore />
-              </CartProvider>
-            }
-          />
-          <Route
-            path="/product/:productId"
-            element={
-              <CartProvider>
-                <SingleProduct />
-              </CartProvider>
-            }
-          />
-          <Route
-            path="/product/checkout"
-            element={
-              <CartProvider>
-                <Checkout />
-              </CartProvider>
-            }
-          />
+        <Route
+          path="/products/"
+          element={
+            <CartProvider>
+              <HomePageStore url={subdomain} />
+            </CartProvider>
+          }
+        />
+        <Route
+          path="/product/:productId"
+          element={
+            <CartProvider>
+              <SingleProduct />
+            </CartProvider>
+          }
+        />
+        <Route
+          path="/product/checkout"
+          element={
+            <CartProvider>
+              <Checkout />
+            </CartProvider>
+          }
+        />
 
           {/* Catch-all Route */}
           <Route path="*" element={<PoweredBySamparka />} />
