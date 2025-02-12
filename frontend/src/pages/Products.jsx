@@ -8,6 +8,7 @@ import ProductFilter from "../components/ProductFilter";
 import ProductCard from "../components/ProductCard";
 export default function Products() {
   const [stores, setStores] = useState([]);
+  const [storeURL, setStoreURL] = useState("");
   const [storeId, setStoreId] = useState("");
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -37,10 +38,10 @@ export default function Products() {
   }, [token]);
 
   useEffect(() => {
-    if (!storeId) return;
+    if (!storeURL) return;
     const fetchStoreProducts = async () => {
       try {
-        const response = await api.get(`/product/getProducts/${storeId}`, {
+        const response = await api.get(`/product/getProducts/${storeURL}`, {
           headers: { token },
         });
         if (response.data) {
@@ -54,7 +55,7 @@ export default function Products() {
       }
     };
     fetchStoreProducts();
-  }, [storeId]);
+  }, [storeURL]);
 
   useEffect(() => {
     if (filter) {
@@ -86,14 +87,19 @@ export default function Products() {
             <div className="text-gray-400">Store:</div>
             <div className="text-emerald-500">
               <select
-                onChange={(e) => setStoreId(e.target.value)}
+                onChange={(e) => {
+                  const selectedIndex = e.target.selectedIndex;
+                  const selectedOption = e.target.options[selectedIndex];
+                  setStoreURL(e.target.value);
+                  setStoreId(selectedOption.getAttribute("data-id"));
+                }}
                 className="w-full px-2 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
               >
                 <option disabled selected>
                   Select Store
                 </option>
                 {stores.map((store) => (
-                  <option value={store._id} key={store._id}>
+                  <option value={store.url} key={store._id} data-id={store._id}>
                     {store.name}
                   </option>
                 ))}
@@ -106,19 +112,18 @@ export default function Products() {
         {/* <Filter /> */}
         <ProductFilter onFilterChange={setFilter} storeId={storeId} />
         <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-  {filteredProducts.length > 0 ? (
-    filteredProducts.map((product) => (
-      <div key={product._id} className="aspect-square">
-        <ProductCard product={product} />
-      </div>
-    ))
-  ) : (
-    <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
-      No items found in this category.
-    </div>
-  )}
-</div>
-
+          {filteredProducts.length > 0 ? (
+            filteredProducts.map((product) => (
+              <div key={product._id} className="aspect-square">
+                <ProductCard product={product} />
+              </div>
+            ))
+          ) : (
+            <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
+              No items found in this category.
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

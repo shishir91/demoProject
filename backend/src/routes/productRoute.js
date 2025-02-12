@@ -33,7 +33,7 @@ router.get(
   customerMiddleware,
   productController.getCategory
 );
-router.get("/getProducts/:storeName", productController.getProduct);
+router.get("/getProducts/:storeUrl", productController.getProduct);
 router.get("/getProduct/:productId", productController.getSingleProduct);
 router.put(
   "/update/:id",
