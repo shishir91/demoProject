@@ -5,14 +5,28 @@ import useFetchSingleProducts from "../../hooks/useFetchSingleProduct";
 import Slider from "react-slick"; // Import react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
+import {useQuery} from "@tanstack/react-query";
+import api from "../../api/config"
+
+
 
 const SingleProduct = ({ className = "" }) => {
   const navigate = useNavigate();
   const { productId } = useParams();
   // console.log("SingleProduct", productId);
 
-  const { product, loading, error } = useFetchSingleProducts(productId);
+  const fetchSinglelProduct = async(productId)=>{
+    const response = await api.get(`/product/getProduct/${productId}`);
+    return response.data;
+  }
+
+  const {data:product,isLoading,error} = useQuery({
+    queryKey:["product",productId],
+    queryFn:()=>fetchSinglelProduct(productId)
+  })
+
+  // const { product, loading, error } = useFetchSingleProducts(productId);
   const [quantity, setQuantity] = useState(1);
 
   const onVectorIconClick = useCallback(() => {
@@ -56,7 +70,7 @@ const SingleProduct = ({ className = "" }) => {
   // Helper function to open or create IndexedDB
   const openDb = () => {
     return new Promise((resolve, reject) => {
-      const request = indexedDB.open("cartDb", 1);
+      const request = indexedDB.open("cartDb", 2);
 
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
@@ -88,8 +102,14 @@ const SingleProduct = ({ className = "" }) => {
   const addToCartDb = async (product, quantity, totalPrice) => {
     try {
       const db = await openDb();
+
+      if (!db.objectStoreNames.contains("cartItems")) {
+        console.error("Object store 'cartItems' not found.");
+        return;
+      }
+
       const transaction = db.transaction("cartItems", "readwrite");
-      const store = transaction.objectStore("cartItems");
+      const store = transaction.objectStore("cartItems",{keyPath:"productId"});
 
       const existingItemRequest = store.get(product._id);
 
@@ -155,140 +175,153 @@ const SingleProduct = ({ className = "" }) => {
 
     navigate("/product/checkout", {
       state: {
-        items: [{
-          id: productId,
-          productImage: product.images[0],
-          productName: product.name,
-          productQuantity: quantity,
-          productTotalPrice:totalPrice,
-        }], 
+        items: [
+          {
+            id: productId,
+            productImage: product.images[0],
+            productName: product.name,
+            productQuantity: quantity,
+            productTotalPrice: totalPrice,
+          },
+        ],
 
         totalPrice: totalPrice,
       },
     });
   };
 
-  return (
-    <>
-      {/* {console.log("Product", product)} */}
-      {loading && <p>Loading Products..</p>}
-      {error && <p className="text-red-500">{error}</p>}
-
-      {product && (
-        <div
-          className={`flex items-center justify-center w-full h-screen bg-gray-100 ${className} overflow-hidden`}
-        >
-          <div className="w-full max-w-[440px] h-full bg-white flex flex-col items-center justify-start py-0 px-4 sm:px-[30px] text-left font-poppins overflow-y-auto flex-grow pb-[70px]">
-            <button
-              className="cursor-pointer border-none py-[15px] px-2.5 bg-transparent self-stretch flex items-center justify-start"
-              onClick={onVectorIconClick}
-            >
-              <img
-                className="w-[11.8px] h-[21px] cursor-pointer"
-                alt="Back"
-                src="/vector4.svg"
-              />
-            </button>
-            <div className="w-full">
-              {product.images && product.images.length > 1 ? (
-                <Slider {...settings}>
-                  {product.images.map((image, index) => (
-                    <div key={index}>
-                      <img
-                        className="max-w-full h-auto object-cover max-h-[350px]"
-                        alt={`${product.name} ${index + 1}`}
-                        src={image}
-                      />
-                    </div>
-                  ))}
-                </Slider>
-              ) : product.images && product.images.length === 1 ? (
-                <img
-                  className="max-w-full h-auto object-cover max-h-[350px]"
-                  alt={product.name}
-                  src={product.images[0]}
-                />
-              ) : (
-                <p className="text-gray-500 text-center">
-                  No image available for this product
-                </p>
-              )}
-            </div>
-            <div className="w-full px-[18px] mt-2">
-              <div className="text-lg font-medium">{product.name}</div>
-              <div
-                className="text-xs text-gray-500 mb-4"
-                style={{
-                  maxHeight: "50px", // Set max height for description
-                  overflowY: "auto", // Enable scrolling if content exceeds max height
-                }}
+  if(product){
+    return (
+      <>
+        {/* {console.log("Product", product)} */}
+        
+        {product && (
+          <div
+            className={`flex items-center justify-center w-full h-screen bg-gray-100 ${className} overflow-hidden`}
+          >
+            <div className="w-full max-w-[440px] h-full bg-white flex flex-col items-center justify-start py-0 px-4 sm:px-[30px] text-left font-poppins overflow-y-auto flex-grow pb-[70px]">
+              <button
+                className="cursor-pointer border-none py-[15px] px-2.5 bg-transparent self-stretch flex items-center justify-start"
+                onClick={onVectorIconClick}
               >
-                {product.description}
-              </div>
-
-              {/* Price Section */}
-              <div className="flex items-center justify-between text-sm mb-4">
-                {/* Discount rate displayed next to the price */}
-                {product.discountRate && (
-                  <div className="text-red-500 font-semibold text-lg mr-2">
-                    {product.discountRate}% Off
-                  </div>
+                <img
+                  className="w-[11.8px] h-[21px] cursor-pointer"
+                  alt="Back"
+                  src="/vector4.svg"
+                />
+              </button>
+              <div className="w-full">
+                {product.images && product.images.length > 1 ? (
+                  <Slider {...settings}>
+                    {product.images.map((image, index) => (
+                      <div key={index}>
+                        <img
+                          className="max-w-full h-auto object-cover max-h-[350px]"
+                          alt={`${product.name} ${index + 1}`}
+                          src={image}
+                        />
+                      </div>
+                    ))}
+                  </Slider>
+                ) : product.images && product.images.length === 1 ? (
+                  <img
+                    className="max-w-full h-auto object-cover max-h-[350px]"
+                    alt={product.name}
+                    src={product.images[0]}
+                  />
+                ) : (
+                  <p className="text-gray-500 text-center">
+                    No image available for this product
+                  </p>
                 )}
-                <div className="flex items-center">
-                  <div className="line-through text-red-500 text-xs mr-2">
-                    Rs {product.price}
+              </div>
+              <div className="w-full px-[18px] mt-2">
+                <div className="text-lg font-medium">{product.name}</div>
+                <div
+                  className="text-xs text-gray-500 mb-4"
+                  style={{
+                    maxHeight: "50px", // Set max height for description
+                    overflowY: "auto", // Enable scrolling if content exceeds max height
+                  }}
+                >
+                  {product.description}
+                </div>
+  
+                {/* Price Section */}
+                <div className="flex items-center justify-between text-sm mb-4">
+                  {/* Discount rate displayed next to the price */}
+                  {product.discountRate && (
+                    <div className="text-red-500 font-semibold text-lg mr-2">
+                      {product.discountRate}% Off
+                    </div>
+                  )}
+                  <div className="flex items-center">
+                    <div className="line-through text-red-500 text-xs mr-2">
+                      Rs {product.price}
+                    </div>
+                    <div className="text-lg font-bold">Rs {pricePerItem}</div>
                   </div>
-                  <div className="text-lg font-bold">Rs {pricePerItem}</div>
                 </div>
               </div>
-            </div>
-            {/* Quantity Section */}
-            <div className="w-full border-t-[1px] border-b-[1px] border-gray-300 py-4 px-[18px] mt-4 flex justify-between items-center">
-              <div className="text-sm font-bold">Quantity</div>
-              <div className="flex items-center border border-gray-300 rounded-3xs px-3 py-2">
+              {/* Quantity Section */}
+              <div className="w-full border-t-[1px] border-b-[1px] border-gray-300 py-4 px-[18px] mt-4 flex justify-between items-center">
+                <div className="text-sm font-bold">Quantity</div>
+                <div className="flex items-center border border-gray-300 rounded-3xs px-3 py-2">
+                  <button
+                    className="cursor-pointer text-lg"
+                    onClick={decreaseQuantity}
+                  >
+                    -
+                  </button>
+                  <input
+                    type="text"
+                    className="w-10 text-center text-sm mx-2 border-none outline-none bg-transparent"
+                    value={quantity}
+                    onChange={handleQuantityChange}
+                  />
+                  <button
+                    className="cursor-pointer text-lg"
+                    onClick={increaseQuantity}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+  
+              {/* Buttons Section (Add to Cart & Buy Now) */}
+              <div className="fixed bottom-0 w-full shadow-lg py-5 px-[18px] flex justify-between space-x-4 z-10 bg-white">
                 <button
-                  className="cursor-pointer text-lg"
-                  onClick={decreaseQuantity}
+                  className="w-full py-1.5 bg-gray-800 text-white rounded-md flex justify-center"
+                  onClick={() => handleAddToCart()}
                 >
-                  -
+                  <b className="text-right">Add</b>
+                  <div className="text-left ml-2">Rs {totalPrice}</div>
                 </button>
-                <input
-                  type="text"
-                  className="w-10 text-center text-sm mx-2 border-none outline-none bg-transparent"
-                  value={quantity}
-                  onChange={handleQuantityChange}
-                />
                 <button
-                  className="cursor-pointer text-lg"
-                  onClick={increaseQuantity}
+                  className="w-full py-1.5 bg-green-500 text-white rounded-md flex justify-center"
+                  onClick={() => handleBuyNow()}
                 >
-                  +
+                  <b className="text-right">Buy Now</b>
+                  <div className="text-left ml-2">Rs {totalPrice}</div>
                 </button>
               </div>
             </div>
-
-            {/* Buttons Section (Add to Cart & Buy Now) */}
-            <div className="fixed bottom-0 w-full shadow-lg py-5 px-[18px] flex justify-between space-x-4 z-10 bg-white">
-              <button
-                className="w-full py-1.5 bg-gray-800 text-white rounded-md flex justify-center"
-                onClick={() => handleAddToCart()}
-              >
-                <b className="text-right">Add</b>
-                <div className="text-left ml-2">Rs {totalPrice}</div>
-              </button>
-              <button
-                className="w-full py-1.5 bg-green-500 text-white rounded-md flex justify-center"
-                onClick={() => handleBuyNow()}
-              >
-                <b className="text-right">Buy Now</b>
-                <div className="text-left ml-2">Rs {totalPrice}</div>
-              </button>
-            </div>
           </div>
-        </div>
-      )}
-    </>
-  );
+        )}
+      </>
+    );
+  }
+
+
+  if(error){
+    <p className="text-red-500 text-9xl">Error Encountered</p>
+  }
+
+  if(isLoading){
+    <p className="text-black">loading</p>
+  }
+
+
 };
 
 SingleProduct.propTypes = {
