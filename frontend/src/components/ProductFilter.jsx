@@ -43,7 +43,7 @@ const ProductFilter = ({ onFilterChange, storeId }) => {
       <select
         value={selectedCategory}
         onChange={handleFilterChange}
-        className="w-full px-2 py-2 rounded-lg bg-stone-900 border border-gray-700"
+        className="w-full px-2 py-2 rounded-lg bg-stone-900 text-emerald-500 border border-gray-700"
       >
         <option value="">Select Category</option>
         {categories.map((category, index) => (

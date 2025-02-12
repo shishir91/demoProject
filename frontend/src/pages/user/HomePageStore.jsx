@@ -35,7 +35,7 @@ const HomePageStore = (store) => {
   }, []);
 
   return (
-    <>
+    <div className="bg-gray-200">
       <Title />
       {/* <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
         <img
@@ -91,7 +91,7 @@ const HomePageStore = (store) => {
           /> */}
         {/* </div>
       </div> */}
-    </>
+    </div>
   );
 };
 

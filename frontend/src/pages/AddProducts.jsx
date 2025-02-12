@@ -94,7 +94,10 @@ function AddProducts() {
       );
 
       if (response.data.success) {
-        toast.success("Product added successfully!");
+        toast.success("Product added successfully!", {
+          duration: 1000,
+          onAutoClose: () => navigate("/products"),
+        });
         setProductName("");
         setProductPrice("");
         setDescription("");
@@ -207,134 +210,136 @@ function AddProducts() {
         </div>
       </div>
 
-      {/* Add Category Section */}
-      <Accordion className="text-black">
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon className="text-black" />}
-        >
-          <Typography className="text-black-500 font-semibold">
-            Add Category
-          </Typography>
-        </AccordionSummary>
-        <AccordionDetails>
+      <div className="w-1/2 flex flex-col ">
+        {/* Add Category Section */}
+        <Accordion className="text-black">
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon className="text-black" />}
+          >
+            <Typography className="text-black-500 font-semibold">
+              Add Category
+            </Typography>
+          </AccordionSummary>
+          <AccordionDetails>
+            <div className="flex flex-col gap-4">
+              <TextField
+                label="Category Name"
+                variant="outlined"
+                fullWidth
+                value={category}
+                onChange={handleCategoryChange}
+                InputLabelProps={{ className: "text-gray-400" }}
+                InputProps={{ className: "text-white" }}
+                className="bg-inherit rounded-lg"
+              />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleAddCategory}
+                className="w-full bg-blue-700 text-white hover:bg-gray-600"
+              >
+                Add Category
+              </Button>
+            </div>
+          </AccordionDetails>
+        </Accordion>
+
+        {/* Add Product Form */}
+        <div className="mt-6 p-4 bg-whitesmoke-200 rounded-lg">
+          <h2 className="text-lg font-bold text-black-300 mb-4">
+            Add New Product
+          </h2>
           <div className="flex flex-col gap-4">
             <TextField
-              label="Category Name"
+              label="Product Name"
               variant="outlined"
               fullWidth
-              value={category}
-              onChange={handleCategoryChange}
+              value={productName}
+              onChange={(e) => setProductName(e.target.value)}
+              InputLabelProps={{ className: "text-gray-800" }}
+              className="text-gray"
+              InputProps={{ className: "text-white" }}
+            />
+            <TextField
+              label="Product Price"
+              variant="outlined"
+              fullWidth
+              type="number"
+              value={productPrice}
+              onChange={(e) => setProductPrice(e.target.value)}
               InputLabelProps={{ className: "text-gray-400" }}
               InputProps={{ className: "text-white" }}
-              className="bg-inherit rounded-lg"
+            />
+            <TextField
+              label="Discount Rate (%)"
+              variant="outlined"
+              fullWidth
+              type="number"
+              value={discountRate}
+              onChange={handleDiscountRateChange}
+              InputLabelProps={{ className: "text-gray-400" }}
+              InputProps={{ className: "text-white" }}
+            />
+            <TextField
+              label="Calculated Price"
+              variant="outlined"
+              fullWidth
+              value={calculatedPrice}
+              InputLabelProps={{ className: "text-gray-400" }}
+              InputProps={{ className: "text-white" }}
+              disabled
+            />
+            <TextField
+              label="Description"
+              variant="outlined"
+              fullWidth
+              multiline
+              rows={3}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              InputLabelProps={{ className: "text-gray-400" }}
+              InputProps={{ className: "text-white" }}
+            />
+            <Select
+              fullWidth
+              value={selectedCategory}
+              onChange={(e) => {
+                const selectedCategoryName = e.target.value;
+                setSelectedCategory(selectedCategoryName);
+              }}
+              displayEmpty
+              className="bg-inherit text-white"
+            >
+              <MenuItem disabled value="">
+                Select Category
+              </MenuItem>
+              {categories ? (
+                categories.map((cat, index) => (
+                  <MenuItem key={index} value={cat}>
+                    {cat}
+                  </MenuItem>
+                ))
+              ) : (
+                <MenuItem disabled value="">
+                  No categories available
+                </MenuItem>
+              )}
+            </Select>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImage(e.target.files[0])}
+              className="text-white"
             />
             <Button
               variant="contained"
               color="primary"
-              onClick={handleAddCategory}
+              onClick={handleProductSubmit}
               className="w-full bg-blue-700 text-white hover:bg-gray-600"
             >
-              Add Category
+              Add Product
             </Button>
           </div>
-        </AccordionDetails>
-      </Accordion>
-
-      {/* Add Product Form */}
-      <div className="mt-6 p-4 bg-whitesmoke-200 rounded-lg">
-        <h2 className="text-lg font-bold text-black-300 mb-4">
-          Add New Product
-        </h2>
-        <div className="flex flex-col gap-4">
-          <TextField
-            label="Product Name"
-            variant="outlined"
-            fullWidth
-            value={productName}
-            onChange={(e) => setProductName(e.target.value)}
-            InputLabelProps={{ className: "text-gray-800" }}
-            className="text-gray"
-            InputProps={{ className: "text-white" }}
-          />
-          <TextField
-            label="Product Price"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={productPrice}
-            onChange={(e) => setProductPrice(e.target.value)}
-            InputLabelProps={{ className: "text-gray-400" }}
-            InputProps={{ className: "text-white" }}
-          />
-          <TextField
-            label="Discount Rate (%)"
-            variant="outlined"
-            fullWidth
-            type="number"
-            value={discountRate}
-            onChange={handleDiscountRateChange}
-            InputLabelProps={{ className: "text-gray-400" }}
-            InputProps={{ className: "text-white" }}
-          />
-          <TextField
-            label="Calculated Price"
-            variant="outlined"
-            fullWidth
-            value={calculatedPrice}
-            InputLabelProps={{ className: "text-gray-400" }}
-            InputProps={{ className: "text-white" }}
-            disabled
-          />
-          <TextField
-            label="Description"
-            variant="outlined"
-            fullWidth
-            multiline
-            rows={3}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            InputLabelProps={{ className: "text-gray-400" }}
-            InputProps={{ className: "text-white" }}
-          />
-          <Select
-            fullWidth
-            value={selectedCategory}
-            onChange={(e) => {
-              const selectedCategoryName = e.target.value;
-              setSelectedCategory(selectedCategoryName);
-            }}
-            displayEmpty
-            className="bg-inherit text-white"
-          >
-            <MenuItem disabled value="">
-              Select Category
-            </MenuItem>
-            {categories ? (
-              categories.map((cat, index) => (
-                <MenuItem key={index} value={cat}>
-                  {cat}
-                </MenuItem>
-              ))
-            ) : (
-              <MenuItem disabled value="">
-                No categories available
-              </MenuItem>
-            )}
-          </Select>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-            className="text-white"
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleProductSubmit}
-            className="w-full bg-blue-700 text-white hover:bg-gray-600"
-          >
-            Add Product
-          </Button>
         </div>
       </div>
     </div>
