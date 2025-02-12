@@ -12,6 +12,8 @@ import {
   Select,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { IconButton } from "@mui/material";
+import { Close as CloseIcon } from "@mui/icons-material";
 import { toast } from "sonner";
 import api from "../api/config";
 
@@ -25,12 +27,24 @@ function AddProducts() {
   const [productPrice, setProductPrice] = useState("");
   const [description, setDescription] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [image, setImage] = useState("");
+  const [images, setImages] = useState([]);
+
   const [discountRate, setDiscountRate] = useState(0); // New state for discount rate
   const [calculatedPrice, setCalculatedPrice] = useState(0); // New state for calculated price
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [preview, setPreview] = useState(null);
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    setImages((prevImages) => [...prevImages, ...files]);
+  };
+
+  const handleRemoveImage = (index) => {
+    const updatedImages = images.filter((_, i) => i !== index);
+    setImages(updatedImages);
+  };
 
   const handleCategoryChange = (event) => {
     setCategory(event.target.value);
@@ -67,7 +81,7 @@ function AddProducts() {
       !selectedCategory ||
       !productName ||
       !productPrice ||
-      !image
+      images.length === 0
     ) {
       toast.error("Please fill all required fields", { autoClose: 2000 });
       return;
@@ -79,7 +93,7 @@ function AddProducts() {
     formData.append("description", description);
     formData.append("category", selectedCategory);
     formData.append("storeId", storeId);
-    formData.append("image", image);
+    formData.append("image", images[0]);
     formData.append("discountRate", discountRate);
     formData.append("calculatedPrice", calculatedPrice);
 
@@ -102,7 +116,7 @@ function AddProducts() {
         setProductPrice("");
         setDescription("");
         setSelectedCategory("");
-        setImage("");
+        setImages([]);
         setDiscountRate(0);
         setCalculatedPrice(0); // Reset calculated price after submission
       }
@@ -136,11 +150,11 @@ function AddProducts() {
   // Handle discount rate change
   const handleDiscountRateChange = (event) => {
     const discount = event.target.value;
-    if (discount < 0 || discount > 100) {
-      toast.error("Discount rate must be 0 or between 0 -100", {
-        duration: 200,
-      });
+    if (discount < 0 || discount >= 100) {
+      toast.error("Discount rate must be between 0 and 99", { duration: 200 });
+      return;
     }
+
     setDiscountRate(discount);
 
     // Calculate the price after discount
@@ -325,12 +339,47 @@ function AddProducts() {
                 </MenuItem>
               )}
             </Select>
-            <input
+            {/* <input
               type="file"
               accept="image/*"
               onChange={(e) => setImage(e.target.files[0])}
               className="text-white"
-            />
+            /> */}
+            <div className="flex flex-col gap-4">
+              <input
+                type="file"
+                multiple
+                accept="image/*"
+                onChange={handleImageChange}
+              />
+<div className="image-preview-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+  {images.map((img, index) => (
+    <div key={index} className="relative">
+      <img
+        src={URL.createObjectURL(img)}
+        alt={`Preview ${index}`}
+        className="w-20 h-20 object-cover"
+      />
+      <IconButton
+        onClick={() => handleRemoveImage(index)}
+        size="small"
+        sx={{
+          position: "absolute",
+          top: -5,
+          right: -5,
+          backgroundColor: "red",
+          color: "white",
+          ":hover": { backgroundColor: "darkred" },
+        }}
+      >
+        <CloseIcon />
+      </IconButton>
+    </div>
+  ))}
+</div>
+
+            </div>
+
             <Button
               variant="contained"
               color="primary"
