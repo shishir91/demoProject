@@ -35,6 +35,8 @@ router.get("/checkStore/:storeURL", storeController.checkStore);
 router.put("/changePoints/:storeURL", storeController.changePoints);
 router.get("/getPointsDetail/:storeURL", storeController.getPointsDetail);
 router.get("/myStores", authMiddleware, storeController.getMyStore);
+
+// for email setting
 router.put("/config/:storeID", authMiddleware, storeController.configSMTP);
 router.get(
   "/getMessage/:storeID",
@@ -46,6 +48,16 @@ router.put(
   authMiddleware,
   mailSMSController.configMessage
 );
+
+// for sms setting
+router.put("/configSMS/:storeID", authMiddleware, storeController.configSMS);
+router.get("/getSMS/:storeID", authMiddleware, mailSMSController.getConfigSMS);
+router.put(
+  "/configSMSMessage/:storeID",
+  authMiddleware,
+  mailSMSController.configSMSMessage
+);
+
 router.put(
   "/editStore",
   authMiddleware,
@@ -68,6 +80,8 @@ router.get(
   authMiddleware,
   storeController.getCustomers
 );
+router.post("/createCustomer/:storeID", authMiddleware, storeController.createCustomer);
+router.put("/givePoints/:storeID", authMiddleware, storeController.givePoints);
 router.get("/getRedeemedRewards/:storeURL", storeController.getRedeemedRewards);
 router.put("/claimReward/:storeURL", storeController.claimReward);
 

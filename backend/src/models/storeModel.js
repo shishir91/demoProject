@@ -33,6 +33,7 @@ const storeSchema = new mongoose.Schema(
     pin: { type: String, default: bcrypt.hashSync("1234", 10) },
     email: { type: String },
     pass: { type: String },
+    smsToken: { type: String },
     loyaltyCard: { type: loyaltySchema, default: () => ({}) },
     services: { type: servicesSchema, default: () => ({}) },
     status: {

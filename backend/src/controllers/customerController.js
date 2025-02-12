@@ -189,8 +189,6 @@ class CustomerController {
   //CUSTOMER GET POINTS
   async getPoints(req, res) {
     try {
-      console.log("helo");
-      
       if (!req.user) {
         return res.json({ success: false });
       }
@@ -206,17 +204,61 @@ class CustomerController {
                 { $inc: { points: receivedPoints } },
                 { new: true }
               )
-              .populate("store", "email pass url");
+              .populate("store", "name email pass smsToken");
             await pointsModel.findByIdAndUpdate(pointsId, {
               points: 0,
             });
-            await mailController.mailCustomers(
-              customer.store.email,
-              customer.store.pass,
-              customer.email,
-              receivedPoints,
-              customer.store.url
-            );
+            // await mailController.mailCustomers(
+            //   customer.store.email,
+            //   customer.store.pass,
+            //   customer.email,
+            //   receivedPoints,
+            //   customer.store.url
+            // );
+            const store = customer.store;
+            if (store.email && store.pass) {
+              const getMessage = await mailSMSModel.findOne({ store });
+              if (
+                getMessage &&
+                getMessage.mailAfterPointEarned &&
+                getMessage.mailAfterPointEarned.subject
+              ) {
+                let subject = getMessage.mailAfterPointEarned.subject;
+                let message = getMessage.mailAfterPointEarned.message;
+                const mailResponse = await mailController.mailCustomers({
+                  user: store.email,
+                  pass: store.pass,
+                  email: customer.email,
+                  subject,
+                  message,
+                  points: receivedPoints,
+                  storeName: store.name,
+                  customerName: customer.name,
+                });
+                console.log(mailResponse);
+              }
+            }
+            if (store.smsToken) {
+              const getSMS = await mailSMSModel.findOne({ store });
+              if (
+                getSMS &&
+                getSMS.smsAfterPointEarned &&
+                getSMS.smsAfterPointEarned.message
+              ) {
+                let from = getSMS.smsAfterPointEarned.from;
+                let message = getSMS.smsAfterPointEarned.message;
+                const smsResponse = await smsController.smsCustomer({
+                  token: store.smsToken,
+                  to: customer.phone,
+                  from,
+                  message,
+                  storeName: store.name,
+                  customerName: customer.name,
+                  points: receivedPoints,
+                });
+                console.log(smsResponse);
+              }
+            }
             return res.json({
               success: true,
               message: `Congratulation. You have received ${receivedPoints} points`,
@@ -245,31 +287,51 @@ class CustomerController {
         throw new Error("Customer not found");
       }
 
-      const updatedCustomer = await customerModel.findByIdAndUpdate(
-        customerId,
-        { points: customer.points + 1 },
-        { new: true }
-      );
+      const updatedCustomer = await customerModel
+        .findByIdAndUpdate(
+          customerId,
+          { points: customer.points + 1 },
+          { new: true }
+        )
+        .populate("store", "name email pass smsToken");
 
-      const store = await storeModel
-        .findOne({ url: storeURL })
-        .select("email pass");
+      const store = updatedCustomer.store;
       if (store.email && store.pass) {
         const getMessage = await mailSMSModel.findOne({ store });
         if (
           getMessage &&
-          getMessage.messageAfterLogin &&
-          getMessage.messageAfterLogin.subject
+          getMessage.mailAfterLogin &&
+          getMessage.mailAfterLogin.subject
         ) {
-          let subject = getMessage.messageAfterLogin.subject;
-          let message = getMessage.messageAfterLogin.message;
-          const mailResponse = await mailController.mailCustomers(
-            store.email,
-            store.pass,
-            customer.email,
+          let subject = getMessage.mailAfterLogin.subject;
+          let message = getMessage.mailAfterLogin.message;
+          const mailResponse = await mailController.mailCustomers({
+            user: store.email,
+            pass: store.pass,
+            email: customer.email,
             subject,
-            message
-          );
+            message,
+            storeName: store.name,
+            customerName: customer.name,
+          });
+          console.log(mailResponse);
+        }
+      }
+
+      if (store.smsToken) {
+        const getSMS = await mailSMSModel.findOne({ store });
+        if (getSMS && getSMS.smsAfterLogin && getSMS.smsAfterLogin.message) {
+          let from = getSMS.smsAfterLogin.from;
+          let message = getSMS.smsAfterLogin.message;
+          const smsResponse = await smsController.smsCustomer({
+            token: store.smsToken,
+            to: customer.phone,
+            from,
+            message,
+            storeName: store.name,
+            customerName: customer.name,
+          });
+          console.log(smsResponse);
         }
       }
 
@@ -339,6 +401,49 @@ class CustomerController {
         customer: req.user,
         reward: rewardID,
       });
+
+      if (store.email && store.pass) {
+        const getMessage = await mailSMSModel.findOne({ store });
+        if (
+          getMessage &&
+          getMessage.mailAfterRewardRedeemed &&
+          getMessage.mailAfterRewardRedeemed.subject
+        ) {
+          let subject = getMessage.mailAfterRewardRedeemed.subject;
+          let message = getMessage.mailAfterRewardRedeemed.message;
+          const mailResponse = await mailController.mailCustomers({
+            user: store.email,
+            pass: store.pass,
+            email: customer.email,
+            subject,
+            message,
+            storeName: store.name,
+            customerName: customer.name,
+            reward: reward.name,
+          });
+          if (
+            getMessage.mailAfterRewardRedeemed_Admin &&
+            getMessage.mailAfterRewardRedeemed_Admin.subject &&
+            getMessage.mailAfterRewardRedeemed_Admin.to
+          ) {
+            let adminEmail = getMessage.mailAfterRewardRedeemed_Admin.to;
+            let subject = getMessage.mailAfterRewardRedeemed_Admin.subject;
+            let message = getMessage.mailAfterRewardRedeemed_Admin.message;
+            const mailResponse2 = await mailController.mailCustomers({
+              user: store.email,
+              pass: store.pass,
+              email: adminEmail,
+              subject,
+              message,
+              storeName: store.name,
+              customerName: customer.name,
+              reward: reward.name,
+            });
+            console.log(mailResponse2);
+          }
+          console.log(mailResponse);
+        }
+      }
 
       return res.json({
         success: true,

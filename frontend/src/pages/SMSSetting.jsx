@@ -1,21 +1,20 @@
 import React, { useEffect, useState } from "react";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Award, FileEdit, Mail, Settings } from "lucide-react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
-import TextEditor from "../components/emailSettingComponents/TextEditor";
-import AfterLogin from "../components/emailSettingComponents/AfterLogin";
-import AfterPointEarned from "../components/emailSettingComponents/AfterPointEarned";
-import AfterRewardRedeemed from "../components/emailSettingComponents/AfterRewardRedeemed";
-import AfterRewardRedeemed_Admin from "../components/emailSettingComponents/AfterRewardRedeemed_Admin";
+import { FileEdit, Mail, Settings } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
+import AfterLogin from "../components/smsSettingComponents/AfterLogin";
+import AfterPointEarned from "../components/smsSettingComponents/AfterPointEarned";
+import AfterRewardRedeemed from "../components/smsSettingComponents/AfterRewardRedeemed";
+import AfterRewardRedeemed_Admin from "../components/smsSettingComponents/AfterRewardRedeemed_Admin";
 import { toast } from "sonner";
 import config from "../api/config";
 
-const EmailSetting = () => {
+const SMSSetting = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const store = location.state?.store;
   const [loading, setLoading] = useState(false);
-  const [mailMessage, setMailMessage] = useState({});
+  const [smsMessage, setSmsMessage] = useState({});
   const token = localStorage.getItem("token");
   const queryParams = new URLSearchParams(location.search);
   let status = queryParams.get("status");
@@ -29,7 +28,7 @@ const EmailSetting = () => {
           headers: { token },
         });
         if (response.data.success) {
-          setMailMessage(response.data.mailSMS);
+          setSmsMessage(response.data.mailSMS);
         } else {
           toast.error(response.data.message, {
             duration: 2000,
@@ -46,14 +45,13 @@ const EmailSetting = () => {
     };
     getMessages();
   }, []);
-
   return (
     <div className="p-4 sm:ml-60 mt-4 mr-4 min-h-screen bg-stone-800 text-gray-100 rounded rounded-xl">
       {loading && <LoadingSpinner />}
       <div>
         <h1 className="text-2xl font-bold text-green-300 mb-2 flex">
           <Mail className="mt-1.5 mr-2" />
-          Email Setting <Settings className="mt-1.5 ml-2" />
+          SMS Setting <Settings className="mt-1.5 ml-2" />
         </h1>
         <h2 className="text-xl font-bold text-green-300 mb-4">
           STORE: {store.name}
@@ -136,37 +134,36 @@ const EmailSetting = () => {
           <span>On Birthday</span>
         </button>
       </div>
-
+      {console.log(smsMessage)}
       <div className="flex justify-between">
-        {status === "afterLogin" && mailMessage.mailAfterLogin && (
+        {status === "afterLogin" && smsMessage.smsAfterLogin && (
           <AfterLogin
             store={store}
             status={status}
-            mailMessage={mailMessage.mailAfterLogin}
+            smsMessage={smsMessage.smsAfterLogin}
           />
         )}
-        {status === "afterPointEarned" && mailMessage.mailAfterLogin && (
+        {status === "afterPointEarned" && smsMessage.smsAfterLogin && (
           <AfterPointEarned
             store={store}
             status={status}
-            mailMessage={mailMessage.mailAfterPointEarned}
+            smsMessage={smsMessage.smsAfterPointEarned}
           />
         )}
-        {status === "afterRewardRedeemed" && mailMessage.mailAfterLogin && (
+        {status === "afterRewardRedeemed" && smsMessage.smsAfterLogin && (
           <AfterRewardRedeemed
             store={store}
             status={status}
-            mailMessage={mailMessage.mailAfterRewardRedeemed}
+            smsMessage={smsMessage.smsAfterRewardRedeemed}
           />
         )}
-        {status === "afterRewardRedeemed_admin" &&
-          mailMessage.mailAfterLogin && (
-            <AfterRewardRedeemed_Admin
-              store={store}
-              status={status}
-              mailMessage={mailMessage.mailAfterRewardRedeemed_Admin}
-            />
-          )}
+        {status === "afterRewardRedeemed_admin" && smsMessage.smsAfterLogin && (
+          <AfterRewardRedeemed_Admin
+            store={store}
+            status={status}
+            smsMessage={smsMessage.smsAfterRewardRedeemed_Admin}
+          />
+        )}
 
         {/* Short Code Section */}
         <div className="bg-stone-900 text-green-300 p-4 rounded-lg shadow-md h-full">
@@ -195,4 +192,4 @@ const EmailSetting = () => {
   );
 };
 
-export default EmailSetting;
+export default SMSSetting;

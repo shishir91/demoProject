@@ -40,23 +40,47 @@ class SmsController {
     }
   }
 
-  async smsCustomer(phoneNumber, store, message) {
-    if (!phoneNumber) {
-      return res
-        .status(400)
-        .json({ error: "Phone number and OTP are required" });
+  async smsCustomer({
+    token,
+    to,
+    from,
+    message,
+    points,
+    storeName,
+    customerName,
+    reward,
+  }) {
+    if (!to) {
+      return res.status(400).json({ error: "Phone number is required" });
     }
 
+    console.log(
+      token,
+      to,
+      from,
+      message,
+      points,
+      storeName,
+      customerName,
+      reward
+    );
+
+    const formattedMessage = message
+      .replace("[points_earned]", points)
+      .replace("[store_name]", storeName)
+      .replace("[customer_name]", customerName)
+      .replace("[reward_name]", reward);
+
     const payload = {
-      token: process.env.SPARROW_SMS_TOKEN,
-      from: store,
-      to: phoneNumber,
-      text: message,
+      token,
+      from,
+      to,
+      text: formattedMessage,
     };
 
     try {
       const response = await axios.post(
-        "https://api.sparrowsms.com/v2/sms/",
+        "http://api.sparrowsms.com/v2/sms/",
         payload,
         {
           headers: {
@@ -71,6 +95,8 @@ class SmsController {
         return { error: "SMS API response error", details: response.data };
       }
     } catch (error) {
+      console.log(error.response);
+
       return {
         error: "Error sending SMS",
         details: error.response ? error.response.data : error.message,

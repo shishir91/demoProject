@@ -331,6 +331,7 @@ class StoreController {
     }
   }
 
+  // SMTP CONFIG
   async configSMTP(req, res) {
     try {
       const { storeID } = req.params;
@@ -357,6 +358,37 @@ class StoreController {
           success: true,
           message: "SMTP Configured Successfully.",
           config,
+        });
+      } else {
+        return res.json({ success: false, message: "Access Denied" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  // SMS CONFIG
+  async configSMS(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { smsToken } = req.body;
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store Not Found" });
+      }
+      if (req.user.role == "admin" || req.user.id == store.user[0]) {
+        const config = await storeModel.findByIdAndUpdate(
+          storeID,
+          { smsToken },
+          { new: true }
+        );
+        const mailSMS = await mailSMSModel.findOne({ store });
+        if (!mailSMS) {
+          await mailSMSModel.create({ store });
+        }
+        return res.json({
+          success: true,
+          message: "SMS Configured Successfully.",
         });
       } else {
         return res.json({ success: false, message: "Access Denied" });
@@ -530,6 +562,86 @@ class StoreController {
     } catch (error) {
       console.log(error);
       res.status(500).send(error);
+    }
+  }
+  //Create New Customer
+  async createCustomer(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { name, phone, email } = req.body;
+      console.log(req.body);
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      if (req.user == store.user[0] || req.user.role == "admin") {
+        // Check if a customer already exists in the specific store
+        const existingCustomer = await customerModel.findOne({
+          store,
+          $or: [{ phone }, { email }],
+        });
+        if (existingCustomer) {
+          return res.json({
+            success: false,
+            message: "Customer already exists",
+          });
+        }
+        if (!email || !phone || !name) {
+          return res.json({
+            success: false,
+            message: "All fields are required",
+          });
+        }
+        if (!validator.isEmail(email)) {
+          return res.json({ success: false, message: "Invalid Email" });
+        }
+        if (!validator.isMobilePhone(phone)) {
+          return res.json({ success: false, message: "Invalid Phone Number" });
+        }
+        const customer = await customerModel.create({
+          name,
+          phone,
+          email,
+          store,
+        });
+        return res.json({
+          success: true,
+          message: "New Customer Created",
+        });
+      } else {
+        return res.json({ success: false, message: "Access Denied" });
+      }
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
+    }
+  }
+  //Give Points to Customer
+  async givePoints(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { phone, points } = req.body;
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.json({ success: false, message: "Store not found" });
+      }
+      const customer = await customerModel.findOne({ store, phone });
+      if (!customer) {
+        return res.json({ success: false, message: "Customer not found" });
+      }
+      const givePoints = await customerModel.findOneAndUpdate(
+        { store, phone },
+        { $inc: { points } },
+        { new: true }
+      );
+      return res.json({
+        success: true,
+        message: "Points Added",
+        givePoints,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).send(error);
     }
   }
 }

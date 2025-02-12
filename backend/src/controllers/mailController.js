@@ -51,18 +51,17 @@ class MailController {
     }
   }
 
-  async mailCustomers(
+  async mailCustomers({
     user,
     pass,
     email,
     subject,
     message,
     points,
-    storeURL,
     storeName,
     customerName,
-    reward
-  ) {
+    reward,
+  }) {
     try {
       let transport = nodemailer.createTransport({
         service: "gmail",
@@ -72,7 +71,7 @@ class MailController {
         },
       });
       const formattedMessage = message
-        .replace("[received_points]", points)
+        .replace("[points_earned]", points)
         .replace("[store_name]", storeName)
         .replace("[customer_name]", customerName)
         .replace("[reward_name]", reward);

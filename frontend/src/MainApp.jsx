@@ -25,6 +25,8 @@ import ConfigSMTP from "./pages/ConfigSMTP";
 import PoweredBySamparka from "./components/PoweredBySamparka";
 import Products from "./pages/Products";
 import AddProducts from "./pages/AddProducts";
+import ConfigSMS from "./pages/ConfigSMS";
+import SMSSetting from "./pages/SMSSetting";
 
 const MainApp = () => {
   const [authState, setAuthState] = useState({
@@ -128,7 +130,7 @@ const MainApp = () => {
             }
           />
           <Route
-            path="config"
+            path="SMTPConfig"
             element={
               <ProtectedRoute>
                 <Sidebar />
@@ -142,6 +144,24 @@ const MainApp = () => {
               <ProtectedRoute>
                 <Sidebar />
                 <EmailSetting />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="SMSConfig"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <ConfigSMS />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="smsSetting"
+            element={
+              <ProtectedRoute>
+                <Sidebar />
+                <SMSSetting />
               </ProtectedRoute>
             }
           />

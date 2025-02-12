@@ -21,6 +21,8 @@ const ViewRewards = (subdomain) => {
         const response = await api.get(
           `/store/getRedeemedRewards/${subdomain.url}`
         );
+        console.log(response);
+
         if (response.data.success) {
           setRewards(response.data.redeemedRewards);
         } else {
@@ -94,7 +96,8 @@ const ViewRewards = (subdomain) => {
               </tr>
             </thead>
             <tbody>
-              {rewards &&
+              {console.log(rewards)}
+              {rewards.length > 0 &&
                 rewards.map((reward) => (
                   <tr key={reward._id} className="border-t">
                     <td className="px-4 py-2 text-gray-300">

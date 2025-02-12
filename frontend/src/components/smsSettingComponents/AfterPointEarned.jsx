@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import TextEditor from "./TextEditor";
+import TextEditor from "../emailSettingComponents/TextEditor";
 import { toast } from "sonner";
 import config from "../../api/config";
 
-const AfterRewardRedeemed_Admin = (state) => {
-  const [to, setTo] = useState(state.mailMessage.to);
-  const [subject, setSubject] = useState(state.mailMessage.subject);
-  const [message, setMessage] = useState(state.mailMessage.message);
+const AfterPointEarned = (state) => {
+  console.log(state);
+
+  const [from, setFrom] = useState(state.smsMessage.from);
+  const [message, setMessage] = useState(state.smsMessage.message);
   const token = localStorage.getItem("token");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await config.put(
-        `/store/configMessage/${state.store._id}`,
-        { to, subject, message, status: state.status },
+        `/store/configSMSMessage/${state.store._id}`,
+        { from, message, status: state.status },
         { headers: { token } }
       );
       if (response.data.success) {
@@ -35,43 +36,25 @@ const AfterRewardRedeemed_Admin = (state) => {
   };
   return (
     <form className="mx-20" onSubmit={handleSubmit}>
-      {/* To */}
-      <div className="relative">
-        <label htmlFor="to" className="block text-md font-medium text-gray-200">
-          To:
-        </label>
-        <div className="relative">
-          <input
-            id="to"
-            name="to"
-            value={to}
-            onChange={(e) => setTo(e.target.value)}
-            required
-            className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
-          />
-        </div>
-      </div>
-
-      {/* Subject */}
+      {/* From */}
       <div className="relative">
         <label
-          htmlFor="subject"
+          htmlFor="from"
           className="block text-md font-medium text-gray-200"
         >
-          Subject:
+          From:
         </label>
         <div className="relative">
           <input
-            id="subject"
-            name="subject"
-            value={subject}
-            onChange={(e) => setSubject(e.target.value)}
+            id="from"
+            name="from"
+            value={from}
+            onChange={(e) => setFrom(e.target.value)}
             required
             className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
           />
         </div>
       </div>
-
       <label
         htmlFor="textEditor"
         className="block text-md font-medium text-gray-200"
@@ -79,7 +62,15 @@ const AfterRewardRedeemed_Admin = (state) => {
         Message:
       </label>
       <div className="my-2">
-        <TextEditor message={message} setMessage={setMessage} />
+        <textarea
+          className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
+          rows={10}
+          cols={75}
+          name="message"
+          id="message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        ></textarea>{" "}
       </div>
       <button
         type="submit"
@@ -91,4 +82,4 @@ const AfterRewardRedeemed_Admin = (state) => {
   );
 };
 
-export default AfterRewardRedeemed_Admin;
+export default AfterPointEarned;

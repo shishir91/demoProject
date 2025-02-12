@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api/config";
 import { toast } from "sonner";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { Search } from "lucide-react";
+import { Search, UserPlus } from "lucide-react";
 
 const Customers = () => {
   const [customers, setCustomers] = useState([]);
@@ -12,6 +12,18 @@ const Customers = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const token = localStorage.getItem("token");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pointsModal, setPointsModal] = useState(false);
+  const [points, setPoints] = useState(0);
+  const [storeID, setStoreID] = useState("");
+  const [phone, setPhone] = useState("");
+  // const
+  const [newCustomer, setNewCustomer] = useState({
+    store: "",
+    name: "",
+    email: "",
+    phone: "",
+  });
 
   // Fetch stores based on user role
   const getStoresAdmin = async () => {
@@ -24,7 +36,6 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -39,7 +50,6 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -55,7 +65,6 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -74,7 +83,6 @@ const Customers = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -86,6 +94,71 @@ const Customers = () => {
     fetchData();
     setLoading(false);
   }, [token]);
+
+  // Handle form input
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewCustomer((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await api.post(
+        `/store/createCustomer/${newCustomer.store}`,
+        { ...newCustomer },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          duration: 2000,
+        });
+      } else {
+        toast.error(response.data.message, {
+          duration: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(error, {
+        duration: 2000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleGivePoints = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      const response = await api.put(
+        `/store/givePoints/${storeID}`,
+        { phone, points },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        toast.success(response.data.message, {
+          duration: 2000,
+        });
+      } else {
+        toast.error(response.data.message, {
+          duration: 2000,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+
+      toast.error(error, {
+        duration: 2000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded rounded-xl">
       {loading && <LoadingSpinner />}
@@ -93,6 +166,15 @@ const Customers = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-xl font-bold text-gray-200">Customers List</h1>
         <div className="flex items-center gap-4 w-full md:w-auto">
+          <div>
+            <button
+              className="flex gap-2 px-4 py-2 text-sm text-white bg-green-800 rounded-md hover:bg-green-900"
+              onClick={() => setIsModalOpen(true)}
+            >
+              <UserPlus className="w-4 pb-1" />
+              Add New Customer
+            </button>
+          </div>
           <div className="text-gray-400">Store:</div>
           <div className="text-emerald-500">
             <select
@@ -116,7 +198,7 @@ const Customers = () => {
             <input
               type="text"
               placeholder="Search by Customer Name"
-              className="w-full bg-[#1E1B1A] rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              className="w-full bg-[#1E1B1A] text-emerald-400 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <Search
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
@@ -137,6 +219,7 @@ const Customers = () => {
               <th className="px-4 py-2 text-left text-gray-200">
                 Phone Number
               </th>
+              <th className="px-4 py-2 text-left text-gray-200">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -146,11 +229,161 @@ const Customers = () => {
                 <td className="px-4 py-2 text-gray-300">{user.name}</td>
                 <td className="px-4 py-2 text-gray-300">{user.email}</td>
                 <td className="px-4 py-2 text-gray-300">{user.phone}</td>
+                <td className="px-4 py-2 text-gray-300">
+                  <button
+                    className="bg-green-800 p-1 px-4 rounded-lg"
+                    onClick={() => {
+                      setPointsModal(true);
+                      setStoreID(user.store);
+                      setPhone(user.phone);
+                    }}
+                  >
+                    Give Points
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {/* Modal for Creating New User */}
+      {isModalOpen && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-md shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Create New Customer</h2>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Store
+                </label>
+                <select
+                  name="store"
+                  id="store"
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg text-sm font-medium text-gray-600 mb-1 border focus:outline-none focus:ring focus:ring-blue-200"
+                >
+                  <option disabled selected>
+                    Select Store
+                  </option>
+                  {stores &&
+                    stores.map((store) => (
+                      <option value={store._id} key={store._id}>
+                        {store.name}
+                      </option>
+                    ))}
+                </select>
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={newCustomer.name}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={newCustomer.email}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="number"
+                  name="phone"
+                  value={newCustomer.phone}
+                  onChange={handleChange}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300"
+                  onClick={() => setIsModalOpen(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                >
+                  Save
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal for Giving Points */}
+      {pointsModal && (
+        <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-md shadow-lg w-96">
+            <h2 className="text-lg font-bold mb-4">Give Points</h2>
+            <form onSubmit={handleGivePoints}>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Phone Number
+                </label>
+                <input
+                  type="number"
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                  Points
+                </label>
+                <input
+                  type="number"
+                  name="points"
+                  value={points}
+                  onChange={(e) => setPoints(e.target.value)}
+                  required
+                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                />
+              </div>
+              <div className="flex justify-end space-x-2">
+                <button
+                  type="button"
+                  className="px-4 py-2 text-sm text-gray-600 bg-gray-200 rounded-md hover:bg-gray-300"
+                  onClick={() => setPointsModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 text-sm text-white bg-blue-500 rounded-md hover:bg-blue-600"
+                >
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

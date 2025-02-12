@@ -218,7 +218,7 @@ const Store = () => {
                       </button>
                       <button
                         onClick={() =>
-                          navigate("/store/config", {
+                          navigate("/store/SMTPConfig", {
                             state: { store },
                           })
                         }
@@ -226,6 +226,17 @@ const Store = () => {
                       >
                         <Settings className="h-5 w-5 mr-2 text-gray-500" />
                         SMTP Config
+                      </button>
+                      <button
+                        onClick={() =>
+                          navigate("/store/SMSConfig", {
+                            state: { store },
+                          })
+                        }
+                        className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                      >
+                        <Settings className="h-5 w-5 mr-2 text-gray-500" />
+                        SMS Config
                       </button>
                       {store.email && store.pass && (
                         <button
@@ -238,6 +249,19 @@ const Store = () => {
                         >
                           <Mail className="h-5 w-5 mr-2 text-gray-500" />
                           Email Setting
+                        </button>
+                      )}
+                      {store.email && store.pass && (
+                        <button
+                          onClick={() =>
+                            navigate("/store/smsSetting", {
+                              state: { store },
+                            })
+                          }
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                        >
+                          <Mail className="h-5 w-5 mr-2 text-gray-500" />
+                          SMS Setting
                         </button>
                       )}
                       {user.role == "admin" && (
