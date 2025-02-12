@@ -8,7 +8,7 @@ export const CartProvider = ({ children }) => {
   const [totalQuantity, setTotalQuantity] = useState(0);
 
   const fetchCartItems = () => {
-    const request = window.indexedDB.open("cartDb", 1);
+    const request = window.indexedDB.open("cartDb", 2);
   
     request.onupgradeneeded = (e) => {
       const db = e.target.result;

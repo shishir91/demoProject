@@ -139,7 +139,7 @@ const StoreBody = ({ className = "", store }) => {
   
                 {/* Product Image */}
                 <div
-                  className="w-[93px] h-24 rounded-md bg-cover bg-center bg-no-repeat sm:w-[120px] sm:h-32"
+                  className="w-[90px] h-20 rounded-md bg-cover bg-center bg-no-repeat sm:w-[120px] sm:h-32"
                   style={{ backgroundImage: `url(${item.images[0]})` }}
                 />
               </Link>

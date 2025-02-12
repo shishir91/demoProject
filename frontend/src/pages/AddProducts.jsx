@@ -175,7 +175,7 @@ function AddProducts() {
   }, [storeId]);
 
   return (
-    <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl">
+    <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl ">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <button
@@ -188,8 +188,8 @@ function AddProducts() {
         <h1 className="text-xl font-bold text-gray-200 mx-auto">
           Add Products
         </h1>
-        <div className="w-19">
-          <div className="flex items-center gap-4 w-full md:w-auto">
+        <div className="">
+          <div className="flex items-center gap-4 w-12 md:w-auto">
             <div className="text-gray-400">Store:</div>
             <div className="text-emerald-500">
               <select
