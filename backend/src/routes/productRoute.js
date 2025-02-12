@@ -34,7 +34,7 @@ router.get(
   productController.getCategory
 );
 router.get("/getProducts/:storeName", productController.getProduct);
-router.get("/getProduct/:productId",productController.getSingleProduct);
+router.get("/getProduct/:productId", productController.getSingleProduct);
 router.put(
   "/update/:id",
   customerMiddleware,

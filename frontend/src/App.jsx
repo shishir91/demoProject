@@ -8,7 +8,13 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 const App = () => {
   // Initialize the QueryClient instance
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions:{
+      queries:{
+        staleTime:10000
+      }
+    }
+  });
   
   // Handle subdomain
   const [subdomain, setSubdomain] = useState("");

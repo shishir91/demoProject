@@ -181,7 +181,7 @@ class ProductController {
   }
   async getProduct(req, res) {
     const { storeName } = req.params;
-
+    console.log('Sending products');
     try {
       const checkStore = await storeModel.findOne({ url: storeName });
       if (checkStore) {
