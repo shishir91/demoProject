@@ -45,12 +45,15 @@ export default function Products() {
         const response = await api.get(`/product/getProducts/${storeURL}`, {
           headers: { token },
         });
+        
+        if (response.data.success) {
+          setProducts(response.data.products);
+          setFilteredProducts(response.data.products);
+        }else{
+          setProducts([]);
+          setFilteredProducts([]);
 
-        if (response.data) {
-          setProducts(response.data);
-          setFilteredProducts(response.data);
-
-      
+        }
       } catch (error) {
         console.error(error);
         toast.error(error.message, { duration: 2000 });

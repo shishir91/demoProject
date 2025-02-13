@@ -62,8 +62,6 @@ const StoreBody = ({ className = "", store }) => {
     }
   }
 
-
-
   return (
     <div className={`relative flex flex-col items-center ${className}`}>
       {/* Floating Cart Button */}
@@ -84,35 +82,35 @@ const StoreBody = ({ className = "", store }) => {
 
       {/* Store Content */}
       <div className="flex justify-end w-full px-4 mt-4">
-  {/* Grid and List View Buttons */}
-  <div className="flex gap-3">
-    {/* Grid Button */}
-    <button
-      className={`flex items-center justify-center w-10 h-10 rounded-full shadow transition ${
-        viewType === "grid"
-          ? "bg-gray-300 text-white hover:bg-gray-300" // Active Grid button styles
-          : "bg-gray-200 hover:bg-gray-300"
-      }`}
-      aria-label="Grid View"
-      onClick={() => setViewType("grid")}
-    >
-      <img src="/grid-view.svg" className="w-6 h-6" />
-    </button>
+        {/* Grid and List View Buttons */}
+        <div className="flex gap-3">
+          {/* Grid Button */}
+          <button
+            className={`flex items-center justify-center w-10 h-10 rounded-full shadow transition ${
+              viewType === "grid"
+                ? "bg-gray-300 text-white hover:bg-gray-300" // Active Grid button styles
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+            aria-label="Grid View"
+            onClick={() => setViewType("grid")}
+          >
+            <img src="/grid-view.svg" className="w-6 h-6" />
+          </button>
 
-    {/* List Button */}
-    <button
-      className={`flex items-center justify-center w-10 h-10 rounded-full shadow transition ${
-        viewType === "list"
-          ? "bg-gray-300 text-white hover:bg-gray-300" // Active List button styles
-          : "bg-gray-200 hover:bg-gray-300"
-      }`}
-      aria-label="List View"
-      onClick={() => setViewType("list")}
-    >
-      <img src="./list.svg" alt="" className="w-6 h-6" />
-    </button>
-  </div>
-</div>
+          {/* List Button */}
+          <button
+            className={`flex items-center justify-center w-10 h-10 rounded-full shadow transition ${
+              viewType === "list"
+                ? "bg-gray-300 text-white hover:bg-gray-300" // Active List button styles
+                : "bg-gray-200 hover:bg-gray-300"
+            }`}
+            aria-label="List View"
+            onClick={() => setViewType("list")}
+          >
+            <img src="./list.svg" alt="" className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
 
       <div className="flex flex-col items-center justify-center py-0 px-5 gap-[27px] mt-12 sm:mt-8">
         {/* Conditionally hide this div when grid view is selected */}
@@ -127,13 +125,13 @@ const StoreBody = ({ className = "", store }) => {
                 Products
               </b>
             </div>
-
+            {console.log(products)}
             {/* Product List (List View) */}
-            {viewType === "list" ? (
+            {viewType === "list" && (
               <div className="w-full">
-                {products?.map((item, index) => (
+                {products?.products?.map((item) => (
                   <Link
-                    key={index}
+                    key={item._id}
                     to={`/product/${item._id}`}
                     className="self-stretch h-auto sm:h-28 flex flex-row items-start justify-start gap-2 cursor-pointer p-2 hover:shadow-md transition"
                   >
@@ -142,7 +140,7 @@ const StoreBody = ({ className = "", store }) => {
                       <div className="text-sm sm:text-base font-medium truncate w-full max-w-[200px]">
                         {item.name}
                       </div>
-                      <div className="text-xs sm:text-sm font-medium text-gray-500 line-clamp-2">
+                      <div className="text-xs sm:text-sm font-medium text-gray-500 overflow-hidden line-clamp-2">
                         {item.description}
                       </div>
 
@@ -155,25 +153,41 @@ const StoreBody = ({ className = "", store }) => {
                         </b>
                       </div>
 
-                      <div className="text-xs sm:text-sm font-semibold text-red-400">
-                        {item.discountRate}% Off
-                      </div>
+                      {item.discountRate > 0 && (
+                        <div className="text-xs sm:text-sm font-semibold text-red-400">
+                          {item.discountRate}% Off
+                        </div>
+                      )}
                     </div>
 
                     {/* Product Image */}
                     <div
                       className="w-[90px] h-20 rounded-md bg-cover bg-center bg-no-repeat sm:w-[120px] sm:h-32"
-                      style={{ backgroundImage: `url(${item.images[0]})` }}
+                      style={{
+                        backgroundImage: `url(${
+                          item.images?.[0] || "/placeholder.jpg"
+                        })`,
+                      }}
                     />
                   </Link>
                 ))}
               </div>
-            ) : null}
+            )}
           </div>
         </div>
 
         {/* Product Description (Grid View) */}
         {viewType === "grid" && <ProductDescription store={store} />}
+        {/* Cart Modal */}
+        {isFrameOpen && (
+          <PortalDrawer
+            overlayColor="rgba(113, 113, 113, 0.3)"
+            placement="Right"
+            onOutsideClick={closeFrame}
+          >
+            <CartComponent onClose={closeFrame} />
+          </PortalDrawer>
+        )}
       </div>
     </div>
   );
