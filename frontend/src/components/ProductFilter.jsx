@@ -15,7 +15,6 @@ const ProductFilter = ({ onFilterChange, storeId }) => {
           const response = await api.get(`/product/getCategory/${storeId}`, {
             headers: { token },
           });
-          console.log("Response:", response.data);
           if (response.data && response.data.length > 0) {
             setCategories(response.data[0].name);
           }

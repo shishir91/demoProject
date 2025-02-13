@@ -9,7 +9,7 @@ import {
 import CustomerLogin from "./pages/subdomainPages/CustomerLogin";
 import Verification from "./pages/subdomainPages/Verification";
 import Reservation from "./pages/subdomainPages/Reservation";
-import StoreSide from "./pages/subdomainPages/StoreSide";
+import StoreSide from "./pages/subdomainPages/storeSide/StoreSide";
 import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
@@ -19,8 +19,9 @@ import HomePageStore from "./pages/user/HomePageStore";
 import SingleProduct from "./pages/user/SingleProduct";
 import Checkout from "./pages/user/Checkout";
 import { CartProvider } from "./context/CartProvider";
-import StoreLogin from "./pages/subdomainPages/StoreLogin";
+import StoreLogin from "./pages/subdomainPages/storeSide/StoreLogin";
 import api from "./api/config";
+import Customers from "./pages/subdomainPages/storeSide/Customers";
 
 const AppStore = (sub) => {
   const [authState, setAuthState] = useState({
@@ -30,7 +31,6 @@ const AppStore = (sub) => {
   const [storeStatus, setStoreStatus] = useState();
   const [storeData, setStoreData] = useState({});
   const subdomain = sub.subdomain;
-  console.log(sub);
 
   useEffect(() => {
     const handleStorageChange = (event) => {
@@ -123,7 +123,6 @@ const AppStore = (sub) => {
           const response = await api.get(`/store/checkStore/${subdomain}`);
 
           if (response.data.success) {
-            console.log(response);
             setStoreStatus(response.data.success);
             setStoreData(response.data.store);
           }
@@ -178,6 +177,15 @@ const AppStore = (sub) => {
                 </>
               }
             />
+            <Route
+              path="customers"
+              element={
+                <>
+                  <StoreSidebar store={storeData} />
+                  <Customers url={subdomain} store={storeData} />
+                </>
+              }
+            />
           </Route>
           <Route
             path="/verification"
@@ -222,30 +230,30 @@ const AppStore = (sub) => {
           }
         /> */}
 
-        <Route
-          path="/products/"
-          element={
-            <CartProvider>
-              <HomePageStore url={subdomain} />
-            </CartProvider>
-          }
-        />
-        <Route
-          path="/product/:productId"
-          element={
-            <CartProvider>
-              <SingleProduct />
-            </CartProvider>
-          }
-        />
-        <Route
-          path="/product/checkout"
-          element={
-            <CartProvider>
-              <Checkout />
-            </CartProvider>
-          }
-        />
+          <Route
+            path="/products/"
+            element={
+              <CartProvider>
+                <HomePageStore url={subdomain} />
+              </CartProvider>
+            }
+          />
+          <Route
+            path="/product/:productId"
+            element={
+              <CartProvider>
+                <SingleProduct />
+              </CartProvider>
+            }
+          />
+          <Route
+            path="/product/checkout"
+            element={
+              <CartProvider>
+                <Checkout />
+              </CartProvider>
+            }
+          />
 
           {/* Catch-all Route */}
           <Route path="*" element={<PoweredBySamparka />} />

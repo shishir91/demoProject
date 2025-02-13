@@ -9,6 +9,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { toast } from "react-toastify";
 import api from "../api/config";
 
+// eslint-disable-next-line react/prop-types
 const ProductCard = ({ product }) => {
   const [open, setOpen] = useState(false);
   const token = localStorage.getItem("token");
@@ -107,21 +108,23 @@ const ProductCard = ({ product }) => {
   return (
     <>
       {/* Product Card */}
-      <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center justify-between">
+      <div className="bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col items-center justify-between max-w-xs h-80">
         <img
           src={product.images[0]}
           alt={product.name}
-          className="w-full h-full object-cover rounded-t-lg mb-4 aspect-square"
+          className="w-full h-40 object-cover rounded-t-lg mb-4 aspect-square"
         />
-        <h3 className="text-xl font-semibold text-gray-800 mb-2 text-center">
+        <h3 className="text-xl font-semibold text-gray-800 mb-2 text-center truncate overflow-hidden">
           {product.name}
         </h3>
-        <p className="text-gray-600 text-sm mb-4 text-center">
+        {/* <p className="text-gray-600 text-sm mb-4 text-center overflow-hidden text-ellipsis max-h-16">
           {product.description || "No description available."}
-        </p>
+        </p> */}
+
         <div className="flex justify-between items-center w-full">
           <p className="text-lg font-semibold text-green-600">
-            ${product.price}
+         <s>   Rs{product.price}</s> <span className="text-red-500">({product.discountRate}%) </span>
+         <span>Rs{product.calculatedPrice}</span>
           </p>
           <button
             className="bg-emerald-500 text-white px-4 py-2 rounded-lg hover:bg-emerald-600"
@@ -145,6 +148,10 @@ const ProductCard = ({ product }) => {
             boxShadow: 24,
             p: 4,
             borderRadius: 2,
+            
+            height: 'auto',  // Use 'auto' for height to allow content to dictate size
+            maxHeight: '90vh',  // Max height of 90% of the viewport height
+            overflowY: 'auto',  // Enable vertical scrolling if content overflows
           }}
         >
           <Typography variant="h6" component="h2" gutterBottom>
@@ -180,12 +187,15 @@ const ProductCard = ({ product }) => {
               margin="normal"
               variant="outlined"
               type="number"
+            
             />
             <TextField
               label="Discount Rate (%)"
               variant="outlined"
               fullWidth
               type="number"
+              margin="normal"
+              style={{marginBottom:'12'}}
               value={formData.discountRate}
               onChange={handleDiscountRateChange}
               InputLabelProps={{ className: "text-gray-400" }}
@@ -195,6 +205,7 @@ const ProductCard = ({ product }) => {
               label="Calculated Price"
               variant="outlined"
               fullWidth
+              margin="normal"
               value={formData.calculatedPrice}
               InputLabelProps={{ className: "text-gray-400" }}
               InputProps={{ className: "text-white" }}

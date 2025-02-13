@@ -2,6 +2,7 @@
 // import storeModel from "../models/storeModel.js";
 const mailSMSModel = require("../models/mailSMSModel");
 const storeModel = require("../models/storeModel");
+const validator = require("validator");
 
 class MailSMSController {
   async configMessage(req, res) {
@@ -98,12 +99,20 @@ class MailSMSController {
   async configSMSMessage(req, res) {
     try {
       const { storeID } = req.params;
-      const { status } = req.body;
+      const { status, to } = req.body;
       const store = await storeModel.findById(storeID);
       if (!store) {
         return res.json({ success: false, message: "Store Not Found" });
       }
       if (req.user.role == "admin" || req.user.id == store.user[0]) {
+        if (to) {
+          if (!validator.isMobilePhone("+977" + to, "ne-NP")) {
+            return res.json({
+              success: false,
+              message: "Invalid Phone Number",
+            });
+          }
+        }
         let mailSMS;
         switch (status) {
           case "afterLogin":

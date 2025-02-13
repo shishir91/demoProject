@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import PinInput from "../../components/storeSide/PinInput";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import PinInput from "../../../components/storeSide/PinInput";
 import { QrCode } from "lucide-react";
 import { toast } from "sonner";
-import api from "../../api/config";
+import api from "../../../api/config";
 import { useNavigate } from "react-router-dom";
 
 const StoreLogin = (subdomain) => {
@@ -40,11 +40,9 @@ const StoreLogin = (subdomain) => {
     setIsLoading(true);
     try {
       const pinString = pin.join("");
-      console.log(pinString);
       const response = await api.post(`/store/verifyPIN/${subdomain.url}`, {
         pin: pinString,
       });
-      console.log(response);
       if (response.data.success) {
         localStorage.setItem("storeToken", response.data.token);
         toast.success(response.data.message, {

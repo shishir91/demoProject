@@ -6,7 +6,6 @@ import {useNavigate} from "react-router-dom"
 
 const CartComponent = ({ className = "", onClose }) => {
   const { totalPrice,cartItems } = useCart();
-  console.log('TotalPrice: ',totalPrice);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,7 +28,6 @@ const CartComponent = ({ className = "", onClose }) => {
   }, []);
 
   const handleCheckout = ()=>{
-    console.log("Cart Items: ", cartItems);
     navigate("/product/checkout",{
       state:{
         items:cartItems,

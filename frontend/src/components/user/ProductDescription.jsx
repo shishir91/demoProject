@@ -11,7 +11,6 @@ import api from "../../api/config";
 const ProductDescription = ({ className = "", store }) => {
   const fetchProducts = async ({store}) =>{
     const response = await api.get(`/product/getProducts/${store.url}`);
-    console.log("REached here");
     return response.data;
   }
   // const navigate = useNavigate();
@@ -24,7 +23,6 @@ const ProductDescription = ({ className = "", store }) => {
     queryFn:()=> fetchProducts(store)  // queryFn must be a function returning a promise
   });
   
-  console.log("Products; ",products);
 
   // const onProductDescriptionContainerClick = useCallback(() => {
   //   navigate("/sp");
@@ -41,7 +39,7 @@ const ProductDescription = ({ className = "", store }) => {
         {error && <p className="text-red-500">{error.message}</p>}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 w-full">
-          {products?.map((item, index) => (
+          {products.products?.map((item, index) => (
             <Link
               key={index}
               to={`/product/${item._id}`}

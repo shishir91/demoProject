@@ -49,6 +49,9 @@ class CustomerController {
       if (!validator.isEmail(email)) {
         return res.json({ success: false, message: "Invalid email address" });
       }
+      if (!validator.isMobilePhone("+977" + phone, "ne-NP")) {
+        return res.json({ success: false, message: "Invalid Phone Number" });
+      }
 
       // Check if a customer already exists in the specific store
       const existingCustomer = await customerModel.findOne({

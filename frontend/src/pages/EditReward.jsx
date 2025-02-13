@@ -51,7 +51,6 @@ const EditReward = () => {
       );
       if (response.data.success) {
         setReward(response.data.reward);
-        console.log(response.data.reward);
         toast.success(response.data.message, {
           duration: 2000,
         });

@@ -42,6 +42,7 @@ const AfterRewardRedeemed_Admin = (state) => {
         </label>
         <div className="relative">
           <input
+            type="number"
             id="to"
             name="to"
             value={to}
@@ -66,6 +67,11 @@ const AfterRewardRedeemed_Admin = (state) => {
             name="from"
             value={from}
             onChange={(e) => setFrom(e.target.value)}
+            onKeyDown={(e) => {
+              if (!/^[a-zA-Z0-9]$/.test(e.key) && e.key !== "Backspace") {
+                e.preventDefault();
+              }
+            }}
             required
             className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
           />
