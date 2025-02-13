@@ -4,6 +4,7 @@ import StoreBody from "./StoreBody";
 import PropTypes from "prop-types";
 
 const HomePageStore = (store) => {
+  console.log(store);
 
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
@@ -36,7 +37,7 @@ const HomePageStore = (store) => {
 
   return (
     <div className="bg-gray-200">
-      <Title />
+      <Title logo={store.store.logo}/>
       {/* <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
         <img
           className="w-[480px] rounded-xl h-auto max-w-full lg:w-[500px] lg:pl-2.5 lg:box-border sm1:flex-1 sm1:self-stretch sm1:h-auto sm1:pl-[30px] sm1:pr-[30px] sm1:box-border sm1:min-w-[100px]"
@@ -89,7 +90,7 @@ const HomePageStore = (store) => {
             href="https://take.app/panipuriz"
             target="_blank"
           /> */}
-        {/* </div>
+      {/* </div>
       </div> */}
     </div>
   );

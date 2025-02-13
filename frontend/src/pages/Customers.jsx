@@ -209,7 +209,7 @@ const Customers = () => {
       </div>
 
       {/* User Table */}
-      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-hidden">
+      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto">
         <table className="w-full table-auto">
           <thead className="bg-stone-700">
             <tr>
@@ -231,7 +231,7 @@ const Customers = () => {
                 <td className="px-4 py-2 text-gray-300">{user.phone}</td>
                 <td className="px-4 py-2 text-gray-300">
                   <button
-                    className="bg-green-800 p-1 px-4 rounded-lg"
+                    className="bg-green-800 p-1 px-4 rounded-lg text-white"
                     onClick={() => {
                       setPointsModal(true);
                       setStoreID(user.store);

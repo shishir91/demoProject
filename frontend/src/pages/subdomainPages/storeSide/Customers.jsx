@@ -113,8 +113,8 @@ const Customers = (state) => {
     }
   };
   return (
-    <div className="bg-gray-200 min-h-screen pt-7">
-      <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 rounded rounded-xl">
+    <div className="bg-gray-200 pt-7">
+      <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen rounded rounded-xl">
         {loading && <LoadingSpinner />}
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
@@ -145,8 +145,8 @@ const Customers = (state) => {
         </div>
 
         {/* User Table */}
-        <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-hidden">
-          <table className="w-full table-auto">
+        <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto">
+          <table className="w-full table-auto min-w-max">
             <thead className="bg-stone-700">
               <tr>
                 <th className="px-4 py-2 text-left text-gray-200">ID</th>
@@ -167,7 +167,7 @@ const Customers = (state) => {
                   <td className="px-4 py-2 text-gray-300">{user.phone}</td>
                   <td className="px-4 py-2 text-gray-300">
                     <button
-                      className="bg-green-800 p-1 px-4 rounded-lg"
+                      className="bg-green-800 p-1 px-4 rounded-lg text-white"
                       onClick={() => {
                         setPointsModal(true);
                         setStoreID(user.store);

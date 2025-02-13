@@ -1,8 +1,8 @@
 import { Award } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
-import LoadingSpinner from "../LoadingSpinner";
-import api from "../../api/config";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import api from "../../../api/config";
 import { useNavigate } from "react-router-dom";
 
 const ViewRewards = (subdomain) => {
@@ -59,10 +59,10 @@ const ViewRewards = (subdomain) => {
   };
 
   return (
-    <div className="sm:ml-56  min-h-screen bg-gray-200 p-6">
+    <div className="bg-gray-200 pt-7">
       {loading && <LoadingSpinner />}
-      <div className="bg-stone-800 min-h-screen p-4 rounded rounded-xl">
-        <div className="flex items-center gap-2 text-emerald-800 my-2">
+      <div className="bg-stone-800 min-h-screen p-4 sm:ml-64 bg rounded rounded-xl">
+        <div className="flex items-center gap-2 text-gray-200 my-2">
           <Award className="w-6 h-6" />
           <h1 className="text-xl font-semibold">REDEEMED REWARD LIST</h1>
         </div>

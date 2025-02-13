@@ -14,7 +14,7 @@ import GetPoints from "./pages/subdomainPages/GetPoints";
 import LoyalityCard from "./pages/LoyalityCard";
 import PoweredBySamparka from "./components/PoweredBySamparka";
 import StoreSidebar from "./components/storeSide/StoreSidebar";
-import ViewRewards from "./components/storeSide/ViewRewards";
+import ViewRewards from "./pages/subdomainPages/storeSide/ViewRewards";
 import HomePageStore from "./pages/user/HomePageStore";
 import SingleProduct from "./pages/user/SingleProduct";
 import Checkout from "./pages/user/Checkout";
@@ -234,7 +234,7 @@ const AppStore = (sub) => {
             path="/products/"
             element={
               <CartProvider>
-                <HomePageStore url={subdomain} />
+                <HomePageStore url={subdomain} store={storeData} />
               </CartProvider>
             }
           />
