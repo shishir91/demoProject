@@ -30,6 +30,7 @@ const {
 } = require("@aws-sdk/client-s3");
 const mailSMSModel = require("../models/mailSMSModel.js");
 const messageModel = require("../models/messageModel.js");
+const smsController = require("./smsController.js");
 
 const s3 = new S3Client({
   region: process.env.AWS_REGION,
@@ -55,7 +56,11 @@ class StoreController {
       store.logo = url;
       if (store && store.status == "active") {
         return res.json({ success: true, message: "Store Available", store });
-        return res.json({ success: true, message: "Store Available", storeId :store._id });
+        return res.json({
+          success: true,
+          message: "Store Available",
+          storeId: store._id,
+        });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
       }
@@ -405,7 +410,9 @@ class StoreController {
     try {
       const { pin } = req.body;
       const { storeURL } = req.params;
-      const store = await storeModel.findOne({ url: storeURL });
+      const store = await storeModel
+        .findOne({ url: storeURL })
+        .select("name location phone logo url");
       if (!store) {
         return res.json({ success: false, message: "Store not found" });
       }
@@ -565,6 +572,7 @@ class StoreController {
       res.status(500).send(error);
     }
   }
+
   //Create New Customer
   async createCustomer(req, res) {
     try {
@@ -575,6 +583,13 @@ class StoreController {
       if (!store) {
         return res.json({ success: false, message: "Store not found" });
       }
+      console.log(req.user);
+      console.log(req.store);
+      if (req.store) {
+        req.user = { role: "admin" };
+      }
+      console.log(req.user);
+
       if (req.user == store.user[0] || req.user.role == "admin") {
         // Check if a customer already exists in the specific store
         const existingCustomer = await customerModel.findOne({
@@ -596,7 +611,7 @@ class StoreController {
         if (!validator.isEmail(email)) {
           return res.json({ success: false, message: "Invalid Email" });
         }
-        if (!validator.isMobilePhone(phone)) {
+        if (!validator.isMobilePhone("+977" + phone, "ne-NP")) {
           return res.json({ success: false, message: "Invalid Phone Number" });
         }
         const customer = await customerModel.create({
@@ -617,6 +632,7 @@ class StoreController {
       return res.status(500).send(error);
     }
   }
+
   //Give Points to Customer
   async givePoints(req, res) {
     try {
@@ -635,6 +651,27 @@ class StoreController {
         { $inc: { points } },
         { new: true }
       );
+      if (store.smsToken) {
+        const getSMS = await mailSMSModel.findOne({ store });
+        if (
+          getSMS &&
+          getSMS.smsAfterPointEarned &&
+          getSMS.smsAfterPointEarned.message
+        ) {
+          let from = getSMS.smsAfterPointEarned.from;
+          let message = getSMS.smsAfterPointEarned.message;
+          const smsResponse = await smsController.smsCustomer({
+            token: store.smsToken,
+            to: customer.phone,
+            from,
+            message,
+            storeName: store.name,
+            customerName: customer.name,
+            points,
+          });
+          console.log(smsResponse);
+        }
+      }
       return res.json({
         success: true,
         message: "Points Added",

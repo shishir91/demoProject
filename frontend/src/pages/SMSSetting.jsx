@@ -134,7 +134,6 @@ const SMSSetting = () => {
           <span>On Birthday</span>
         </button>
       </div>
-      {console.log(smsMessage)}
       <div className="flex justify-between">
         {status === "afterLogin" && smsMessage.smsAfterLogin && (
           <AfterLogin

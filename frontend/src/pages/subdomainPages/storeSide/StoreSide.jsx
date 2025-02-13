@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import { toast } from "sonner";
-import LoadingSpinner from "../../components/LoadingSpinner";
-import api from "../../api/config";
-import SetPoints from "../../components/storeSide/SetPoints";
-import NewCustomer from "../../components/storeSide/NewCustomer";
-import StoreSidebar from "../../components/storeSide/StoreSidebar";
+import LoadingSpinner from "../../../components/LoadingSpinner";
+import api from "../../../api/config";
+import SetPoints from "../../../components/storeSide/SetPoints";
+import NewCustomer from "../../../components/storeSide/NewCustomer";
+import StoreSidebar from "../../../components/storeSide/StoreSidebar";
 import { useNavigate } from "react-router-dom";
 
 const StoreSide = (subdomain) => {

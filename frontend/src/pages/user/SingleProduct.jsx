@@ -6,25 +6,27 @@ import Slider from "react-slick"; // Import react-slick
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import { toast } from "sonner";
-import {useQuery} from "@tanstack/react-query";
-import api from "../../api/config"
-
-
+import { useQuery } from "@tanstack/react-query";
+import api from "../../api/config";
 
 const SingleProduct = ({ className = "" }) => {
   const navigate = useNavigate();
   const { productId } = useParams();
   // console.log("SingleProduct", productId);
 
-  const fetchSinglelProduct = async(productId)=>{
+  const fetchSinglelProduct = async (productId) => {
     const response = await api.get(`/product/getProduct/${productId}`);
     return response.data;
-  }
+  };
 
-  const {data:product,isLoading,error} = useQuery({
-    queryKey:["product",productId],
-    queryFn:()=>fetchSinglelProduct(productId)
-  })
+  const {
+    data: product,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["product", productId],
+    queryFn: () => fetchSinglelProduct(productId),
+  });
 
   // const { product, loading, error } = useFetchSingleProducts(productId);
   const [quantity, setQuantity] = useState(1);
@@ -75,12 +77,11 @@ const SingleProduct = ({ className = "" }) => {
       request.onupgradeneeded = (event) => {
         const db = event.target.result;
 
-        // Check if object store exists before creating it
         if (!db.objectStoreNames.contains("cartItems")) {
           const objectStore = db.createObjectStore("cartItems", {
-            keyPath: "id",
-            autoIncrement: true,
+            keyPath: "id", // ✅ Keep keyPath, but REMOVE autoIncrement
           });
+
           console.log("Object store 'cartItems' created.");
         } else {
           console.log("Object store 'cartItems' already exists.");
@@ -89,12 +90,12 @@ const SingleProduct = ({ className = "" }) => {
 
       request.onsuccess = (event) => {
         console.log("IndexedDB opened successfully");
-        resolve(event.target.result); // db object is available here
+        resolve(event.target.result);
       };
 
       request.onerror = (event) => {
         console.error("Error opening IndexedDB:", event.target.error);
-        reject(event.target.error); // Reject if database opening fails
+        reject(event.target.error);
       };
     });
   };
@@ -109,7 +110,7 @@ const SingleProduct = ({ className = "" }) => {
       }
 
       const transaction = db.transaction("cartItems", "readwrite");
-      const store = transaction.objectStore("cartItems",{keyPath:"productId"});
+      const store = transaction.objectStore("cartItems");
 
       const existingItemRequest = store.get(product._id);
 
@@ -117,31 +118,45 @@ const SingleProduct = ({ className = "" }) => {
         const existingItem = existingItemRequest.result;
 
         if (existingItem) {
-          // Update existing item's quantity and total price
           existingItem.productQuantity += quantity;
           existingItem.productTotalPrice += totalPrice;
 
           const updateRequest = store.put(existingItem);
           updateRequest.onsuccess = () => {
-            toast.success("Cart updated successfully!");
-            console.log("Cart item updated!");
+            toast.success("Cart updated successfully!", {
+              duration: 1000,
+              onAutoClose: () => window.location.reload(),
+            });
+          };
+          updateRequest.onerror = (event) => {
+            console.error("Error updating item:", event.target.error);
           };
         } else {
-          // Add a new item to the cart
           const newItem = {
-            id: product._id, // Ensure each product has a unique key (using product._id)
+            productId: product._id,
             productName: product.name,
             productQuantity: quantity,
             productTotalPrice: totalPrice,
-            productImage: product.images[0] || "", // Store the first image
+            productImage: product.images?.[0] || "",
           };
+
+          console.log("Adding new item:", newItem); // Debugging
 
           const addRequest = store.add(newItem);
           addRequest.onsuccess = () => {
-            toast.success("Item added to cart!");
-            console.log("Item added to cart successfully!");
+            toast.success("Item added to cart!", {
+              duration: 1000,
+              onAutoClose: () => window.location.reload(),
+            });
+          };
+          addRequest.onerror = (event) => {
+            console.error("Error adding item:", event.target.error);
           };
         }
+      };
+
+      existingItemRequest.onerror = (event) => {
+        console.error("Error checking existing item:", event.target.error);
       };
 
       transaction.oncomplete = () => {
@@ -190,11 +205,11 @@ const SingleProduct = ({ className = "" }) => {
     });
   };
 
-  if(product){
+  if (product) {
     return (
       <>
         {/* {console.log("Product", product)} */}
-        
+
         {product && (
           <div
             className={`flex items-center justify-center w-full h-screen bg-gray-100 ${className} overflow-hidden`}
@@ -246,7 +261,7 @@ const SingleProduct = ({ className = "" }) => {
                 >
                   {product.description}
                 </div>
-  
+
                 {/* Price Section */}
                 <div className="flex items-center justify-between text-sm mb-4">
                   {/* Discount rate displayed next to the price */}
@@ -287,7 +302,7 @@ const SingleProduct = ({ className = "" }) => {
                   </button>
                 </div>
               </div>
-  
+
               {/* Buttons Section (Add to Cart & Buy Now) */}
               <div className="fixed bottom-0 w-full shadow-lg py-5 px-[18px] flex justify-between space-x-4 z-10 bg-white">
                 <button
@@ -312,16 +327,13 @@ const SingleProduct = ({ className = "" }) => {
     );
   }
 
-
-  if(error){
-    <p className="text-red-500 text-9xl">Error Encountered</p>
+  if (error) {
+    <p className="text-red-500 text-9xl">Error Encountered</p>;
   }
 
-  if(isLoading){
-    <p className="text-black">loading</p>
+  if (isLoading) {
+    <p className="text-black">loading</p>;
   }
-
-
 };
 
 SingleProduct.propTypes = {

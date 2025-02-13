@@ -10,6 +10,7 @@ const adminMiddleware = require("../middlewares/adminMiddleware");
 const authMiddleware = require("../middlewares/authMiddleware");
 const multer = require("multer");
 const mailSMSController = require("../controllers/mailSMSController");
+const storeMiddleware = require("../middlewares/storeMiddleware");
 
 const router = new Router();
 
@@ -80,7 +81,12 @@ router.get(
   authMiddleware,
   storeController.getCustomers
 );
-router.post("/createCustomer/:storeID", authMiddleware, storeController.createCustomer);
+router.post(
+  "/createCustomer/:storeID",
+  authMiddleware,
+  storeMiddleware,
+  storeController.createCustomer
+);
 router.put("/givePoints/:storeID", authMiddleware, storeController.givePoints);
 router.get("/getRedeemedRewards/:storeURL", storeController.getRedeemedRewards);
 router.put("/claimReward/:storeURL", storeController.claimReward);

@@ -15,7 +15,6 @@ const ProductFilter = ({ onFilterChange, storeId }) => {
           const response = await api.get(`/product/getCategory/${storeId}`, {
             headers: { token },
           });
-          console.log("Response:", response.data);
           if (response.data && response.data.length > 0) {
             setCategories(response.data[0].name);
           }
@@ -33,7 +32,7 @@ const ProductFilter = ({ onFilterChange, storeId }) => {
     onFilterChange(event.target.value);
   };
   return (
-    <div className="flex items-center gap-4 w-full md:w-auto">
+    <div className="flex items-center gap-4 w-full md:w-auto mb-4">
       <button
         className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded"
         onClick={() => alert("Filter Options")}

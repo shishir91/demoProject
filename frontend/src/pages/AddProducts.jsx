@@ -97,7 +97,6 @@ function AddProducts() {
     formData.append("discountRate", discountRate);
     formData.append("calculatedPrice", calculatedPrice);
 
-    console.log("FormData", formData);
     try {
       const response = await api.post(
         `/product/addProduct/${storeId}`,
@@ -138,7 +137,6 @@ function AddProducts() {
         headers: { token },
       });
       if (response.data) {
-        console.log("Fetched Categories", response.data);
         setCategories(response.data[0].name); // Update categories state
       }
     } catch (error) {
@@ -203,7 +201,7 @@ function AddProducts() {
           Add Products
         </h1>
         <div className="">
-          <div className="flex items-center gap-4 w-12 md:w-auto">
+          <div className="flex items-center gap-4 w-auto">
             <div className="text-gray-400">Store:</div>
             <div className="text-emerald-500">
               <select
@@ -224,13 +222,13 @@ function AddProducts() {
         </div>
       </div>
 
-      <div className="w-1/2 flex flex-col ">
+      <div className="max-w-lg w-full sm:w-3/4 md:w-1/2 mx-auto flex flex-col justify-center items-center p-4">
         {/* Add Category Section */}
-        <Accordion className="text-black">
+        <Accordion className="w-full">
           <AccordionSummary
             expandIcon={<ExpandMoreIcon className="text-black" />}
           >
-            <Typography className="text-black-500 font-semibold">
+            <Typography className="text-black font-semibold">
               Add Category
             </Typography>
           </AccordionSummary>
@@ -243,7 +241,6 @@ function AddProducts() {
                 value={category}
                 onChange={handleCategoryChange}
                 InputLabelProps={{ className: "text-gray-400" }}
-                InputProps={{ className: "text-white" }}
                 className="bg-inherit rounded-lg"
               />
               <Button
@@ -259,8 +256,8 @@ function AddProducts() {
         </Accordion>
 
         {/* Add Product Form */}
-        <div className="mt-6 p-4 bg-whitesmoke-200 rounded-lg">
-          <h2 className="text-lg font-bold text-black-300 mb-4">
+        <div className="mt-6 p-4 bg-gray-100 rounded-lg w-full">
+          <h2 className="text-lg font-bold text-gray-800 mb-4">
             Add New Product
           </h2>
           <div className="flex flex-col gap-4">
@@ -270,9 +267,6 @@ function AddProducts() {
               fullWidth
               value={productName}
               onChange={(e) => setProductName(e.target.value)}
-              InputLabelProps={{ className: "text-gray-800" }}
-              className="text-gray"
-              InputProps={{ className: "text-white" }}
             />
             <TextField
               label="Product Price"
@@ -281,8 +275,6 @@ function AddProducts() {
               type="number"
               value={productPrice}
               onChange={(e) => setProductPrice(e.target.value)}
-              InputLabelProps={{ className: "text-gray-400" }}
-              InputProps={{ className: "text-white" }}
             />
             <TextField
               label="Discount Rate (%)"
@@ -291,16 +283,12 @@ function AddProducts() {
               type="number"
               value={discountRate}
               onChange={handleDiscountRateChange}
-              InputLabelProps={{ className: "text-gray-400" }}
-              InputProps={{ className: "text-white" }}
             />
             <TextField
               label="Calculated Price"
               variant="outlined"
               fullWidth
               value={calculatedPrice}
-              InputLabelProps={{ className: "text-gray-400" }}
-              InputProps={{ className: "text-white" }}
               disabled
             />
             <TextField
@@ -311,23 +299,18 @@ function AddProducts() {
               rows={3}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              InputLabelProps={{ className: "text-gray-400" }}
-              InputProps={{ className: "text-white" }}
             />
             <Select
               fullWidth
               value={selectedCategory}
-              onChange={(e) => {
-                const selectedCategoryName = e.target.value;
-                setSelectedCategory(selectedCategoryName);
-              }}
+              onChange={(e) => setSelectedCategory(e.target.value)}
               displayEmpty
-              className="bg-inherit text-white"
+              className="bg-inherit"
             >
               <MenuItem disabled value="">
                 Select Category
               </MenuItem>
-              {categories ? (
+              {categories.length ? (
                 categories.map((cat, index) => (
                   <MenuItem key={index} value={cat}>
                     {cat}
@@ -352,32 +335,34 @@ function AddProducts() {
                 accept="image/*"
                 onChange={handleImageChange}
               />
-<div className="image-preview-container" style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-  {images.map((img, index) => (
-    <div key={index} className="relative">
-      <img
-        src={URL.createObjectURL(img)}
-        alt={`Preview ${index}`}
-        className="w-20 h-20 object-cover"
-      />
-      <IconButton
-        onClick={() => handleRemoveImage(index)}
-        size="small"
-        sx={{
-          position: "absolute",
-          top: -5,
-          right: -5,
-          backgroundColor: "red",
-          color: "white",
-          ":hover": { backgroundColor: "darkred" },
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
-    </div>
-  ))}
-</div>
-
+              <div
+                className="image-preview-container"
+                style={{ display: "flex", flexWrap: "wrap", gap: "10px" }}
+              >
+                {images.map((img, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt={`Preview ${index}`}
+                      className="w-20 h-20 object-cover"
+                    />
+                    <IconButton
+                      onClick={() => handleRemoveImage(index)}
+                      size="small"
+                      sx={{
+                        position: "absolute",
+                        top: -5,
+                        right: -5,
+                        backgroundColor: "red",
+                        color: "white",
+                        ":hover": { backgroundColor: "darkred" },
+                      }}
+                    >
+                      <CloseIcon />
+                    </IconButton>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <Button

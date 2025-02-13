@@ -31,17 +31,38 @@ const StoreBody = ({ className = "", store }) => {
 
   const { cartItems, totalPrice, totalQuantity } = useCart();
 
+  console.log("Cart Details", cartItems);
+
   if (isLoading) {
-    return (
-      <div className={`relative flex flex-col items-center ${className}`}>
-        <p>Loading products...</p>
+    <div className={`relative flex flex-col items-center ${className} `}>
+      <div className="flex flex-col items-center justify-center py-0 px-5 gap-[27px] mt-12 sm:mt-8">
+        <div className="w-full sm:w-[480px] rounded-xl border-gray-300 border-[1px] border-solid box-border flex flex-col items-start justify-center p-5 gap-3">
+          <div className="self-stretch flex flex-col items-center justify-center text-base sm:text-lg">
+            <div className="self-stretch flex flex-row items-center justify-start">
+              <b className="flex-1 tracking-[0.01em] text-h1 text-center sm:text-left">
+                Products
+              </b>
+            </div>
+            <div className="self-stretch flex flex-row items-center justify-start text-sm sm:text-base">
+              <div className="flex-1 tracking-[0.01em] text-rubik">
+                Products
+              </div>
+            </div>
+          </div>
+
+          {isLoading && <p>Loading products...</p>}
+        </div>
       </div>
-    );
+    </div>;
   }
 
   if (error) {
-    return <p className="text-red-500">{error.message}</p>;
+    {
+      error && <p className="text-red-500">{error.message}</p>;
+    }
   }
+
+
 
   return (
     <div className={`relative flex flex-col items-center ${className}`}>

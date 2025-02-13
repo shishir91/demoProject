@@ -2,12 +2,13 @@ import PropTypes from "prop-types";
 import { useCart } from "../../context/CartProvider";
 
 const CartProductComponent = ({ className = "" }) => {
-  const { cartItems, removeItem,updateItemQuantity } = useCart();
+  const { cartItems, removeItem, updateItemQuantity } = useCart();
 
+  console.log(cartItems);
 
-  const handleQuantityChange = (id,change)=>{
-    updateItemQuantity(id,change)
-  }
+  const handleQuantityChange = (id, change) => {
+    updateItemQuantity(id, change);
+  };
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
@@ -25,20 +26,20 @@ const CartProductComponent = ({ className = "" }) => {
             <div className="relative tracking-[0.01em] font-medium">
               {item.productName}
             </div>
-            <b className="relative text-sm tracking-[0.01em]">
-              Rs 
-            </b>
+            <b className="relative text-sm tracking-[0.01em]">Rs</b>
             <div className="rounded-3xs border-gray-300 border-[1px] border-solid box-border h-[41px] flex flex-row items-center justify-center p-2.5 gap-[25px] text-smi">
               <button
                 className="cursor-pointer bg-transparent text-sm font-poppins text-black"
-                onClick={() => handleQuantityChange(item.id,1)}
+                onClick={() => handleQuantityChange(item.id, 1)}
               >
                 +
               </button>
-              <div className="relative tracking-[0.01em]">{item.productQuantity}</div>
+              <div className="relative tracking-[0.01em]">
+                {item.productQuantity}
+              </div>
               <button
                 className="cursor-pointer bg-transparent text-sm font-poppins text-black"
-                onClick={() => handleQuantityChange(item.id,-1) }
+                onClick={() => handleQuantityChange(item.id, -1)}
               >
                 -
               </button>

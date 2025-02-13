@@ -113,7 +113,8 @@ const Customers = () => {
       );
       if (response.data.success) {
         toast.success(response.data.message, {
-          duration: 2000,
+          duration: 1000,
+          onAutoClose: () => window.location.reload(),
         });
       } else {
         toast.error(response.data.message, {
@@ -122,8 +123,7 @@ const Customers = () => {
       }
     } catch (error) {
       console.log(error);
-
-      toast.error(error, {
+      toast.error(error.message, {
         duration: 2000,
       });
     } finally {
@@ -152,7 +152,7 @@ const Customers = () => {
     } catch (error) {
       console.log(error);
 
-      toast.error(error, {
+      toast.error(error.message, {
         duration: 2000,
       });
     } finally {
@@ -209,7 +209,7 @@ const Customers = () => {
       </div>
 
       {/* User Table */}
-      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-hidden">
+      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto">
         <table className="w-full table-auto">
           <thead className="bg-stone-700">
             <tr>
@@ -231,7 +231,7 @@ const Customers = () => {
                 <td className="px-4 py-2 text-gray-300">{user.phone}</td>
                 <td className="px-4 py-2 text-gray-300">
                   <button
-                    className="bg-green-800 p-1 px-4 rounded-lg"
+                    className="bg-green-800 p-1 px-4 rounded-lg text-white"
                     onClick={() => {
                       setPointsModal(true);
                       setStoreID(user.store);
@@ -347,9 +347,9 @@ const Customers = () => {
                   type="number"
                   name="phone"
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  disabled
                   required
-                  className="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-200"
+                  className="w-full px-4 py-2 border rounded-md text-gray-500 focus:outline-none focus:ring focus:ring-blue-200"
                 />
               </div>
               <div className="mb-4">

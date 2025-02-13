@@ -54,17 +54,6 @@ class SmsController {
       return res.status(400).json({ error: "Phone number is required" });
     }
 
-    console.log(
-      token,
-      to,
-      from,
-      message,
-      points,
-      storeName,
-      customerName,
-      reward
-    );
-
     const formattedMessage = message
       .replace("[points_earned]", points)
       .replace("[store_name]", storeName)
@@ -73,10 +62,17 @@ class SmsController {
 
     const payload = {
       token,
-      from,
-      to,
+      from: "TheAlert",
+      to: String(to),
       text: formattedMessage,
     };
+
+    // const payload = {
+    //   token: process.env.SPARROW_SMS_TOKEN,
+    //   from: "TheAlert",
+    //   to: "9813215178",
+    //   text: `Hello, You received Points.`,
+    // };
 
     try {
       const response = await axios.post(
@@ -95,8 +91,6 @@ class SmsController {
         return { error: "SMS API response error", details: response.data };
       }
     } catch (error) {
-      console.log(error.response);
-
       return {
         error: "Error sending SMS",
         details: error.response ? error.response.data : error.message,

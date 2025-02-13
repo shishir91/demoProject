@@ -181,7 +181,7 @@ class ProductController {
   }
   async getProduct(req, res) {
     const { storeUrl } = req.params;
-    console.log('Sending products');
+    console.log("Sending products");
     try {
       const checkStore = await storeModel.findOne({ url: storeUrl });
       if (checkStore) {
@@ -212,9 +212,9 @@ class ProductController {
           }
 
           if (!products || products.length === 0) {
-            return res.status(404).json({ message: "No products found" });
+            return res.json({ success: false, message: "No products found" });
           }
-          return res.status(200).json(products);
+          return res.json({ success: true, products });
         } catch (error) {
           console.error(error);
           return res.status(500).json({ message: "Server Error" });

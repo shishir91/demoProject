@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Home, UserPlus, Gift, Menu, X } from "lucide-react";
+import { Home, UserPlus, Gift, Menu, X, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const StoreSidebar = (store) => {
   const [isOpen, setIsOpen] = useState(false);
-  console.log(store.store);
 
   return (
     <>
@@ -45,13 +44,13 @@ const StoreSidebar = (store) => {
               </Link>
             </li>
             <li className="mb-4">
-              <a
-                href="#"
+              <Link
+                to="/store/customers"
                 className="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-gray-700 transition-all"
               >
-                <UserPlus size={20} />
-                <span>New Customer</span>
-              </a>
+                <Users size={20} />
+                <span>Customers</span>
+              </Link>
             </li>
             <li>
               <Link

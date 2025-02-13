@@ -81,7 +81,7 @@ const Dashboard = () => {
       </div>
 
       {/* User Table */}
-      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-hidden">
+      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto">
         <table className="w-full table-auto">
           <thead className="bg-stone-700">
             <tr>

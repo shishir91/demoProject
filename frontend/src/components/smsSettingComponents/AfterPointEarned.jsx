@@ -4,8 +4,6 @@ import { toast } from "sonner";
 import config from "../../api/config";
 
 const AfterPointEarned = (state) => {
-  console.log(state);
-
   const [from, setFrom] = useState(state.smsMessage.from);
   const [message, setMessage] = useState(state.smsMessage.message);
   const token = localStorage.getItem("token");
@@ -50,6 +48,11 @@ const AfterPointEarned = (state) => {
             name="from"
             value={from}
             onChange={(e) => setFrom(e.target.value)}
+            onKeyDown={(e) => {
+              if (!/^[a-zA-Z0-9]$/.test(e.key) && e.key !== "Backspace") {
+                e.preventDefault();
+              }
+            }}
             required
             className="my-2 block w-full px-4 py-2 bg-stone-900 border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-stone-500 pr-10"
           />
