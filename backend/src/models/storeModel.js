@@ -17,6 +17,7 @@ const loyaltySchema = new mongoose.Schema({
 });
 
 const ecommerceSchema = new mongoose.Schema({
+  status:{type:Boolean,default:true},
   whatsappNumber:{type:String,required:true},
   socials:[
     {
@@ -31,7 +32,7 @@ const ecommerceSchema = new mongoose.Schema({
 const servicesSchema = new mongoose.Schema({
   loyalty: { type: Boolean, default: true },
   reservation: { type: Boolean, default: false },
-  ecommerce: { type: Boolean, default: false },
+  ecommerce: { type: ecommerceSchema, default: () => ({}) },
   games: { type: Boolean, default: false },
   share: { type: Boolean, default: false },
 });
