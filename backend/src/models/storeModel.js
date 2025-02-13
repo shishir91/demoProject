@@ -15,10 +15,23 @@ const loyaltySchema = new mongoose.Schema({
   stamp: { type: String },
   customStamp: { type: String },
 });
+
+const ecommerceSchema = new mongoose.Schema({
+  whatsappNumber:{type:String,required:true},
+  socials:[
+    {
+      tiktokUrl:{type:String},
+      instagramUrl:{type:String},
+      facebookUrl:{type:String}
+    }
+  ],
+  storeBanner:{type:String}
+})
+
 const servicesSchema = new mongoose.Schema({
   loyalty: { type: Boolean, default: true },
   reservation: { type: Boolean, default: false },
-  catalogue: { type: Boolean, default: false },
+  ecommerce: { type: Boolean, default: false },
   games: { type: Boolean, default: false },
   share: { type: Boolean, default: false },
 });
