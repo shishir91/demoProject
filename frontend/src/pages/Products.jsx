@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import { Link } from "react-router-dom";
 import api from "../api/config";
 import { toast } from "sonner";
-// import { Filter } from 'lucide-react';
 import ProductFilter from "../components/ProductFilter";
 import ProductCard from "../components/ProductCard";
+
 export default function Products() {
   const [stores, setStores] = useState([]);
   const [storeURL, setStoreURL] = useState("");
@@ -13,6 +13,7 @@ export default function Products() {
   const [products, setProducts] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filter, setFilter] = useState("");
+  const [storeDescription, setStoreDescription] = useState("");
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -44,14 +45,12 @@ export default function Products() {
         const response = await api.get(`/product/getProducts/${storeURL}`, {
           headers: { token },
         });
-        if (response.data.success) {
-          setProducts(response.data.products);
-          setFilteredProducts(response.data.products);
-        } else {
-          toast.error(response.data.message, { duration: 2000 });
-          setProducts([]);
-          setFilteredProducts([]);
-        }
+
+        if (response.data) {
+          setProducts(response.data);
+          setFilteredProducts(response.data);
+
+      
       } catch (error) {
         console.error(error);
         toast.error(error.message, { duration: 2000 });
@@ -71,20 +70,16 @@ export default function Products() {
     }
   }, [filter, products]);
 
+  const handleSaveDescription = () => {
+    // Handle saving the description (e.g., send to API or update store data)
+    toast.success("Store description saved!", { duration: 2000 });
+  };
+
   return (
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold text-gray-200">Products List</h1>
-        <div className="flex items-center gap-4 w-full md:w-auto">
-          {/* Responsive Button */}
-          <Link to="/addProducts" className="ml-auto sm:ml-0">
-            <Button variant="contained" color="success">
-              <span className="hidden sm:block">+ Add Products</span>
-              <span className="block sm:hidden">+</span>
-            </Button>
-          </Link>
-        </div>
+        <h1 className="text-xl font-bold text-gray-200">MyEcommerce</h1>
         <div className="w-19">
           <div className="flex items-center gap-4 w-full md:w-auto">
             <div className="text-gray-400">Store:</div>
@@ -96,7 +91,7 @@ export default function Products() {
                   setStoreURL(e.target.value);
                   setStoreId(selectedOption.getAttribute("data-id"));
                 }}
-                className="w-full px-2 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
+                className="w-32 px-2 py-2 rounded-lg bg-stone-900 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
               >
                 <option disabled selected>
                   Select Store
@@ -111,22 +106,55 @@ export default function Products() {
           </div>
         </div>
       </div>
-      <div>
-        {/* <Filter /> */}
-        <ProductFilter onFilterChange={setFilter} storeId={storeId} />
-        <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filteredProducts.length > 0 ? (
-            filteredProducts.map((product) => (
-              <div key={product._id} className="aspect-square">
-                <ProductCard product={product} />
-              </div>
-            ))
-          ) : (
-            <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
-              No items found in this category.
-            </div>
-          )}
+
+      {/* Store Description */}
+      <div className="mb-6">
+        <div className="flex flex-col gap-4 mb-4">
+          {/* Store Description Form */}
+          <textarea
+            value={storeDescription}
+            onChange={(e) => setStoreDescription(e.target.value)}
+            placeholder="Add store description..."
+            className="w-full p-2 rounded-lg bg-stone-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
+            rows="4"
+          />
+
+          {/* Save Button */}
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handleSaveDescription}
+            className="w-full"
+          >
+            Save Description
+          </Button>
         </div>
+      </div>
+
+      {/* Product Filter and Add Products Button */}
+      <div className="flex items-center gap-4 mb-6">
+        <ProductFilter onFilterChange={setFilter} storeId={storeId} />
+        <Link to="/addProducts" className="ml-auto sm:ml-0">
+          <Button variant="contained" color="success">
+            <span className="hidden sm:block">+ Add Products</span>
+            <span className="block sm:hidden">+</span>
+          </Button>
+        </Link>
+      </div>
+
+      {/* Product Cards */}
+      <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map((product) => (
+            <div key={product._id}>
+              <ProductCard product={product} />
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
+            No items found in this category.
+          </div>
+        )}
       </div>
     </div>
   );

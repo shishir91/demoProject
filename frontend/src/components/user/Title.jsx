@@ -6,7 +6,7 @@ const Title = ({ className = "" , logo}) => {
     <div
       className={`self-stretch [filter:drop-shadow(0px_2px_7.1px_rgba(0,_0,_0,_0.05))] border-gray-400 border-b-[1px] border-solid box-border h-[273px] flex flex-col items-start justify-start pt-0 px-5 pb-2.5 gap-[27px] text-center text-11xl1 text-black font-poppins ${className}`}
     >
-      <div className="self-stretch flex flex-row items-center justify-end gap-5">
+      <div className="self-stretch flex flex-row items-center justify-end gap-5 mt-2">
         <button className="cursor-pointer [border:none] p-0 bg-[transparent] w-5 relative h-5">
           <img
             className="absolute top-[0px] left-[0px] w-5 h-5"

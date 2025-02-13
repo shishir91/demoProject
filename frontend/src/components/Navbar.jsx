@@ -28,7 +28,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between bg-stone-800 px-6 py-4 shadow-md sticky top-0">
+    <nav className="flex items-center justify-between bg-stone-800 px-6 py-4 shadow-md sticky top-0 z-10">
       {/* Logo */}
       <div className="flex items-center space-x-2">
         <img src={logo} alt="Samparka Logo" className="h-8" />

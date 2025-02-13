@@ -27,6 +27,7 @@ import Products from "./pages/Products";
 import AddProducts from "./pages/AddProducts";
 import ConfigSMS from "./pages/ConfigSMS";
 import SMSSetting from "./pages/SMSSetting";
+import EcomForm from "./pages/EcomForm";
 
 const MainApp = () => {
   const [authState, setAuthState] = useState({
@@ -230,6 +231,15 @@ const MainApp = () => {
               <Products />
             </ProtectedRoute>
           }
+        />
+        <Route
+        path="/ecomForm"
+        element={
+          <ProtectedRoute>
+            <Sidebar/>
+            <EcomForm/>
+          </ProtectedRoute>
+        }
         />
         <Route
           path="/addProducts"
