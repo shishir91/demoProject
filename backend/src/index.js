@@ -25,7 +25,7 @@ const manifestRoute = require("./routes/manifestRoute");
 const storeModel = require("./models/storeModel");
 const rewardModel = require("./models/rewardModel");
 const productRoute = require("./routes/productRoute");
-
+const ecomRoute = require("./routes/ecomRoute");
 const app = express();
 
 app.use(express.json());
@@ -71,6 +71,7 @@ app.use("/store", storeRoute);
 app.use("/reward", rewardRoute);
 app.use("/customer", customerRoute);
 app.use("/product", productRoute);
+app.use("/ecom",ecomRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Running...." + process.env.CLIENT_ORIGIN);

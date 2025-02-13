@@ -1,9 +1,11 @@
 import React, { useState, useRef } from "react";
 import { TextField, Button, Typography, Box, IconButton } from "@mui/material";
 import { Close as CloseIcon } from "@mui/icons-material";
+import api from "../api/config";
 
 export default function EcomForm() {
   // State variables for each input field
+  const [storeName, setStoreName] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [storeDescription, setStoreDescription] = useState("");
   const [instagramUrl, setInstagramUrl] = useState("");
@@ -24,22 +26,45 @@ export default function EcomForm() {
     fileInputRef.current.value = ""; // Clear the file input value
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault(); // Prevent form from reloading the page on submit
+  
+    const formData = new FormData();
+  formData.append("storeName", storeName);
+  formData.append("whatsappNumber", whatsappNumber);
+  formData.append("storeDescription", storeDescription);
+  formData.append("instagramUrl", instagramUrl);
+  formData.append("facebookUrl", facebookUrl);
+  formData.append("tiktokUrl", tiktokUrl);
 
-    // Log or display the form values
+  // Append the banner image as file data
+  if (fileInputRef.current.files[0]) {
+    formData.append("image", fileInputRef.current.files[0]);
+  }
+    console.log("Ecom Form Data: ",formData);
+
     console.log({
+      status: true, 
+      storeName,
       whatsappNumber,
-      storeDescription,
-      instagramUrl,
-      facebookUrl,
-      tiktokUrl,
-      bannerImage,
+      socials: [
+        {
+          tiktokUrl,
+          instagramUrl,
+          facebookUrl,
+        },
+      ],
+      storeBanner: bannerImage,
     });
-
+    // try{
+    //   const response = await api.post(
+    //     `/`
+    //   )
+    // }
     // Optionally, show the values on the UI after submit
     alert("Form Submitted! Check console for values.");
   };
+  
 
   return (
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl text-whitesmoke-200 flex items-center justify-center overflow-hidden">
@@ -71,6 +96,21 @@ export default function EcomForm() {
             mt: 2,
           }}
         >
+
+
+          <TextField
+            label="Store Name"
+            type="text"
+            variant="outlined"
+            fullWidth
+            value={storeName}
+            onChange={(e) => setStoreName(e.target.value)}
+            InputLabelProps={{ style: { color: "white" } }}
+            InputProps={{
+              style: { color: "white" },
+            }}
+          />
+
           <TextField
             label="WhatsApp Number"
             type="tel"

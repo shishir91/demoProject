@@ -17,15 +17,8 @@ const loyaltySchema = new mongoose.Schema({
 });
 
 const ecommerceSchema = new mongoose.Schema({
-  status:{type:Boolean,default:true},
-  whatsappNumber:{type:String,required:true},
-  socials:[
-    {
-      tiktokUrl:{type:String},
-      instagramUrl:{type:String},
-      facebookUrl:{type:String}
-    }
-  ],
+  status:{type:Boolean,default:false},
+  storeDescription:{type:String},
   storeBanner:{type:String}
 })
 
