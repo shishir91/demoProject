@@ -52,7 +52,7 @@ const Checkout = () => {
       `*Address:* ${address}\n\n` +
       `Please Confirm my order.`;
 
-    const whatsappUrl = `https://wa.me/9849432199?text=${encodeURIComponent(
+    const whatsappUrl = `https://wa.me/9808000693?text=${encodeURIComponent(
       message
     )}`;
     window.open(whatsappUrl, "_blank");
