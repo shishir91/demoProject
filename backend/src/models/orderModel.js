@@ -2,9 +2,16 @@ const mongoose = require('mongoose');
 
 // Define the schema for the Order model
 const orderSchema = new mongoose.Schema({
-  userId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    ref: 'User',  // Reference to the User model
+  userName: { 
+    type: String,
+    required: true 
+  },
+  userPhone: { 
+    type: String,
+    required: true 
+  },
+  userAddress: { 
+    type: String,
     required: true 
   },
   storeId: {
