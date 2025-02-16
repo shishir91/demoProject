@@ -82,7 +82,7 @@ export default function Products() {
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-xl font-bold text-gray-200">MyEcommerce</h1>
+        <h1 className="text-xl font-bold text-gray-200">My E-Store</h1>
         <div className="w-19">
           <div className="flex items-center gap-4 w-full md:w-auto">
             <div className="text-gray-400">Store:</div>
@@ -110,53 +110,59 @@ export default function Products() {
         </div>
       </div>
 
-      {/* Store Description */}
-      <div className="mb-6">
-        <div className="flex flex-col gap-4 mb-4">
-          {/* Store Description Form */}
-          <textarea
-            value={storeDescription}
-            onChange={(e) => setStoreDescription(e.target.value)}
-            placeholder="Add store description..."
-            className="w-full p-2 rounded-lg bg-stone-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
-            rows="4"
-          />
-
-          {/* Save Button */}
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={handleSaveDescription}
-            className="w-full"
-          >
-            Save Description
-          </Button>
-        </div>
-      </div>
-
-      {/* Product Filter and Add Products Button */}
-      <div className="flex items-center gap-4 mb-6">
-        <ProductFilter onFilterChange={setFilter} storeId={storeId} />
-        <Link to="/addProducts" className="ml-auto sm:ml-0">
-          <Button variant="contained" color="success">
-            <span className="hidden sm:block">+ Add Products</span>
-            <span className="block sm:hidden">+</span>
-          </Button>
-        </Link>
-      </div>
-
-      {/* Product Cards */}
-      <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {filteredProducts.length > 0 ? (
-          filteredProducts.map((product) => (
-            <div key={product._id}>
-              <ProductCard product={product} />
-            </div>
-          ))
-        ) : (
+      <div>
+        {storeURL === "" ? (
           <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
-            No items found in this category.
+            Select Your Store
           </div>
+        ) : (
+          <>
+            {/* Store Description */}
+            <div className="mb-6">
+              <div className="flex flex-col gap-4 mb-4">
+                {/* Store Description Form */}
+                <textarea
+                  value={storeDescription}
+                  onChange={(e) => setStoreDescription(e.target.value)}
+                  placeholder="Add store description..."
+                  className="w-full p-2 rounded-lg bg-stone-900 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-700"
+                  rows="4"
+                />
+
+                {/* Save Button */}
+                <button
+                  className="w-full h-10 bg-green-800 rounded-lg text-gray-200 hover:bg-green-900"
+                  onClick={handleSaveDescription}
+                >
+                  Save Description
+                </button>
+              </div>
+            </div>
+            {/* Product Filter and Add Products Button */}
+            <div className="flex items-center gap-4 mb-2">
+              <ProductFilter onFilterChange={setFilter} storeId={storeId} />
+              <Link to="/addProducts" className="ml-auto sm:ml-0">
+                <button className="w-auto h-10 bg-green-800 p-2 rounded-lg text-gray-200">
+                  <span className="hidden sm:block">+ Add Products</span>
+                  <span className="block sm:hidden">+</span>
+                </button>
+              </Link>
+            </div>
+            {/* // Product Cards */}
+            <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {filteredProducts.length > 0 ? (
+                filteredProducts.map((product) => (
+                  <div key={product._id}>
+                    <ProductCard product={product} />
+                  </div>
+                ))
+              ) : (
+                <div className="col-span-full flex justify-center items-center h-64 text-gray-500 text-lg">
+                  No items found in this category.
+                </div>
+              )}
+            </div>
+          </>
         )}
       </div>
     </div>

@@ -151,7 +151,7 @@ const LoyalityCard = (
           </div>
 
           {/* Navigation Buttons */}
-          <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
+          {/* <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
             <div
               className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
               onClick={handleNavigate(navigationPaths.game)}
@@ -167,14 +167,9 @@ const LoyalityCard = (
               className={`w-[70px] rounded-tl-3xs1 rounded-tr-none rounded-br-none rounded-bl-3xs1 ${cardStyle.borderColor} border-[1px] border-solid box-border flex flex-row items-center justify-center py-[9px] px-0 cursor-pointer lg1:gap-2.5`}
               onClick={() => navigate("/products", { state: { ...cardData } })}
             >
-              {/* <img
-                className="w-6 relative h-[22px]"
-                alt="Reservation Icon"
-                src="/icon1.svg"
-              /> */}
               <ShoppingBag className="text-white" />
             </div>
-          </div>
+          </div> */}
         </div>
 
         {/* Reward Modal */}

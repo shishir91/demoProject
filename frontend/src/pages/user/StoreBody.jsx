@@ -7,6 +7,7 @@ import PortalDrawer from "../../components/PortalDrawer";
 import { useCart } from "../../context/CartProvider";
 import api from "../../api/config";
 import { useQuery } from "@tanstack/react-query";
+import { AnimatePresence, motion } from "framer-motion";
 
 const StoreBody = ({ className = "", store }) => {
   const [isFrameOpen, setFrameOpen] = useState(false);
@@ -107,7 +108,7 @@ const StoreBody = ({ className = "", store }) => {
             aria-label="List View"
             onClick={() => setViewType("list")}
           >
-            <img src="./list.svg" alt="" className="w-6 h-6" />
+            <img src="/list.svg" alt="" className="w-6 h-6" />
           </button>
         </div>
       </div>
@@ -133,7 +134,7 @@ const StoreBody = ({ className = "", store }) => {
                   <Link
                     key={item._id}
                     to={`/product/${item._id}`}
-                    className="self-stretch h-auto sm:h-28 flex flex-row items-start justify-start gap-2 cursor-pointer p-2 hover:shadow-md transition"
+                    className="self-stretch h-auto flex flex-row items-start justify-start gap-2 cursor-pointer p-2 hover:shadow-md transition"
                   >
                     {/* Product Info */}
                     <div className="flex-1 flex flex-col items-start justify-start gap-1">
@@ -178,16 +179,17 @@ const StoreBody = ({ className = "", store }) => {
 
         {/* Product Description (Grid View) */}
         {viewType === "grid" && <ProductDescription store={store} />}
-        {/* Cart Modal */}
-        {isFrameOpen && (
-          <PortalDrawer
-            overlayColor="rgba(113, 113, 113, 0.3)"
-            placement="Right"
-            onOutsideClick={closeFrame}
-          >
-            <CartComponent onClose={closeFrame} />
-          </PortalDrawer>
-        )}
+        <AnimatePresence>
+          {isFrameOpen && (
+            <PortalDrawer
+              overlayColor="rgba(113, 113, 113, 0.3)"
+              placement="Right"
+              onOutsideClick={closeFrame}
+            >
+              <CartComponent onClose={closeFrame} />
+            </PortalDrawer>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
