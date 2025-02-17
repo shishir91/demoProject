@@ -3,10 +3,10 @@ import AddAddress from "../../components/user/AddAddress";
 import PortalPopup from "../../components/PortalPopup";
 import { useLocation } from "react-router-dom";
 import api from "../../api/config";
+import { MapPin } from "lucide-react";
 
 const Checkout = (store) => {
   console.log("Store Detailis: ", store);
-import { MapPin } from "lucide-react";
 
   const location = useLocation();
   const [userName, setUserName] = useState("");
@@ -47,13 +47,13 @@ import { MapPin } from "lucide-react";
     }
 
     const orderData = {
-      storeId:store.store._id,
+      storeId: store.store._id,
       userName,
       userPhone: phoneNumber,
       userAddress: address,
       products: items,
     };
-    console.log("order Data: ",orderData);
+    console.log("order Data: ", orderData);
 
     try {
       const response = await api.post("/order", orderData);
@@ -92,11 +92,12 @@ import { MapPin } from "lucide-react";
       <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center py-[60px] px-8 box-border text-left text-mini1 text-black font-poppins">
         <div className="max-w-lg w-full flex flex-col items-center gap-4">
           <div className="w-full text-xl font-bold text-gray-700">Checkout</div>
-          <div className="w-full text-lg font-bold">{store.store.name}</div>
+          <div className="w-full text-lg font-bold">{store?.store?.name}</div>
 
+          {/* Customer Section */}
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Customer*</div>
-            <form>
+            <form onSubmit={(e) => e.preventDefault()}>
               <div className="mb-3">
                 <label className="block mb-1">Name</label>
                 <input
@@ -147,6 +148,7 @@ import { MapPin } from "lucide-react";
             </form>
           </div>
 
+          {/* Items Section */}
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Items</div>
             {items.length > 0 ? (
@@ -175,10 +177,10 @@ import { MapPin } from "lucide-react";
             )}
           </div>
 
+          {/* Delivery Section */}
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Delivery</div>
-            {/* <div>Flat Fee of NPR 100.00</div> */}
-            <div>Your Delivary Address: {address}</div>
+            <div>Your Delivery Address: {address}</div>
             <button
               className="mt-2 w-full border border-gray-300 p-2 rounded-md flex items-center justify-center gap-2"
               onClick={openAddAddressPopup}
@@ -187,18 +189,8 @@ import { MapPin } from "lucide-react";
               <span>Enter Address</span>
             </button>
           </div>
-          {/* <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[7px] px-2.5 text-smi1">
-            <div className="self-stretch bg-white overflow-hidden flex flex-row items-center justify-center py-0 px-2.5 gap-2.5">
-              <img
-                className="w-5 relative h-5 overflow-hidden shrink-0"
-                alt=""
-                src="/utagalt.svg"
-              />
-              <div className="relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                Discount Code
-              </div>
-            </div>
-          </div> */}
+
+          {/* Order Summary Section */}
           <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[15px] px-2.5 text-sm">
             <div className="w-[440px] flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
               <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
@@ -206,55 +198,25 @@ import { MapPin } from "lucide-react";
               </div>
               {items.length > 0 ? (
                 items.map((item, index) => (
-                  <>
-                    <div
-                      key={index}
-                      className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]"
-                    >
-                      <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                        {item.productName}({item.productQuantity})
-                        {console.log("Name: ", item.productName)}
-                      </div>
-                      <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
-                        Rs {item.productTotalPrice}
-                      </div>
+                  <div
+                    key={index}
+                    className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]"
+                  >
+                    <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
+                      {item.productName}({item.productQuantity})
                     </div>
-                    <div className="self-stretch flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]">
-                      {/* <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                        Items({item.productQuantity})
-                      </div> */}
-                      {/* <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
-                        Rs 100.00
-                      </div> */}
+                    <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
+                      Rs {item.productTotalPrice}
                     </div>
-                  </>
+                  </div>
                 ))
               ) : (
                 <div>No Products here</div>
               )}
-
-          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
-            <div className="font-semibold mb-2">Order Summary</div>
-            {items.length > 0 ? (
-              items.map((item, index) => (
-                <div
-                  key={index}
-                  className="flex justify-between border-b border-dashed border-gray-600 py-2"
-                >
-                  <div>
-                    {item.productName} ({item.productQuantity})
-                  </div>
-                  <div>Rs {item.productTotalPrice}</div>
-                </div>
-              ))
-            ) : (
-              <div>No Products here</div>
-            )}
-            {/* <div className="flex justify-between border-b border-dashed border-gray-600 py-2">
-              <div>Discount (10%)</div>
-              <div>Rs 60.00</div>
-            </div> */}
+            </div>
           </div>
+
+          {/* Checkout Button */}
           <div className="flex items-center justify-between bg-black text-white px-6 py-3 rounded-[10px] shadow-lg w-[90%] sm:w-[300px]">
             <button
               onClick={handleCheckout}
@@ -267,6 +229,7 @@ import { MapPin } from "lucide-react";
         </div>
       </div>
 
+      {/* Address Popup */}
       {isAddAddressPopupOpen && (
         <PortalPopup>
           <AddAddress
