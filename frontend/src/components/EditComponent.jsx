@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
+import api from "../api/config"
+import {toast} from "sonner";
 
 export default function EditComponent({ order, onClose }) {
   const [updatedOrder, setUpdatedOrder] = useState({ ...order });
@@ -11,21 +13,39 @@ export default function EditComponent({ order, onClose }) {
   const handleDeleteProduct = (productId) => {
     setUpdatedOrder({
       ...updatedOrder,
-      products: updatedOrder.products.filter((product) => product._id !== productId),
+      products: updatedOrder.products.filter(
+        (product) => product._id !== productId
+      ),
     });
   };
 
   const handleAddProduct = () => {
     setUpdatedOrder({
       ...updatedOrder,
-      products: [...updatedOrder.products, { _id: Date.now(), productName: "", productPrice: "", productQuantity: "", productTotalPrice: "" }],
+      products: [
+        ...updatedOrder.products,
+        {
+          _id: Date.now(),
+          productName: "",
+          productPrice: "",
+          productQuantity: "",
+          productTotalPrice: "",
+        },
+      ],
     });
   };
 
   const handleSubmit = async () => {
     try {
-      console.log("Updating order...", updatedOrder);
-      onClose();
+      const response = await api.put(
+        `/order/update/${updatedOrder._id}`,
+        updatedOrder
+      );
+      if(response.data.success){
+        toast.success("Order updated");
+        onClose();
+      }
+        
     } catch (error) {
       console.error(error);
     }
@@ -44,7 +64,7 @@ export default function EditComponent({ order, onClose }) {
           onChange={handleChange}
           className="border w-full p-2 rounded mb-2"
         />
-        
+
         <label>Customer Phone No</label>
         <input
           type="text"
@@ -53,7 +73,7 @@ export default function EditComponent({ order, onClose }) {
           onChange={handleChange}
           className="border w-full p-2 rounded mb-2"
         />
-        
+
         <label>Customer Address</label>
         <input
           type="text"
@@ -62,7 +82,7 @@ export default function EditComponent({ order, onClose }) {
           onChange={handleChange}
           className="border w-full p-2 rounded mb-2"
         />
-        
+
         <label>Total Price</label>
         <input
           type="text"
@@ -91,7 +111,10 @@ export default function EditComponent({ order, onClose }) {
                 <td className="p-2 border">{product.productQuantity}</td>
                 <td className="p-2 border">{product.productTotalPrice}</td>
                 <td className="p-2 border text-center">
-                  <button onClick={() => handleDeleteProduct(product._id)} className="text-red-500 hover:text-red-700">
+                  <button
+                    onClick={() => handleDeleteProduct(product._id)}
+                    className="text-red-500 hover:text-red-700"
+                  >
                     <Trash2 size={20} />
                   </button>
                 </td>
@@ -99,13 +122,13 @@ export default function EditComponent({ order, onClose }) {
             ))}
           </tbody>
         </table>
-        
-        <button
+
+        {/* <button
           onClick={handleAddProduct}
           className="w-full bg-green-500 text-white py-2 rounded mb-2 hover:bg-green-700"
         >
           Add Product
-        </button>
+        </button> */}
 
         <label>Status</label>
         <select

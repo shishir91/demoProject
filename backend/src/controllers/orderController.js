@@ -117,8 +117,6 @@ class OrderController {
 
   async deleteOrderStatus(req, res) {
     try {
-      
-
       const { orderId } = req.params;
 
       if (!orderId) {
@@ -141,18 +139,40 @@ class OrderController {
     }
   }
 
-  async updateOrderDetails(req,res){
-    try{
-      const {orderId} = req.params;
-      if(!orderId){
+  async updateOrderDetails(req, res) {
+    try {
+      const { orderId } = req.params;
+      const { userName, userAddress, userPhone } = req.body;
+      if (!orderId) {
         return res.status(404).json({
-          success:false,message:"Order Id not found"
-        })
+          success: false,
+          message: "Order Id not found",
+        });
       }
-      
-    }catch(error){
 
-    }
+      if (!userName || !userAddress || !userPhone) {
+        return res.status(400).json({
+          success: false,
+          message: "Update Fields are missing",
+        });
+      }
+
+      const order = await Order.findByIdAndUpdate(orderId, {
+        userName,
+        userAddress,
+        userPhone,
+      });
+      if (!order) {
+        return res.status(404).json({
+          success: true,
+          message: "Order Id isn't valid",
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        message: "Order updated succesfully",
+      });
+    } catch (error) {}
   }
 }
 module.exports = new OrderController();
