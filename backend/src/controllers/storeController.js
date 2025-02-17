@@ -46,7 +46,7 @@ class StoreController {
       const { storeURL } = req.params;
       const store = await storeModel
         .findOne({ url: storeURL })
-        .select("_id name location phone logo url status loyaltyCard");
+        .select("-pin -user -email -pass -smsToken");
       const getObjectParams = {
         Bucket: "samparkabucket",
         Key: store.logo,
@@ -56,11 +56,6 @@ class StoreController {
       store.logo = url;
       if (store && store.status == "active") {
         return res.json({ success: true, message: "Store Available", store });
-        return res.json({
-          success: true,
-          message: "Store Available",
-          storeId: store._id,
-        });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });
       }
@@ -334,6 +329,42 @@ class StoreController {
         message: "Error updating store status",
         error: error.message,
       });
+    }
+  }
+
+  async editStoreServices(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { service } = req.body;
+      if (!service) {
+        return res.status(400).json({ message: "No service data provided" });
+      }
+      // Find the store first
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.status(404).json({ message: "Store not found" });
+      }
+      // Prepare the update object
+      let updateField = {};
+      if (service === "ecommerce") {
+        updateField = {
+          "services.ecommerce.status": !store.services.ecommerce.status,
+        };
+      } else {
+        updateField = {
+          [`services.${service}`]: !store.services[service],
+        };
+      }
+      // Update the store
+      const updatedStore = await storeModel.findByIdAndUpdate(
+        storeID,
+        { $set: updateField },
+        { new: true }
+      );
+      return res.status(200).json(updatedStore);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send(error);
     }
   }
 

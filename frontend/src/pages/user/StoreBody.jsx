@@ -133,7 +133,7 @@ const StoreBody = ({ className = "", store }) => {
                 {products?.products?.map((item) => (
                   <Link
                     key={item._id}
-                    to={`/product/${item._id}`}
+                    to={`/products/${item._id}`}
                     className="self-stretch h-auto flex flex-row items-start justify-start gap-2 cursor-pointer p-2 hover:shadow-md transition"
                   >
                     {/* Product Info */}

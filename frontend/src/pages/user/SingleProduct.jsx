@@ -187,7 +187,7 @@ const SingleProduct = ({ className = "" }) => {
     console.log("Quantity:", quantity);
     console.log("Total Price: Rs", totalPrice);
 
-    navigate("/product/checkout", {
+    navigate("/products/checkout", {
       state: {
         items: [
           {

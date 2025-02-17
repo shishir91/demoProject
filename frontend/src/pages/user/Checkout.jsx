@@ -4,18 +4,13 @@ import PortalPopup from "../../components/PortalPopup";
 import { useLocation } from "react-router-dom";
 import { MapPin } from "lucide-react";
 
-const Checkout = () => {
+const Checkout = (store) => {
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isAddAddressPopupOpen, setAddAddressPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
   const { items, totalPrice } = location.state || { items: [], totalPrice };
-  console.log("Items in checkout: ", items);
-  // console.log(name);
-  // console.log(quantity);
-  console.log("Total Price; ", totalPrice);
-  // console.log(productImage);
 
   // State for custom dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -77,7 +72,7 @@ const Checkout = () => {
       <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center py-[60px] px-8 box-border text-left text-mini1 text-black font-poppins">
         <div className="max-w-lg w-full flex flex-col items-center gap-4">
           <div className="w-full text-xl font-bold text-gray-700">Checkout</div>
-          <div className="w-full text-lg font-bold">Samparka’s Store</div>
+          <div className="w-full text-lg font-bold">{store.store.name}</div>
 
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Customer*</div>
@@ -189,10 +184,10 @@ const Checkout = () => {
             ) : (
               <div>No Products here</div>
             )}
-            <div className="flex justify-between border-b border-dashed border-gray-600 py-2">
+            {/* <div className="flex justify-between border-b border-dashed border-gray-600 py-2">
               <div>Discount (10%)</div>
               <div>Rs 60.00</div>
-            </div>
+            </div> */}
           </div>
           <div className="flex items-center justify-between bg-black text-white px-6 py-3 rounded-[10px] shadow-lg w-[90%] sm:w-[300px]">
             <button

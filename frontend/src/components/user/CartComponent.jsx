@@ -32,7 +32,7 @@ const CartComponent = ({ className = "", onClose }) => {
   }, []);
 
   const handleCheckout = () => {
-    navigate("/product/checkout", {
+    navigate("/products/checkout", {
       state: {
         items: cartItems,
         totalPrice: totalPrice,
