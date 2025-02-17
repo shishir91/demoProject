@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Form from "../../components/Form.jsx";
 import LoadingSpinner from "../../components/LoadingSpinner.jsx";
 import image from "/unnamed.jpg";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const CustomerLogin = (storeURL) => {
   const [formData, setFormData] = useState({
@@ -16,33 +17,40 @@ const CustomerLogin = (storeURL) => {
   });
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
-  const [store, setStore] = useState({});
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+  const subdomain = storeURL.url;
+  const { storeData } = queryClient.getQueryData(["store", subdomain]); // Retrieve cached data
+  const [store, setStore] = useState(storeData);
 
-  const getStore = async () => {
-    setLoading(true);
-    try {
-      const response = await api.get(`/customer/store/${storeURL.url}`);
-      if (response.data.success) {
-        setStore(response.data.store);
-      }
-    } catch (error) {
-      console.log(error);
-      toast.error(error.message, {
-        duration: 2000,
-        
-      });
-    } finally {
-      setLoading(false);
-    }
-  };
+  console.log(storeData);
+
+  if (!storeData) return <p>No store data available</p>;
+
+  // const getStore = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get(`/customer/store/${storeURL.url}`);
+  //     if (response.data.success) {
+  //       setStore(response.data.store);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(error.message, {
+  //       duration: 2000,
+
+  //     });
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   useEffect(() => {
     if (user && token) {
       navigate("/loyality");
     }
-    getStore();
+    // getStore();
   }, []);
 
   const handleChange = (e) => {
@@ -81,7 +89,6 @@ const CustomerLogin = (storeURL) => {
         setLoading(false);
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
@@ -89,7 +96,6 @@ const CustomerLogin = (storeURL) => {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };

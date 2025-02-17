@@ -27,7 +27,6 @@ import Products from "./pages/Products";
 import AddProducts from "./pages/AddProducts";
 import ConfigSMS from "./pages/ConfigSMS";
 import SMSSetting from "./pages/SMSSetting";
-// import EcomForm from "./pages/EcomForm";
 import Orders from "./pages/Orders";
 import Services from "./pages/admin/Services";
 import Checkout from "./pages/user/Checkout";
