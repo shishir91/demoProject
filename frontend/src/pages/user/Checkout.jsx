@@ -5,10 +5,19 @@ import { useLocation } from "react-router-dom";
 import api from "../../api/config";
 import { MapPin } from "lucide-react";
 import DineInComponent from "../../components/user/DineInComponent";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Checkout = (store) => {
-  console.log("Store Detailis: ", store);
+  const host = window.location.hostname.split(".");
+  const sub = host.length > 1 ? host[0] : null;
+  const subdomain = sub;
 
+  console.log("Subdomain : ", subdomain);
+  console.log("Store Detailis: ", store);
+  const queryClient = useQueryClient();
+  const { storeData } = queryClient.getQueryData(["store"]);
+
+  console.log("Store Data: ", storeData);
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -25,6 +34,13 @@ const Checkout = (store) => {
   // State for custom dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [selectedCountryCode, setSelectedCountryCode] = useState("+977");
+  const [orderType, setOrderType] = useState("dineIn");
+  // const [address, setAddress] = useState("");
+  const [extraNotes, setExtraNotes] = useState("");
+
+  const handleOrderTypeChange = (e) => {
+    setOrderType(e.target.value);
+  };
 
   // Toggle dropdown visibility
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -198,66 +214,153 @@ const Checkout = (store) => {
           </div> */}
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Delivery</div>
-            {/* For Retails Based */}
-            {/* <div>Your Delivery Address: {address}</div>
-            <button
-              className="mt-2 w-full border border-gray-300 p-2 rounded-md flex items-center justify-center gap-2"
-              onClick={openAddAddressPopup}
-            >
-              <MapPin className="w-5 h-5" />
-              <span>Enter Address</span>
-            </button> */}
 
+            {storeData?.type == "retail" && (
+              <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
+                <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                  <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                    Enter Address
+                  </div>
+                  <textarea
+                    // value={address}
+                    // onChange={handleAddressChange}
+                    placeholder="Type your address here"
+                    className="border-gray-300  p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                  />
+                </div>
+                <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                  <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                    Add Extra Notes
+                  </div>
+                  <textarea
+                    // value={address}
+                    // onChange={handleAddressChange}
+                    placeholder="Delivery Details"
+                    className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                  />
+                </div>
+                <button
+                  // onClick={handleConfirm}
+                  className="cursor-pointer border-black border-[1px] border-solid py-2.5 px-[3px] bg-darkslategray-300 self-stretch rounded-6xs box-border h-auto flex flex-row items-center justify-center max-w-full sm:h-auto sm:rounded-6xs sm:pl-0 sm:pr-0 sm:box-border"
+                >
+                  <div className="flex-1 relative text-sm tracking-[0.01em] font-semibold font-poppins text-black text-center sm:flex-1 sm:text-sm sm:self-stretch sm:h-auto">
+                    Confirm
+                  </div>
+                </button>
+              </div>
+            )}
             {/* For Food Based */}
-            {/* <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
-              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
-                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-                  Insert Your Table Number
+            {storeData?.type == "food" && (
+              <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
+                <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                  <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                    Select Order Type
+                  </div>
+                  <div className="flex gap-4">
+                    <label>
+                      <input
+                        type="radio"
+                        value="dineIn"
+                        checked={orderType === "dineIn"}
+                        onChange={handleOrderTypeChange}
+                        className="mr-2"
+                      />
+                      Dine In
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        value="delivery"
+                        checked={orderType === "delivery"}
+                        onChange={handleOrderTypeChange}
+                        className="mr-2"
+                      />
+                      Delivery
+                    </label>
+                  </div>
                 </div>
-                <textarea
-                  value={address}
-                  placeholder="1A"
-                  className="border-gray-300  p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
-                />
-              </div>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
-                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-                  Note
-                </div>
-                <textarea
-                  value={address}
-                  placeholder="Add Extra Details"
-                  className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
-                />
-              </div>
-            </div> */}
 
-            {/* For Service Based */}
-            <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
-              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
-                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-                  Insert Date
-                </div>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  min={today} // Prevents selecting a past date
-                  className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
-                />
+                {orderType === "dineIn" ? (
+                  <>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                      <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                        Insert Your Table Number
+                      </div>
+                      <textarea
+                        value={address}
+                        placeholder="Table No."
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                      />
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                      <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                        Note
+                      </div>
+                      <textarea
+                        value={extraNotes}
+                        placeholder="Add Extra Details"
+                        onChange={(e) => setExtraNotes(e.target.value)}
+                        className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                      />
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                      <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                        Enter Address
+                      </div>
+                      <textarea
+                        value={address}
+                        placeholder="Type your address here"
+                        onChange={(e) => setAddress(e.target.value)}
+                        className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                      />
+                    </div>
+                    <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                      <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                        Add Extra Notes
+                      </div>
+                      <textarea
+                        value={extraNotes}
+                        placeholder="Delivery Details"
+                        onChange={(e) => setExtraNotes(e.target.value)}
+                        className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
-              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
-                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-                  Insert Time
+            )}
+
+            {storeData?.type == "service" && (
+              <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
+                <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                  <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                    Insert Date
+                  </div>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    min={today} // Prevents selecting a past date
+                    className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                  />
                 </div>
-                <input
-                  type="time"
-                  value={time}
-                  onChange={(e) => setTime(e.target.value)}
-                  className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
-                />
+                <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                  <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                    Insert Time
+                  </div>
+                  <input
+                    type="time"
+                    value={time}
+                    onChange={(e) => setTime(e.target.value)}
+                    className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Order Summary Section */}
