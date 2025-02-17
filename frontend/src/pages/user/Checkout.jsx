@@ -4,6 +4,7 @@ import PortalPopup from "../../components/PortalPopup";
 import { useLocation } from "react-router-dom";
 import api from "../../api/config";
 import { MapPin } from "lucide-react";
+import DineInComponent from "../../components/user/DineInComponent";
 
 const Checkout = (store) => {
   console.log("Store Detailis: ", store);
@@ -13,6 +14,12 @@ const Checkout = (store) => {
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isAddAddressPopupOpen, setAddAddressPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
+  const [date, setDate] = useState("");
+  const [time, setTime] = useState("");
+
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split("T")[0];
+
   const { items, totalPrice } = location.state || { items: [], totalPrice };
 
   // State for custom dropdown
@@ -178,7 +185,7 @@ const Checkout = (store) => {
           </div>
 
           {/* Delivery Section */}
-          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+          {/* <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Delivery</div>
             <div>Your Delivery Address: {address}</div>
             <button
@@ -188,6 +195,69 @@ const Checkout = (store) => {
               <MapPin className="w-5 h-5" />
               <span>Enter Address</span>
             </button>
+          </div> */}
+          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+            <div className="font-semibold mb-2">Delivery</div>
+            {/* For Retails Based */}
+            {/* <div>Your Delivery Address: {address}</div>
+            <button
+              className="mt-2 w-full border border-gray-300 p-2 rounded-md flex items-center justify-center gap-2"
+              onClick={openAddAddressPopup}
+            >
+              <MapPin className="w-5 h-5" />
+              <span>Enter Address</span>
+            </button> */}
+
+            {/* For Food Based */}
+            {/* <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
+              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                  Insert Your Table Number
+                </div>
+                <textarea
+                  value={address}
+                  placeholder="1A"
+                  className="border-gray-300  p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                />
+              </div>
+              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                  Note
+                </div>
+                <textarea
+                  value={address}
+                  placeholder="Add Extra Details"
+                  className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                />
+              </div>
+            </div> */}
+
+            {/* For Service Based */}
+            <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
+              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                  Insert Date
+                </div>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  min={today} // Prevents selecting a past date
+                  className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
+                />
+              </div>
+              <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                  Insert Time
+                </div>
+                <input
+                  type="time"
+                  value={time}
+                  onChange={(e) => setTime(e.target.value)}
+                  className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
+                />
+              </div>
+            </div>
           </div>
 
           {/* Order Summary Section */}
@@ -232,7 +302,8 @@ const Checkout = (store) => {
       {/* Address Popup */}
       {isAddAddressPopupOpen && (
         <PortalPopup>
-          <AddAddress
+          {/* <AddAddress */}
+          <DineInComponent
             closePopup={closeAddAddressPopup}
             onAddressChange={setAddress}
             address={address}
