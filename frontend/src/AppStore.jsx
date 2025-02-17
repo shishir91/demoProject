@@ -242,7 +242,7 @@ const AppStore = (sub) => {
             path="/product/:productId"
             element={
               <CartProvider>
-                <SingleProduct />
+                <SingleProduct store={storeData} />
               </CartProvider>
             }
           />
@@ -250,7 +250,7 @@ const AppStore = (sub) => {
             path="/product/checkout"
             element={
               <CartProvider>
-                <Checkout />
+                <Checkout store={storeData}/>
               </CartProvider>
             }
           />

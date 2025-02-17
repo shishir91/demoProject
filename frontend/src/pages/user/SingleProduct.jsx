@@ -134,6 +134,7 @@ const SingleProduct = ({ className = "" }) => {
         } else {
           const newItem = {
             productId: product._id,
+            productPrice:product.price,
             productName: product.name,
             productQuantity: quantity,
             productTotalPrice: totalPrice,
@@ -192,7 +193,7 @@ const SingleProduct = ({ className = "" }) => {
       state: {
         items: [
           {
-            id: productId,
+            productId,
             productImage: product.images[0],
             productName: product.name,
             productQuantity: quantity,

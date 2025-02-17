@@ -1,32 +1,36 @@
-const Order = require("../models/orderModel"); // Adjust the path as needed
+const Order = require("../models/orderModel");
+const storeModel = require("../models/storeModel");
 
 class OrderController {
   async makeOrder(req, res) {
     try {
-      const { userId, storeId, products } = req.body;
+      const { userName, userPhone, userAddress, storeId, products } = req.body;
 
-      if (!userId || !storeId || !products || products.length === 0) {
-        return res
-          .status(400)
-          .json({
-            message: "Missing required fields or no products in the order.",
-          });
+      if (
+        !userName ||
+        !userPhone ||
+        !userAddress ||
+        !storeId ||
+        !products ||
+        products.length === 0
+      ) {
+        return res.status(400).json({
+          message: "Missing required fields or no products in the order.",
+        });
       }
 
-      // Calculate subtotal
-      let subTotal = 0;
+      let totalAmount = 0;
       products.forEach((product) => {
-        subTotal += product.quantity * product.price;
+        totalAmount += product.productTotalPrice;
       });
 
-      // Assuming totalAmount includes some additional charges like tax or shipping
-      const totalAmount = subTotal; // You can modify this to include other fees
-
       const newOrder = new Order({
-        userId,
+        userName,
+        userPhone,
+        userAddress,
         storeId,
         products,
-        subTotal,
+
         totalAmount,
         status: "pending",
       });
@@ -42,6 +46,113 @@ class OrderController {
       res.status(500).json({ message: "Internal server error" });
     }
   }
-}
 
+  async getOrder(req, res) {
+    const { storeId } = req.params;
+    try {
+      const checkStore = await storeModel.findOne({ _id: storeId });
+      if (checkStore) {
+        try {
+          const orders = await Order.find({ storeId });
+
+          // No image handling, directly return the orders
+          return res.status(200).json({
+            success: true,
+            message: "Orders retrieved successfully",
+            orders,
+          });
+        } catch (error) {
+          console.error(error);
+          return res.status(500).json({ message: "Error fetching orders" });
+        }
+      } else {
+        return res.status(404).json({ message: "Store not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Error fetching store" });
+    }
+  }
+
+  async updateOrderStatus(req, res) {
+    try {
+      const { storeId } = req.params;
+      const { orderId, status } = req.body;
+
+      if (!orderId || !status) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing required headers" });
+      }
+
+      // Validate status
+      const validStatuses = ["pending", "paid", "failed"];
+      if (!validStatuses.includes(status)) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Invalid status value" });
+      }
+
+      const order = await Order.findByIdAndUpdate(orderId, {
+        status: status,
+      });
+
+      if (!order) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Order not found" });
+      }
+
+      order.status = status;
+      await order.save();
+
+      res
+        .status(200)
+        .json({ success: true, message: `Order marked as ${status}`, order });
+    } catch (error) {
+      console.error("Error updating order status:", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+
+  async deleteOrderStatus(req, res) {
+    try {
+      
+
+      const { orderId } = req.params;
+
+      if (!orderId) {
+        return res
+          .status(400)
+          .json({ success: false, message: "Missing required headers" });
+      }
+      const order = await Order.findByIdAndDelete(orderId);
+      if (!order) {
+        return res
+          .status(404)
+          .json({ success: false, message: "Order Id not found" });
+      }
+      res
+        .status(200)
+        .json({ success: true, message: "Order deleted succesfully" });
+    } catch (error) {
+      console.error("Error deleting order", error);
+      res.status(500).json({ success: false, message: "Server error" });
+    }
+  }
+
+  async updateOrderDetails(req,res){
+    try{
+      const {orderId} = req.params;
+      if(!orderId){
+        return res.status(404).json({
+          success:false,message:"Order Id not found"
+        })
+      }
+      
+    }catch(error){
+
+    }
+  }
+}
 module.exports = new OrderController();

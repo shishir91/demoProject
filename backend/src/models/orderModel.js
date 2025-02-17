@@ -1,61 +1,76 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 // Define the schema for the Order model
 const orderSchema = new mongoose.Schema({
-  userName: { 
+  userName: {
     type: String,
-    required: true 
+    required: true,
   },
-  userPhone: { 
+  userPhone: {
     type: String,
-    required: true 
+    required: true,
   },
-  userAddress: { 
+  userAddress: {
     type: String,
-    required: true 
+    required: true,
   },
   storeId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Store',  // Reference to the Shop model
-    required: true
+    ref: "Store", // Reference to the Shop model
+    required: true,
   },
   products: [
     {
-      itemId: {
+      productId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Product',  // Reference to the Product model
-        required: true
+        ref: "Product", // Reference to the Product model
+        required: true,
       },
-      quantity: {
-        type: Number,
-        required: true
+      productName: {
+        type: String,
+        required: true,
       },
-      price: {
+      productQuantity: {
         type: Number,
-        required: true
-      }
-    }
+        required: true,
+      },
+      productPrice: {
+        type: Number,
+        required: true,
+      },
+      productTotalPrice: {
+        type: Number,
+        required: true,
+      },
+    },
   ],
-  subTotal: {
-    type: Number,
-    required: true
-  },
   totalAmount: {
     type: Number,
-    required: true
+    required: true,
   },
   orderDate: {
     type: Date,
-    default: Date.now  // Automatically set the current date and time when the order is created
+    default: Date.now,
   },
   status: {
     type: String,
-    enum: ['pending', 'paid', 'failed'],  // Enum for order status
-    default: 'pending'
-  }
+    enum: [
+      "pending",
+      "paid",
+      "processing",
+      "shipped",
+      "delivered",
+      "bill_pending",
+      "returned",
+      "refund_processing",
+      "refunded",
+      "failed",
+    ], // Enum for order status
+    default: "pending",
+  },
 });
 
 // Create and export the model
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
 
 module.exports = Order;

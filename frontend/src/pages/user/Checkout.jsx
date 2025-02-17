@@ -2,8 +2,10 @@ import { useState, useCallback } from "react";
 import AddAddress from "../../components/user/AddAddress";
 import PortalPopup from "../../components/PortalPopup";
 import { useLocation } from "react-router-dom";
+import api from "../../api/config";
 
-const Checkout = () => {
+const Checkout = (store) => {
+  console.log("Store Detailis: ", store);
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -24,7 +26,7 @@ const Checkout = () => {
     setAddAddressPopupOpen(false);
   }, []);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!userName || !phoneNumber || !address) {
       alert("Please fill in all required fields!");
       return;
@@ -34,28 +36,45 @@ const Checkout = () => {
       return;
     }
 
-    const orderSummary = items
-      .map(
-        (item, index) =>
-          `*Item ${index + 1}:* ${item.productName}\n*Quantity:* ${
-            item.productQuantity
-          }\n*Price:* Rs ${item.productTotalPrice}\n\n`
-      )
-      .join("");
+    const orderData = {
+      storeId:store.store._id,
+      userName,
+      userPhone: phoneNumber,
+      userAddress: address,
+      products: items,
+    };
+    console.log("order Data: ",orderData);
 
-    const message =
-      `*Order Summary*\n\n${orderSummary}` +
-      `*Total Price:* Rs ${totalPrice}\n\n` +
-      `*Customer Details*\n` +
-      `*Name:* ${userName}\n` +
-      `*Phone:* +977 ${phoneNumber}\n` +
-      `*Address:* ${address}\n\n` +
-      `Please Confirm my order.`;
+    try {
+      const response = await api.post("/order", orderData);
+      console.log("Order created successfully:", response.data);
 
-    const whatsappUrl = `https://wa.me/9808000693?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(whatsappUrl, "_blank");
+      const orderSummary = items
+        .map(
+          (item, index) =>
+            `*Item ${index + 1}:* ${item.productName}\n*Quantity:* ${
+              item.productQuantity
+            }\n*Price:* Rs ${item.productTotalPrice}\n\n`
+        )
+        .join("");
+
+      const message =
+        `*Order Summary*\n\n${orderSummary}` +
+        `*Total Price:* Rs ${totalPrice}\n\n` +
+        `*Customer Details*\n` +
+        `*Name:* ${userName}\n` +
+        `*Phone:* +977 ${phoneNumber}\n` +
+        `*Address:* ${address}\n\n` +
+        `Please Confirm my order.`;
+
+      const whatsappUrl = `https://wa.me/9808000693?text=${encodeURIComponent(
+        message
+      )}`;
+      window.open(whatsappUrl, "_blank");
+    } catch (error) {
+      console.error("Error creating order; ", error);
+      alert("Failed to make order. please try again");
+    }
   };
 
   return (
@@ -140,7 +159,8 @@ const Checkout = () => {
                   <div>
                     <div className="font-medium">{item.productName}</div>
                     <div>Quantity: {item.productQuantity}</div>
-                    <div>Price: Rs {item.productTotalPrice}</div>
+                    <div>Per price: {item.productPrice}</div>
+                    <div>Total Price: Rs {item.productTotalPrice}</div>
                   </div>
                 </div>
               ))
@@ -197,8 +217,11 @@ const Checkout = () => {
               </div>
               {items.length > 0 ? (
                 items.map((item, index) => (
-                 <>
-                    <div  key={index} className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]">
+                  <>
+                    <div
+                      key={index}
+                      className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]"
+                    >
                       <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
                         {item.productName}({item.productQuantity})
                         {console.log("Name: ", item.productName)}
@@ -215,12 +238,10 @@ const Checkout = () => {
                         Rs 100.00
                       </div> */}
                     </div>
-                    </>
+                  </>
                 ))
               ) : (
-                <div>
-                  No Products here
-                </div>
+                <div>No Products here</div>
               )}
 
               <div className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]">
