@@ -27,6 +27,8 @@ import Products from "./pages/Products";
 import AddProducts from "./pages/AddProducts";
 import ConfigSMS from "./pages/ConfigSMS";
 import SMSSetting from "./pages/SMSSetting";
+import EcomForm from "./pages/EcomForm";
+import Orders from "./pages/Orders";
 import Services from "./pages/admin/Services";
 
 const MainApp = () => {
@@ -243,6 +245,7 @@ const MainApp = () => {
             </ProtectedRoute>
           }
         />
+
         {/* <Route
         path="/ecomForm"
         element={
@@ -261,6 +264,16 @@ const MainApp = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/orders"
+          element={
+            <ProtectedRoute>
+              <Sidebar />
+              <Orders />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<PoweredBySamparka />} />
       </Routes>
     </Router>

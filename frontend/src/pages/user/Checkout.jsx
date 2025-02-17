@@ -2,9 +2,12 @@ import { useState, useCallback } from "react";
 import AddAddress from "../../components/user/AddAddress";
 import PortalPopup from "../../components/PortalPopup";
 import { useLocation } from "react-router-dom";
-import { MapPin } from "lucide-react";
+import api from "../../api/config";
 
 const Checkout = (store) => {
+  console.log("Store Detailis: ", store);
+import { MapPin } from "lucide-react";
+
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -33,7 +36,7 @@ const Checkout = (store) => {
     setAddAddressPopupOpen(false);
   }, []);
 
-  const handleCheckout = () => {
+  const handleCheckout = async () => {
     if (!userName || !phoneNumber || !address) {
       alert("Please fill in all required fields!");
       return;
@@ -43,28 +46,45 @@ const Checkout = (store) => {
       return;
     }
 
-    const orderSummary = items
-      .map(
-        (item, index) =>
-          `*Item ${index + 1}:* ${item.productName}\n*Quantity:* ${
-            item.productQuantity
-          }\n*Price:* Rs ${item.productTotalPrice}\n\n`
-      )
-      .join("");
+    const orderData = {
+      storeId:store.store._id,
+      userName,
+      userPhone: phoneNumber,
+      userAddress: address,
+      products: items,
+    };
+    console.log("order Data: ",orderData);
 
-    const message =
-      `*Order Summary*\n\n${orderSummary}` +
-      `*Total Price:* Rs ${totalPrice}\n\n` +
-      `*Customer Details*\n` +
-      `*Name:* ${userName}\n` +
-      `*Phone:* +977 ${phoneNumber}\n` +
-      `*Address:* ${address}\n\n` +
-      `Please Confirm my order.`;
+    try {
+      const response = await api.post("/order", orderData);
+      console.log("Order created successfully:", response.data);
 
-    const whatsappUrl = `https://wa.me/9849432199?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(whatsappUrl, "_blank");
+      const orderSummary = items
+        .map(
+          (item, index) =>
+            `*Item ${index + 1}:* ${item.productName}\n*Quantity:* ${
+              item.productQuantity
+            }\n*Price:* Rs ${item.productTotalPrice}\n\n`
+        )
+        .join("");
+
+      const message =
+        `*Order Summary*\n\n${orderSummary}` +
+        `*Total Price:* Rs ${totalPrice}\n\n` +
+        `*Customer Details*\n` +
+        `*Name:* ${userName}\n` +
+        `*Phone:* +977 ${phoneNumber}\n` +
+        `*Address:* ${address}\n\n` +
+        `Please Confirm my order.`;
+
+      const whatsappUrl = `https://wa.me/9808000693?text=${encodeURIComponent(
+        message
+      )}`;
+      window.open(whatsappUrl, "_blank");
+    } catch (error) {
+      console.error("Error creating order; ", error);
+      alert("Failed to make order. please try again");
+    }
   };
 
   return (
@@ -143,7 +163,8 @@ const Checkout = (store) => {
                   <div>
                     <div className="font-medium">{item.productName}</div>
                     <div>Quantity: {item.productQuantity}</div>
-                    <div>Price: Rs {item.productTotalPrice}</div>
+                    <div>Per price: {item.productPrice}</div>
+                    <div>Total Price: Rs {item.productTotalPrice}</div>
                   </div>
                 </div>
               ))
@@ -166,6 +187,51 @@ const Checkout = (store) => {
               <span>Enter Address</span>
             </button>
           </div>
+          {/* <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[7px] px-2.5 text-smi1">
+            <div className="self-stretch bg-white overflow-hidden flex flex-row items-center justify-center py-0 px-2.5 gap-2.5">
+              <img
+                className="w-5 relative h-5 overflow-hidden shrink-0"
+                alt=""
+                src="/utagalt.svg"
+              />
+              <div className="relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
+                Discount Code
+              </div>
+            </div>
+          </div> */}
+          <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[15px] px-2.5 text-sm">
+            <div className="w-[440px] flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
+              <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+                Order Summary
+              </div>
+              {items.length > 0 ? (
+                items.map((item, index) => (
+                  <>
+                    <div
+                      key={index}
+                      className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]"
+                    >
+                      <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
+                        {item.productName}({item.productQuantity})
+                        {console.log("Name: ", item.productName)}
+                      </div>
+                      <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
+                        Rs {item.productTotalPrice}
+                      </div>
+                    </div>
+                    <div className="self-stretch flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]">
+                      {/* <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
+                        Items({item.productQuantity})
+                      </div> */}
+                      {/* <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
+                        Rs 100.00
+                      </div> */}
+                    </div>
+                  </>
+                ))
+              ) : (
+                <div>No Products here</div>
+              )}
 
           <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
             <div className="font-semibold mb-2">Order Summary</div>

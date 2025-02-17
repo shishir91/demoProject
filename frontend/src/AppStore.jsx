@@ -229,6 +229,7 @@ const AppStore = (sub) => {
             // </StoreProtectedRoute>
           }
         /> */}
+
           {storeData.services?.ecommerce?.status && (
             <Route path="/products">
               <Route
