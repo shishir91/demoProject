@@ -55,6 +55,7 @@ class StoreController {
       const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
       store.logo = url;
       if (store && store.status == "active") {
+        console.log("Store Available");
         return res.json({ success: true, message: "Store Available", store });
       } else {
         return res.json({ success: false, message: "Store UnAvailable" });

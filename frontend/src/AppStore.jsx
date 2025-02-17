@@ -163,7 +163,7 @@ const AppStore = (sub) => {
   };
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["store", subdomain],
+    queryKey: ["store"],
     queryFn: () => fetchStoreData(subdomain),
     enabled: !!subdomain,
     staleTime: 300000,
