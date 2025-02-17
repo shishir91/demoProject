@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import { useCart } from "../../context/CartProvider";
+import { X } from "lucide-react";
 
 const CartProductComponent = ({ className = "" }) => {
   const { cartItems, removeItem, updateItemQuantity } = useCart();
@@ -14,7 +15,7 @@ const CartProductComponent = ({ className = "" }) => {
     <div className={`flex flex-col gap-4 ${className}`}>
       {cartItems.map((item) => (
         <div
-          key={item.id}
+          key={item.productId}
           className="self-stretch border-gray-400 border-b-[1px] border-solid flex flex-row items-start justify-start p-2.5 gap-[15px] text-left text-base text-black font-poppins lg:self-stretch lg:w-auto"
         >
           <div
@@ -30,7 +31,7 @@ const CartProductComponent = ({ className = "" }) => {
             <div className="rounded-3xs border-gray-300 border-[1px] border-solid box-border h-[41px] flex flex-row items-center justify-center p-2.5 gap-[25px] text-smi">
               <button
                 className="cursor-pointer bg-transparent text-sm font-poppins text-black"
-                onClick={() => handleQuantityChange(item.id, 1)}
+                onClick={() => handleQuantityChange(item.productId, 1)}
               >
                 +
               </button>
@@ -39,17 +40,15 @@ const CartProductComponent = ({ className = "" }) => {
               </div>
               <button
                 className="cursor-pointer bg-transparent text-sm font-poppins text-black"
-                onClick={() => handleQuantityChange(item.id, -1)}
+                onClick={() => handleQuantityChange(item.productId, -1)}
               >
                 -
               </button>
             </div>
           </div>
-          <img
-            className="w-3 h-3 cursor-pointer"
-            alt="Remove"
-            src="/icon2.svg"
-            onClick={() => removeItem(item.id)}
+          <X
+            className="w-5 h-5 cursor-pointer"
+            onClick={() => removeItem(item.productId)}
           />
         </div>
       ))}

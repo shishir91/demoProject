@@ -124,8 +124,7 @@ const SingleProduct = ({ className = "" }) => {
           const updateRequest = store.put(existingItem);
           updateRequest.onsuccess = () => {
             toast.success("Cart updated successfully!", {
-              duration: 1000,
-              onAutoClose: () => window.location.reload(),
+              duration: 2000,
             });
           };
           updateRequest.onerror = (event) => {
@@ -137,6 +136,7 @@ const SingleProduct = ({ className = "" }) => {
             productPrice:product.price,
             productName: product.name,
             productQuantity: quantity,
+            productPrice: pricePerItem,
             productTotalPrice: totalPrice,
             productImage: product.images?.[0] || "",
           };
@@ -146,8 +146,7 @@ const SingleProduct = ({ className = "" }) => {
           const addRequest = store.add(newItem);
           addRequest.onsuccess = () => {
             toast.success("Item added to cart!", {
-              duration: 1000,
-              onAutoClose: () => window.location.reload(),
+              duration: 2000,
             });
           };
           addRequest.onerror = (event) => {
@@ -189,7 +188,7 @@ const SingleProduct = ({ className = "" }) => {
     console.log("Quantity:", quantity);
     console.log("Total Price: Rs", totalPrice);
 
-    navigate("/product/checkout", {
+    navigate("/products/checkout", {
       state: {
         items: [
           {

@@ -6,17 +6,27 @@ import api from "../../api/config";
 
 const Checkout = (store) => {
   console.log("Store Detailis: ", store);
+import { MapPin } from "lucide-react";
+
   const location = useLocation();
   const [userName, setUserName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [isAddAddressPopupOpen, setAddAddressPopupOpen] = useState(false);
   const [address, setAddress] = useState("");
   const { items, totalPrice } = location.state || { items: [], totalPrice };
-  console.log("Items in checkout: ", items);
-  // console.log(name);
-  // console.log(quantity);
-  console.log("Total Price; ", totalPrice);
-  // console.log(productImage);
+
+  // State for custom dropdown
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [selectedCountryCode, setSelectedCountryCode] = useState("+977");
+
+  // Toggle dropdown visibility
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+  // Handle option selection
+  const handleCountryCodeSelect = (code) => {
+    setSelectedCountryCode(code);
+    setIsDropdownOpen(false);
+  };
 
   const openAddAddressPopup = useCallback(() => {
     setAddAddressPopupOpen(true);
@@ -79,58 +89,55 @@ const Checkout = (store) => {
 
   return (
     <>
-      <div className="w-full relative bg-white overflow-hidden flex flex-col items-center justify-center py-[60px] px-0 box-border text-left text-mini1 text-black font-poppins">
-        <div className="w-[480px] flex flex-col items-center justify-center gap-[17px] sm1:self-stretch sm1:w-auto sm1:pl-[30px] sm1:pr-[30px] sm1:box-border">
-          <div className="self-stretch flex flex-col items-start justify-start gap-2.5 text-xl text-gray-700">
-            <div className="w-[480px] bg-white h-[30px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-0 px-2.5 box-border">
-              <b className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                Checkout
-              </b>
-            </div>
-            <div className="w-[480px] bg-white h-[30px] overflow-hidden shrink-0 flex flex-row items-start justify-start py-0 px-2.5 box-border text-black">
-              <b className="w-[1420px] relative tracking-[0.01em] inline-block shrink-0 lg:flex-1 sm1:flex-1">
-                Samparka’s Store
-              </b>
-            </div>
-          </div>
-          <div className="self-stretch rounded-6xs1 border-gray-1000 border-[1px] border-solid flex flex-col items-start justify-start py-5 px-[15px] gap-2.5 text-xs">
-            <div className="self-stretch bg-white overflow-hidden flex flex-row items-start justify-start py-0 px-2.5 text-mini1">
-              <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                Customer*
-              </div>
-            </div>
-            <form action="">
-              <div className="self-stretch bg-white overflow-hidden flex flex-col items-start justify-start py-[7px] px-2.5 gap-[3px]">
-                <div className="relative tracking-[0.01em]">Name</div>
+      <div className="w-full min-h-screen bg-white flex flex-col items-center justify-center py-[60px] px-8 box-border text-left text-mini1 text-black font-poppins">
+        <div className="max-w-lg w-full flex flex-col items-center gap-4">
+          <div className="w-full text-xl font-bold text-gray-700">Checkout</div>
+          <div className="w-full text-lg font-bold">{store.store.name}</div>
+
+          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+            <div className="font-semibold mb-2">Customer*</div>
+            <form>
+              <div className="mb-3">
+                <label className="block mb-1">Name</label>
                 <input
-                  className="border-gray-300 border-[1px] border-solid [outline:none] bg-[transparent] self-stretch rounded-6xs1 flex flex-row items-start justify-start p-2.5"
+                  className="w-full border border-gray-300 p-2 rounded-md"
                   type="text"
-                  id="name"
-                  name="name"
                   placeholder="Your name"
                   value={userName}
                   onChange={(e) => setUserName(e.target.value)}
                   required
                 />
               </div>
-              <div className="self-stretch bg-white overflow-hidden flex flex-col items-start justify-start py-[7px] px-2.5 gap-[3px]">
-                <div className="relative tracking-[0.01em]">
-                  WhatsApp Number
-                </div>
-                <div className="self-stretch flex flex-row items-start justify-start gap-2.5">
-                  {/* <input
-                  className="border-gray-300 border-[1px] border-solid [outline:none] bg-[transparent] w-[65px] rounded-6xs1 box-border flex flex-row items-start justify-start p-2.5"
-                  type="text"
-                /> */}
-                  <span className="bg-gray-200 px-2 py-1 text-sm font-semibold text-gray-700 rounded-l-md">
-                    +977
-                  </span>
+
+              <div className="mb-3">
+                <label className="block mb-1">WhatsApp Number</label>
+                <div className="flex gap-2">
+                  <div className="relative flex-1">
+                    <div
+                      className="border border-gray-300 p-2 rounded-md flex items-center justify-between cursor-pointer"
+                      onClick={toggleDropdown}
+                    >
+                      <span>{selectedCountryCode}</span>
+                      <span>{isDropdownOpen ? "▲" : "▼"}</span>
+                    </div>
+                    {isDropdownOpen && (
+                      <div className="absolute left-0 right-0 bg-white border border-gray-300 mt-1 rounded-md shadow-lg">
+                        {["+977", "+91"].map((code) => (
+                          <div
+                            key={code}
+                            className="px-3 py-2 hover:bg-gray-100 cursor-pointer"
+                            onClick={() => handleCountryCodeSelect(code)}
+                          >
+                            {code}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                   <input
-                    className="border-gray-300 border-[1px] border-solid [outline:none] bg-[transparent] flex-1 rounded-6xs1 flex flex-row items-start justify-start p-2.5"
+                    className="flex-1 border border-gray-300 p-2 rounded-md"
                     type="number"
-                    id="phone"
-                    name="phone"
-                    placeholder="Enter your whatsapp number"
+                    placeholder="Enter your WhatsApp number"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
                     required
@@ -139,22 +146,19 @@ const Checkout = (store) => {
               </div>
             </form>
           </div>
-          <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-start justify-start py-5 px-2.5 gap-2.5">
-            <div className="self-stretch bg-white overflow-hidden flex flex-row items-start justify-start py-0 px-2.5">
-              <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                Items
-              </div>
-            </div>
+
+          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+            <div className="font-semibold mb-2">Items</div>
             {items.length > 0 ? (
               items.map((item, index) => (
                 <div
                   key={index}
-                  className="self-stretch border-gray-300 border-b-[1px] flex items-center gap-4 p-4"
+                  className="flex items-center gap-4 border-b border-gray-300 py-3"
                 >
                   <img
                     src={item.productImage}
                     alt={item.productName}
-                    className="w-20 h-20 object-cover rounded"
+                    className="w-16 h-16 object-cover rounded"
                   />
                   <div>
                     <div className="font-medium">{item.productName}</div>
@@ -170,32 +174,17 @@ const Checkout = (store) => {
               </div>
             )}
           </div>
-          <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-start justify-start py-5 px-2.5 gap-[13px]">
-            <div className="self-stretch bg-white overflow-hidden flex flex-row items-start justify-start py-0 px-2.5">
-              <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                Items
-              </div>
-            </div>
-            <div className="self-stretch border-gray-300 border-b-[1px] border-solid flex flex-row items-start justify-start p-2.5 text-sm lg:self-stretch lg:w-auto">
-              <div className="flex-1 flex flex-col items-start justify-start gap-[5px] sm1:flex-1">
-                <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-                  Delivery
-                </div>
-                <div className="self-stretch relative tracking-[0.01em] whitespace-pre-wrap lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">{`Flat Fee of NPR 100.00`}</div>
-              </div>
-            </div>
+
+          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+            <div className="font-semibold mb-2">Delivery</div>
+            {/* <div>Flat Fee of NPR 100.00</div> */}
+            <div>Your Delivary Address: {address}</div>
             <button
-              className="cursor-pointer border-gray-300 border-[1px] border-solid p-2.5 bg-[transparent] self-stretch rounded-6xs1 flex flex-row items-center justify-center gap-[3px]"
+              className="mt-2 w-full border border-gray-300 p-2 rounded-md flex items-center justify-center gap-2"
               onClick={openAddAddressPopup}
             >
-              <img
-                className="w-5 relative h-[18.8px] overflow-hidden shrink-0"
-                alt=""
-                src="/ulocationpoint.svg"
-              />
-              <div className="relative text-xs tracking-[0.01em] font-poppins text-black text-center">
-                Enter Address
-              </div>
+              <MapPin className="w-5 h-5" />
+              <span>Enter Address</span>
             </button>
           </div>
           {/* <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[7px] px-2.5 text-smi1">
@@ -244,25 +233,37 @@ const Checkout = (store) => {
                 <div>No Products here</div>
               )}
 
-              <div className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]">
-                <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                  Discount(10%)
+          <div className="w-full border border-gray-300 p-4 rounded-md text-sm">
+            <div className="font-semibold mb-2">Order Summary</div>
+            {items.length > 0 ? (
+              items.map((item, index) => (
+                <div
+                  key={index}
+                  className="flex justify-between border-b border-dashed border-gray-600 py-2"
+                >
+                  <div>
+                    {item.productName} ({item.productQuantity})
+                  </div>
+                  <div>Rs {item.productTotalPrice}</div>
                 </div>
-                <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
-                  Rs 60.00
-                </div>
-              </div>
-            </div>
+              ))
+            ) : (
+              <div>No Products here</div>
+            )}
+            {/* <div className="flex justify-between border-b border-dashed border-gray-600 py-2">
+              <div>Discount (10%)</div>
+              <div>Rs 60.00</div>
+            </div> */}
           </div>
-          <button
-            onClick={() => handleCheckout()}
-            className="cursor-pointer border-black border-[1px] border-solid py-2.5 px-[3px] bg-darkslategray-300 self-stretch rounded-6xs box-border h-auto flex flex-row items-center justify-center max-w-full sm:h-auto sm:rounded-6xs sm:pl-0 sm:pr-0 sm:box-border"
-            disabled={!userName || !phoneNumber || !address}
-          >
-            <div className="flex-1 relative text-sm tracking-[0.01em] font-semibold font-poppins text-black text-center sm:flex-1 sm:text-sm sm:self-stretch sm:h-auto">
+          <div className="flex items-center justify-between bg-black text-white px-6 py-3 rounded-[10px] shadow-lg w-[90%] sm:w-[300px]">
+            <button
+              onClick={handleCheckout}
+              className="rounded-md flex-1 text-center font-semibold text-xl sm:text-lg disabled:opacity-50"
+              disabled={!userName || !phoneNumber || !address}
+            >
               Confirm
-            </div>
-          </button>
+            </button>
+          </div>
         </div>
       </div>
 
@@ -271,6 +272,7 @@ const Checkout = (store) => {
           <AddAddress
             closePopup={closeAddAddressPopup}
             onAddressChange={setAddress}
+            address={address}
           />
         </PortalPopup>
       )}

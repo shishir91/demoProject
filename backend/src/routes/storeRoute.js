@@ -29,6 +29,16 @@ router.post(
   upload.single("image"),
   storeController.createStore
 );
+router.put(
+  "/editServices/:storeID",
+  adminMiddleware,
+  storeController.editStoreServices
+);
+router.put(
+  "/editDelivery/:storeID",
+  adminMiddleware,
+  storeController.editDelivery
+);
 
 //USER CONTROL
 router.post("/verifyPIN/:storeURL", storeController.verifyPIN);

@@ -29,6 +29,7 @@ import ConfigSMS from "./pages/ConfigSMS";
 import SMSSetting from "./pages/SMSSetting";
 import EcomForm from "./pages/EcomForm";
 import Orders from "./pages/Orders";
+import Services from "./pages/admin/Services";
 
 const MainApp = () => {
   const [authState, setAuthState] = useState({
@@ -131,6 +132,17 @@ const MainApp = () => {
               </ProtectedRoute>
             }
           />
+          <Route path="services">
+            <Route
+              index
+              element={
+                <ProtectedRoute>
+                  <Sidebar />
+                  <Services />
+                </ProtectedRoute>
+              }
+            />
+          </Route>
           <Route
             path="SMTPConfig"
             element={
@@ -233,15 +245,16 @@ const MainApp = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/ecomForm"
-          element={
-            <ProtectedRoute>
-              <Sidebar />
-              <EcomForm />
-            </ProtectedRoute>
-          }
-        />
+
+        {/* <Route
+        path="/ecomForm"
+        element={
+          <ProtectedRoute>
+            <Sidebar/>
+            <EcomForm/>
+          </ProtectedRoute>
+        }
+        /> */}
         <Route
           path="/addProducts"
           element={

@@ -199,7 +199,7 @@ const AppStore = (sub) => {
             <Route
               index
               element={
-                <LoyalityCard url={subdomain} />
+                <LoyalityCard url={subdomain} store={storeData} />
                 // <StoreProtectedRoute>
                 // </StoreProtectedRoute>
               }
@@ -230,30 +230,34 @@ const AppStore = (sub) => {
           }
         /> */}
 
-          <Route
-            path="/products/"
-            element={
-              <CartProvider>
-                <HomePageStore url={subdomain} store={storeData} />
-              </CartProvider>
-            }
-          />
-          <Route
-            path="/product/:productId"
-            element={
-              <CartProvider>
-                <SingleProduct store={storeData} />
-              </CartProvider>
-            }
-          />
-          <Route
-            path="/product/checkout"
-            element={
-              <CartProvider>
-                <Checkout store={storeData}/>
-              </CartProvider>
-            }
-          />
+          {storeData.services?.ecommerce?.status && (
+            <Route path="/products">
+              <Route
+                index
+                element={
+                  <CartProvider>
+                    <HomePageStore url={subdomain} store={storeData} />
+                  </CartProvider>
+                }
+              />
+              <Route
+                path=":productId"
+                element={
+                  <CartProvider>
+                    <SingleProduct />
+                  </CartProvider>
+                }
+              />
+              <Route
+                path="checkout"
+                element={
+                  <CartProvider>
+                    <Checkout url={subdomain} store={storeData} />
+                  </CartProvider>
+                }
+              />
+            </Route>
+          )}
 
           {/* Catch-all Route */}
           <Route path="*" element={<PoweredBySamparka />} />

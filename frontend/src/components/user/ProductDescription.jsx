@@ -42,7 +42,7 @@ const ProductDescription = ({ className = "", store }) => {
           {products.products?.map((item, index) => (
             <Link
               key={index}
-              to={`/product/${item._id}`}
+              to={`/products/${item._id}`}
               className={`flex flex-col items-center justify-start gap-2 cursor-pointer text-left text-black font-poppins w-full ${className}`}
             >
               <img

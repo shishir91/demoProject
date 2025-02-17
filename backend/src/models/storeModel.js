@@ -1,4 +1,3 @@
-// import mongoose from "mongoose";
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 
@@ -12,15 +11,15 @@ const loyaltySchema = new mongoose.Schema({
   stampColor: { type: String, default: "#22C55E" },
   cardColor: { type: String, default: "#016e49" },
   textColor: { type: String, default: "#ffffff" },
-  stamp: { type: String },
-  customStamp: { type: String },
+  stamp: { type: String, default: "" },
+  customStamp: { type: String, default: "" },
 });
 
 const ecommerceSchema = new mongoose.Schema({
-  status:{type:Boolean,default:false},
-  storeDescription:{type:String},
-  storeBanner:{type:String}
-})
+  status: { type: Boolean, default: false },
+  storeDescription: { type: String },
+  storeBanner: { type: String },
+});
 
 const servicesSchema = new mongoose.Schema({
   loyalty: { type: Boolean, default: true },
@@ -37,12 +36,23 @@ const storeSchema = new mongoose.Schema(
     phone: { type: String, required: true },
     logo: { type: String, required: true },
     url: { type: String, required: true, unique: true },
-    pin: { type: String, default: bcrypt.hashSync("1234", 10) },
+    pin: {
+      type: String,
+      default: function () {
+        return bcrypt.hashSync("1234", 10);
+      },
+    },
     email: { type: String },
     pass: { type: String },
     smsToken: { type: String },
-    loyaltyCard: { type: loyaltySchema, default: () => ({}) },
+    loyaltyCard: { type: Object, default: {} },
     services: { type: servicesSchema, default: () => ({}) },
+    type: {
+      type: String,
+      enum: ["retail", "food", "service"],
+      required: true,
+      default: "retail",
+    },
     status: {
       type: String,
       enum: ["active", "deactive"],
@@ -61,5 +71,4 @@ const storeSchema = new mongoose.Schema(
   }
 );
 
-// export default mongoose.model("Store", storeSchema);
 module.exports = mongoose.model("Store", storeSchema);

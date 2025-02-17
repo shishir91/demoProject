@@ -18,7 +18,7 @@ const Sidebar = () => {
 
   const handleEcomClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
-    navigate("/ecomForm");
+    navigate("/products");
   };
 
   return (
@@ -79,32 +79,39 @@ const Sidebar = () => {
 
           {/* E-Commerce Section */}
           <li>
-            <button
-              onClick={handleEcomClick}
-              className="flex items-center w-full p-2 rounded-lg text-white hover:bg-gray-700 group focus:outline-none"
-            >
-              <ShoppingBasket className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
-              <span className="ms-3 flex-1">E-Commerce</span>
-              {isDropdownOpen ? (
-                <ChevronDown className="transition-transform duration-300" />
-              ) : (
-                <ChevronRight className="transition-transform duration-300" />
-              )}
-            </button>
+            <div className="flex hover:bg-gray-700 rounded-lg hover:text-white">
+              <button
+                onClick={handleEcomClick}
+                className="flex w-full p-2 text-white group focus:outline-none"
+              >
+                <ShoppingBasket className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
+                <span className="ms-3">E-Store</span>
+              </button>
+              <div
+                className="text-gray-400 mt-2"
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              >
+                {isDropdownOpen ? (
+                  <ChevronDown className="transition-transform duration-300 hover:bg-gray-800 rounded-lg" />
+                ) : (
+                  <ChevronRight className="transition-transform duration-300 hover:bg-gray-800 rounded-lg" />
+                )}
+              </div>
+            </div>
             <div
               className={`overflow-hidden transition-[max-height] duration-300 ${
                 isDropdownOpen ? "max-h-40" : "max-h-0"
               }`}
             >
               <ul className="pl-8 mt-2 space-y-2">
-                <li>
+                {/* <li>
                   <Link
                     to="/products"
                     className="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700"
                   >
                     <span>Products</span>
                   </Link>
-                </li>
+                </li> */}
                 <li className="relative">
                   <Link
                     to="/orders"

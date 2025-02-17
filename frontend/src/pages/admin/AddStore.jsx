@@ -67,6 +67,7 @@ const AddStore = () => {
     formDataToSend.append("phone", formData.phone);
     formDataToSend.append("url", formData.url);
     formDataToSend.append("user", formData.user);
+    formDataToSend.append("type", formData.type);
 
     // Append the file (image)
     if (formData.image) {
@@ -74,6 +75,9 @@ const AddStore = () => {
     }
 
     try {
+      if (!formData.type) {
+        return toast.error("All Fields Are Required", { duration: 2000 });
+      }
       const response = await api.post("/store/addStore", formDataToSend, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -83,20 +87,18 @@ const AddStore = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          
+
           onAutoClose: () => navigate("/store"),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -169,6 +171,30 @@ const AddStore = () => {
             />
           </div>
 
+          {/* Phone Number */}
+          <div>
+            <label
+              htmlFor="type"
+              className="block text-sm font-medium text-gray-200"
+            >
+              Type
+            </label>
+            <select
+              required
+              name="type"
+              id="type"
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-2 bg-[#1E1B1A] border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+              <option value="" selected disabled>
+                ---Select-Type---
+              </option>
+              <option value="retail">Retail</option>
+              <option value="food">Food</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+
           {/* Store Logo */}
           <div>
             <label
@@ -232,7 +258,9 @@ const AddStore = () => {
               required
               className="mt-1 block w-full px-4 py-2 bg-[#1E1B1A] border border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-              <option value="">Select User</option>
+              <option value="" selected disabled>
+                Select User
+              </option>
               {users.length > 0 ? (
                 users.map((user) => (
                   <option key={user._id} value={user._id}>

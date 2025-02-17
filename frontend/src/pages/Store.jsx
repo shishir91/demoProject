@@ -11,6 +11,7 @@ import {
   Plus,
   Mail,
   Settings,
+  BadgeCheck,
 } from "lucide-react";
 import Switch from "../components/Switch";
 import { useNavigate } from "react-router-dom";
@@ -216,6 +217,17 @@ const Store = () => {
                         <IdCard className="h-5 w-5 mr-2 text-gray-500" />
                         Loyality Card
                       </button>
+                      {user.role == "admin" && (
+                        <button
+                          onClick={() =>
+                            navigate("/store/services", { state: { store } })
+                          }
+                          className="w-full px-4 py-2 text-left text-gray-700 hover:bg-gray-200 flex items-center"
+                        >
+                          <BadgeCheck className="h-5 w-5 mr-2 text-gray-500" />
+                          Services
+                        </button>
+                      )}
                       <button
                         onClick={() =>
                           navigate("/store/SMTPConfig", {
