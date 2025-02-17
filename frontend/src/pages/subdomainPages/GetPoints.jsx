@@ -4,7 +4,7 @@ import api from "../../api/config";
 import { toast } from "sonner";
 import { CheckCircle } from "lucide-react";
 
-const GetPoints = (store) => {
+const GetPoints = () => {
   const [loading, setLoading] = useState(true);
   const [points, setPoints] = useState(0);
   const { pointsId } = useParams();

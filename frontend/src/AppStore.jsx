@@ -166,7 +166,7 @@ const AppStore = (sub) => {
     queryKey: ["store"],
     queryFn: () => fetchStoreData(subdomain),
     enabled: !!subdomain,
-    staleTime: 300000,
+    staleTime: Infinity,
   });
 
   useEffect(() => {
@@ -218,7 +218,7 @@ const AppStore = (sub) => {
           <Route
             index
             element={
-              <CustomerLogin url={subdomain} />
+              <CustomerLogin />
               // <StorePublicRoute>
               // </StorePublicRoute>
             }
@@ -274,7 +274,7 @@ const AppStore = (sub) => {
             <Route
               index
               element={
-                <LoyalityCard url={subdomain} store={storeData} />
+                <LoyalityCard />
                 // <StoreProtectedRoute>
                 // </StoreProtectedRoute>
               }
@@ -283,7 +283,7 @@ const AppStore = (sub) => {
               path=":pointsId"
               element={
                 <StoreProtectedRoute>
-                  <GetPoints url={subdomain} />
+                  <GetPoints />
                 </StoreProtectedRoute>
               }
             />

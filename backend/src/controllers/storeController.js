@@ -54,6 +54,17 @@ class StoreController {
       const command = new GetObjectCommand(getObjectParams);
       const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
       store.logo = url;
+      if (store.loyaltyCard.customStamp) {
+        const getObjectParams1 = {
+          Bucket: "samparkabucket",
+          Key: store.loyaltyCard.customStamp,
+        };
+        const command1 = new GetObjectCommand(getObjectParams1);
+        const url1 = await getSignedUrl(s3, command1, { expiresIn: 3600 });
+        store.loyaltyCard.customStamp = url1;
+      } else {
+        store.loyaltyCard.customStamp = null; // or set a default value
+      }
       if (store && store.status == "active") {
         console.log("Store Available");
         return res.json({ success: true, message: "Store Available", store });

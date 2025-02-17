@@ -9,6 +9,7 @@ import api from "../api/config";
 import LoadingSpinner from "../components/LoadingSpinner";
 import { toast } from "sonner";
 import { ShoppingBag } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 const LoyalityCard = (
   store,
@@ -28,18 +29,27 @@ const LoyalityCard = (
     borderColor: "border-whitesmoke-100",
   }
 ) => {
+  const queryClient = useQueryClient();
+  const { storeData } = queryClient.getQueryData(["store"]);
+  console.log(storeData);
+  if (!storeData) return <PoweredBySamparka />;
   const greetings = ["Namaste!", "Jwojwolapa!", "Sewaro!", "Tashi Delek!"];
 
   const token = localStorage.getItem("token");
   const [user, setUser] = useState(
     JSON.parse(localStorage.getItem("userInfo"))
   );
-  const [cardData, setCardData] = useState({});
-  const [loading, setLoading] = useState(true);
+  const [cardData, setCardData] = useState({
+    ...storeData.loyaltyCard,
+    store: storeData.name,
+    logo: storeData.logo,
+    location: storeData.location,
+    storeId: storeData._id,
+  });
+  const [loading, setLoading] = useState(false);
   const [isFrameOpen, setFrameOpen] = useState(false);
   const [greeting, setGreeting] = useState(greetings[0]);
   const navigate = useNavigate();
-  const storeData = store.store;
 
   useEffect(() => {
     if (!user || !token) {
@@ -59,29 +69,29 @@ const LoyalityCard = (
       }
     };
 
-    const getStore = async () => {
-      try {
-        const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
-          headers: { token },
-        });
+    // const getStore = async () => {
+    //   try {
+    //     const response = await api.get(`/customer/loyaltyCard/${store.url}`, {
+    //       headers: { token },
+    //     });
 
-        if (response.data.success) {
-          setCardData({
-            ...response.data.store.loyaltyCard,
-            store: response.data.store.name,
-            logo: response.data.store.logo,
-            location: response.data.store.location,
-            storeId: response.data.store._id,
-          });
-        }
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    };
+    //     if (response.data.success) {
+    //       setCardData({
+    //         ...response.data.store.loyaltyCard,
+    //         store: response.data.store.name,
+    //         logo: response.data.store.logo,
+    //         location: response.data.store.location,
+    //         storeId: response.data.store._id,
+    //       });
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
     getCustomerData();
-    getStore();
+    // getStore();
   }, [token]);
 
   useEffect(() => {

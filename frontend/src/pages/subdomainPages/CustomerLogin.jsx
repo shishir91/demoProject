@@ -7,8 +7,9 @@ import Form from "../../components/Form.jsx";
 import LoadingSpinner from "../../components/LoadingSpinner.jsx";
 import image from "/unnamed.jpg";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import PoweredBySamparka from "../../components/PoweredBySamparka.jsx";
 
-const CustomerLogin = (storeURL) => {
+const CustomerLogin = () => {
   const [formData, setFormData] = useState({
     countryCode: "+977",
     phone: "",
@@ -20,15 +21,17 @@ const CustomerLogin = (storeURL) => {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const subdomain = storeURL.url;
-  const { storeData } = queryClient.getQueryData(["store"]); 
-  const [store, setStore] = useState(storeData);
+  const { storeData: store } = queryClient.getQueryData(["store"]);
+  // const [store, setStore] = useState(storeData);
+  // const store = storeData;
 
-  console.log(storeData);
+  console.log(store);
 
-  if (!storeData) return <p>No store data available</p>;
+  if (!store) return <PoweredBySamparka />;
 
-  // const getStore = async () => {
+  {
+    /* // const getStore = async () => { */
+  }
   //   setLoading(true);
   //   try {
   //     const response = await api.get(`/customer/store/${storeURL.url}`);
@@ -205,7 +208,7 @@ const CustomerLogin = (storeURL) => {
           src={store.logo}
         />
         <div className="font-poppins tracking-[0.01em] text-mini1 sm:text-sm md:text-sm lg:text-sm xl:text-sm w-full text-center mt-2">
-          Welcome to my store
+          Welcome to {store.name}
         </div>
       </div>
 
