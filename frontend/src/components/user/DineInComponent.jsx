@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
-const AddAddress = ({
+const DineInComponent = ({
   className = "",
   closePopup,
   onAddressChange,
@@ -25,23 +25,23 @@ const AddAddress = ({
       <div className="self-stretch rounded-6xs flex flex-col items-center justify-end py-[15px] px-2.5 gap-[13px] z-[1]">
         <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
           <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-            Enter Address
+            Insert Your Table Number
           </div>
           <textarea
             value={address}
             onChange={handleAddressChange}
-            placeholder="Type your address here"
+            placeholder="1A"
             className="border-gray-300  p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
           />
         </div>
         <div className="self-stretch flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
           <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
-            Add Extra Notes
+            Note
           </div>
           <textarea
             value={address}
             onChange={handleAddressChange}
-            placeholder="Delivery Details"
+            placeholder="Add Extra Details"
             className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
           />
         </div>
@@ -58,10 +58,10 @@ const AddAddress = ({
   );
 };
 
-AddAddress.propTypes = {
+DineInComponent.propTypes = {
   className: PropTypes.string,
   closePopup: PropTypes.func,
   onAddressChange: PropTypes.string,
 };
 
-export default AddAddress;
+export default DineInComponent;

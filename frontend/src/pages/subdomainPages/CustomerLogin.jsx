@@ -21,7 +21,7 @@ const CustomerLogin = (storeURL) => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const subdomain = storeURL.url;
-  const { storeData } = queryClient.getQueryData(["store", subdomain]); // Retrieve cached data
+  const { storeData } = queryClient.getQueryData(["store", subdomain]); 
   const [store, setStore] = useState(storeData);
 
   console.log(storeData);
