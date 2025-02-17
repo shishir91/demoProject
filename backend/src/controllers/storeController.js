@@ -368,6 +368,38 @@ class StoreController {
     }
   }
 
+  async editDelivery(req, res) {
+    try {
+      const { storeID } = req.params;
+      const { deliveryType } = req.body;
+      if (!deliveryType) {
+        return res.status(400).json({ message: "Invalid deliveryType data" });
+      }
+
+      const store = await storeModel.findById(storeID);
+      if (!store) {
+        return res.status(404).json({ message: "Store not found" });
+      }
+      let updateField = {};
+      updateField = {
+        [`services.ecommerce.deliveryType.${deliveryType}`]:
+          !store.services.ecommerce.deliveryType[deliveryType],
+      };
+      const updatedStore = await storeModel.findByIdAndUpdate(
+        storeID,
+        { $set: updateField },
+        { new: true }
+      );
+      return res.status(200).json({
+        message: "Delivery options updated successfully",
+        updatedStore,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
+
   // SMTP CONFIG
   async configSMTP(req, res) {
     try {

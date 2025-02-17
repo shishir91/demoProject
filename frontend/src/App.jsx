@@ -4,18 +4,18 @@ import PoweredBySamparka from "./components/PoweredBySamparka";
 import MainApp from "./MainApp";
 import AppStore from "./AppStore";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const App = () => {
   // Initialize the QueryClient instance
   const queryClient = new QueryClient({
-    defaultOptions:{
-      queries:{
-        staleTime:10000
-      }
-    }
+    defaultOptions: {
+      queries: {
+        staleTime: 10000,
+      },
+    },
   });
-  
+
   // Handle subdomain
   const [subdomain, setSubdomain] = useState("");
 

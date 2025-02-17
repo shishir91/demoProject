@@ -15,29 +15,10 @@ const loyaltySchema = new mongoose.Schema({
   customStamp: { type: String, default: "" },
 });
 
-const validDeliveryOptions = {
-  retail: ["pickUp", "delivery"],
-  food: ["dineIn", "delivery", "preOrder"],
-  service: ["booking"],
-};
-
 const ecommerceSchema = new mongoose.Schema({
   status: { type: Boolean, default: false },
   storeDescription: { type: String },
   storeBanner: { type: String },
-  deliveryType: {
-    type: [String],
-    validate: {
-      validator: function (value) {
-        const storeType = this.parent()?.type; // Get the type from parent schema
-        return value.every((option) =>
-          validDeliveryOptions[storeType]?.includes(option)
-        );
-      },
-      message: (props) =>
-        `Invalid deliveryType ${props.value} for business type ${props.instance.type}`,
-    },
-  },
 });
 
 const servicesSchema = new mongoose.Schema({
@@ -64,7 +45,7 @@ const storeSchema = new mongoose.Schema(
     email: { type: String },
     pass: { type: String },
     smsToken: { type: String },
-    loyaltyCard: { type: loyaltySchema, default: () => ({}) },
+    loyaltyCard: { type: Object, default: {} },
     services: { type: servicesSchema, default: () => ({}) },
     type: {
       type: String,

@@ -71,7 +71,7 @@ const Services = () => {
       key: "ecommerce",
       label: "E-Commerce",
       icon: <ShoppingCart />,
-      link: "/store/services/ecommerce",
+      link: "/ecommerce",
     },
     { key: "games", label: "Games", icon: <Gamepad2 />, link: "/games" },
     { key: "share", label: "Share", icon: <Share2 />, link: "/share" },
@@ -108,12 +108,7 @@ const Services = () => {
           {serviceOptions.map(({ key, label, icon, link }) => (
             <div
               key={key}
-              className="flex justify-between cursor-pointer items-center bg-stone-600 p-4 rounded-lg shadow-md hover:bg-stone-500 transition"
-              onClick={
-                key === "ecommerce"
-                  ? () => navigate(link, { state: store })
-                  : undefined
-              }
+              className="flex justify-between items-center bg-stone-600 p-4 rounded-lg shadow-md hover:bg-stone-500 transition"
             >
               <div className="flex items-center gap-3">
                 <span className="text-emerald-400">{icon}</span>

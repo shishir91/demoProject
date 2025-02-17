@@ -152,7 +152,7 @@ const LoyalityCard = (
           </div>
 
           {/* Navigation Buttons */}
-          {storeData.services.ecommerce?.status && (
+          {storeData.services?.ecommerce?.status && (
             <div className="w-full flex flex-row items-center justify-between py-2 px-0 gap-1 lg1:gap-1">
               <div
                 className={`w-[70px] rounded-tl-none rounded-tr-3xs1 rounded-br-3xs1 rounded-bl-none flex flex-row items-center justify-center py-[9px] px-0 lg1:gap-2.5`}
