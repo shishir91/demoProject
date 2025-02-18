@@ -163,7 +163,12 @@ class RewardController {
         const command = new DeleteObjectCommand(deleteObjectParams);
         await s3.send(command);
         const deleteReward = await rewardModel.findByIdAndDelete(rewardID);
-
+        if (deleteReward) {
+          await redemptionModel.deleteMany({ reward: rewardID });
+          console.log("Related redemptions deleted.");
+        } else {
+          console.log("Reward not found.");
+        }
         return res.json({
           success: true,
           message: "Reward Deleted Successfully",

@@ -45,7 +45,7 @@ const storeSchema = new mongoose.Schema(
     email: { type: String },
     pass: { type: String },
     smsToken: { type: String },
-    loyaltyCard: { type: Object, default: {} },
+    loyaltyCard: { type: loyaltySchema, default: () => ({}) },
     services: { type: servicesSchema, default: () => ({}) },
     type: {
       type: String,

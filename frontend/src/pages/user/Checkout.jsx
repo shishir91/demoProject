@@ -222,8 +222,8 @@ const Checkout = (store) => {
                     Enter Address
                   </div>
                   <textarea
-                    // value={address}
-                    // onChange={handleAddressChange}
+                    value={address}
+                    onChange={(e) => setAddress(e.target.value)}
                     placeholder="Type your address here"
                     className="border-gray-300  p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
                   />
@@ -233,20 +233,20 @@ const Checkout = (store) => {
                     Add Extra Notes
                   </div>
                   <textarea
-                    // value={address}
-                    // onChange={handleAddressChange}
+                    value={extraNotes}
+                    onChange={(e) => setExtraNotes(e.target.value)}
                     placeholder="Delivery Details"
                     className="border-gray-300 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border p-2 h-[40px]"
                   />
                 </div>
-                <button
+                {/* <button
                   // onClick={handleConfirm}
                   className="cursor-pointer border-black border-[1px] border-solid py-2.5 px-[3px] bg-darkslategray-300 self-stretch rounded-6xs box-border h-auto flex flex-row items-center justify-center max-w-full sm:h-auto sm:rounded-6xs sm:pl-0 sm:pr-0 sm:box-border"
                 >
                   <div className="flex-1 relative text-sm tracking-[0.01em] font-semibold font-poppins text-black text-center sm:flex-1 sm:text-sm sm:self-stretch sm:h-auto">
                     Confirm
                   </div>
-                </button>
+                </button> */}
               </div>
             )}
             {/* For Food Based */}
@@ -364,27 +364,27 @@ const Checkout = (store) => {
           </div>
 
           {/* Order Summary Section */}
-          <div className="self-stretch rounded-6xs1 border-gray-300 border-[1px] border-solid flex flex-col items-center justify-end py-[15px] px-2.5 text-sm">
-            <div className="w-[440px] flex flex-col items-start justify-start gap-[9px] sm1:self-stretch sm1:w-auto">
-              <div className="self-stretch relative tracking-[0.01em] font-semibold lg:self-stretch lg:w-auto sm1:self-stretch sm1:w-auto">
+          <div className="w-full max-w-[440px] sm:max-w-full rounded-lg border border-gray-300 flex flex-col items-center justify-end py-4 px-3 text-sm">
+            <div className="w-full flex flex-col items-start justify-start gap-2">
+              <div className="w-full text-left font-semibold tracking-wide">
                 Order Summary
               </div>
               {items.length > 0 ? (
                 items.map((item, index) => (
                   <div
                     key={index}
-                    className="self-stretch border-gray-600 border-b-[1px] border-dashed flex flex-row items-start justify-start py-[7px] px-0 gap-[5px]"
+                    className="w-full border-gray-600 border-b border-dashed flex flex-row items-start justify-between py-2"
                   >
-                    <div className="flex-1 relative tracking-[0.01em] lg:flex-1 sm1:flex-1">
-                      {item.productName}({item.productQuantity})
+                    <div className="text-left flex-1">
+                      {item.productName} ({item.productQuantity})
                     </div>
-                    <div className="flex-1 relative tracking-[0.01em] text-right lg:flex-1 sm1:flex-1">
+                    <div className="text-right flex-1">
                       Rs {item.productTotalPrice}
                     </div>
                   </div>
                 ))
               ) : (
-                <div>No Products here</div>
+                <div className="w-full text-center">No Products here</div>
               )}
             </div>
           </div>
@@ -394,7 +394,7 @@ const Checkout = (store) => {
             <button
               onClick={handleCheckout}
               className="rounded-md flex-1 text-center font-semibold text-xl sm:text-lg disabled:opacity-50"
-              disabled={!userName || !phoneNumber || !address}
+              disabled={!userName || !phoneNumber}
             >
               Confirm
             </button>

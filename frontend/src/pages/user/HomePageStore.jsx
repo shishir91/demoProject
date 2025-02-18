@@ -2,9 +2,10 @@ import { useEffect } from "react";
 import Title from "../../components/user/Title";
 import StoreBody from "./StoreBody";
 import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
 
 const HomePageStore = (store) => {
-  console.log(store);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
@@ -37,6 +38,16 @@ const HomePageStore = (store) => {
 
   return (
     <div className="bg-white min-h-screen">
+      <button
+        className="cursor-pointer border-none py-[15px] px-2.5 bg-transparent self-stretch flex items-center justify-start"
+        onClick={() => navigate("/loyality")}
+      >
+        <img
+          className="w-[11.8px] h-[21px] cursor-pointer"
+          alt="Back"
+          src="/vector4.svg"
+        />
+      </button>
       <Title store={store.store} />
       {/* <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
         <img
