@@ -31,7 +31,6 @@ const LoyalityCard = (
 ) => {
   const queryClient = useQueryClient();
   const { storeData } = queryClient.getQueryData(["store"]);
-  console.log(storeData);
   if (!storeData) return <PoweredBySamparka />;
   const greetings = ["Namaste!", "Jwojwolapa!", "Sewaro!", "Tashi Delek!"];
 

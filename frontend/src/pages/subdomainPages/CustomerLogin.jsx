@@ -25,8 +25,6 @@ const CustomerLogin = () => {
   // const [store, setStore] = useState(storeData);
   // const store = storeData;
 
-  console.log(store);
-
   if (!store) return <PoweredBySamparka />;
 
   {

@@ -5,8 +5,6 @@ import { X } from "lucide-react";
 const CartProductComponent = ({ className = "" }) => {
   const { cartItems, removeItem, updateItemQuantity } = useCart();
 
-  console.log(cartItems);
-
   const handleQuantityChange = (id, change) => {
     updateItemQuantity(id, change);
   };

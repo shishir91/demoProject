@@ -12,6 +12,7 @@ import {
   Mail,
   Settings,
   BadgeCheck,
+  Search,
 } from "lucide-react";
 import Switch from "../components/Switch";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ const Store = () => {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
+  const [query, setQuery] = useState("");
 
   const getStoresAdmin = async () => {
     setIsLoading(true);
@@ -131,11 +133,16 @@ const Store = () => {
     }
   };
 
+  const filteredStores = stores.filter((store) =>
+    [store.name, store.location].some((field) =>
+      field.toLowerCase().includes(query.toLowerCase())
+    )
+  );
   return (
     <div className="p-4 sm:ml-60 text-white min-h-screen">
       {isLoading && <LoadingSpinner />}
       {/* Header Section */}
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex items-center gap-4 w-full md:w-auto mb-6">
         <h1 className="text-2xl font-bold text-green-300">
           STORE LIST{" "}
           <span className="text-sm font-normal ml-2">
@@ -151,22 +158,37 @@ const Store = () => {
             Add New Store
           </button>
         )}
+        <div className="relative flex-1 md:w-64">
+          <input
+            type="text"
+            placeholder="Search by Store Name or Location"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="w-full bg-stone-800 text-emerald-400 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+          <Search
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+            size={18}
+          />
+        </div>
       </div>
 
       {/* Store List */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* Create New Store */}
-        <div
-          onClick={() => navigate("/addStore")}
-          className="bg-[#2A2524] p-6 rounded-lg flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-[#1E1B1A] shadow-lg"
-        >
-          <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-4">
-            <Plus size={24} className="text-gray-800" />
+        {user.role == "admin" && (
+          <div
+            onClick={() => navigate("/addStore")}
+            className="bg-stone-800 p-6 rounded-lg flex flex-col items-center justify-center min-h-[200px] cursor-pointer hover:bg-emerald-900 shadow-lg"
+          >
+            <div className="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center mb-4">
+              <Plus size={24} className="text-gray-800" />
+            </div>
+            <span className="text-gray-400">Create New Store</span>
           </div>
-          <span className="text-gray-400">Create New Store</span>
-        </div>
-        {stores &&
-          stores.map((store, index) => (
+        )}
+        {filteredStores.length > 0 ? (
+          filteredStores.map((store, index) => (
             <div
               key={index}
               className="bg-[#2A2524] p-4 rounded-lg shadow-md relative"
@@ -326,7 +348,12 @@ const Store = () => {
                 </div>
               </div>
             </div>
-          ))}
+          ))
+        ) : (
+          <div colSpan="7" className="px-4 py-2 text-center text-gray-400">
+            No results found.
+          </div>
+        )}
       </div>
 
       {/* Model */}

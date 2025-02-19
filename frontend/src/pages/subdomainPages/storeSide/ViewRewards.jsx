@@ -1,4 +1,4 @@
-import { Award } from "lucide-react";
+import { Award, Search } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
 import LoadingSpinner from "../../../components/LoadingSpinner";
@@ -9,6 +9,8 @@ const ViewRewards = (subdomain) => {
   const [rewards, setRewards] = useState([]);
   const [loading, setLoading] = useState(false);
   const token = localStorage.getItem("storeToken");
+  const [query, setQuery] = useState("");
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,13 +60,37 @@ const ViewRewards = (subdomain) => {
     }
   };
 
+  const filteredRewards = rewards.filter((reward) =>
+    [reward.reward.name, reward.customer.name, reward.customer.phone].some(
+      (field) =>
+        String(field || "")
+          .toLowerCase()
+          .includes(query.toLowerCase())
+    )
+  );
+
   return (
     <div className="bg-gray-200 pt-7">
       {loading && <LoadingSpinner />}
       <div className="bg-stone-800 min-h-screen p-4 sm:ml-64 bg rounded rounded-xl">
-        <div className="flex items-center gap-2 text-gray-200 my-2">
-          <Award className="w-6 h-6" />
-          <h1 className="text-xl font-semibold">REDEEMED REWARD LIST</h1>
+        <div className="flex items-center gap-20 text-gray-200 my-2">
+          <div className="flex items-center">
+            <Award className="w-6 h-6" />
+            <h1 className="text-xl font-semibold">REDEEMED REWARD LIST</h1>
+          </div>
+          <div className="relative flex-1 md:w-64">
+            <input
+              type="text"
+              placeholder="Search by Reward Name, Customer Name or Phone Number"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="w-full bg-[#1E1B1A] text-emerald-400 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+            <Search
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+              size={18}
+            />
+          </div>
         </div>
         {/* User Table */}
         <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-hidden mt-4">
@@ -96,8 +122,8 @@ const ViewRewards = (subdomain) => {
                 </tr>
               </thead>
               <tbody>
-                {rewards.length > 0 &&
-                  rewards.map((reward) => (
+                {filteredRewards.length > 0 ? (
+                  filteredRewards.map((reward) => (
                     <tr key={reward._id} className="border-t">
                       <td className="px-4 py-2 text-gray-300">
                         {reward.reward.name}
@@ -146,7 +172,17 @@ const ViewRewards = (subdomain) => {
                         )}
                       </td>
                     </tr>
-                  ))}
+                  ))
+                ) : (
+                  <tr>
+                    <td
+                      colSpan="7"
+                      className="px-4 py-2 text-center text-gray-400"
+                    >
+                      No results found.
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
