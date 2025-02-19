@@ -25,11 +25,12 @@ const Checkout = (store) => {
   const [address, setAddress] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
+  const [tableNo, settableNo] = useState("");
 
   // Get today's date in YYYY-MM-DD format
   const today = new Date().toISOString().split("T")[0];
 
-  const { items, totalPrice } = location.state || { items: [], totalPrice };
+  const { items, totalPrice } = location.state || {};
 
   // State for custom dropdown
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -60,7 +61,7 @@ const Checkout = (store) => {
   }, []);
 
   const handleCheckout = async () => {
-    if (!userName || !phoneNumber || !address) {
+    if (!userName || !phoneNumber) {
       alert("Please fill in all required fields!");
       return;
     }
@@ -75,6 +76,10 @@ const Checkout = (store) => {
       userPhone: phoneNumber,
       userAddress: address,
       products: items,
+      Orderdate:date,
+      time:time,
+      extraNotes,
+      tableNo,
     };
     console.log("order Data: ", orderData);
 
@@ -91,18 +96,36 @@ const Checkout = (store) => {
         )
         .join("");
 
-      const message =
+      let message =
         `*Order Summary*\n\n${orderSummary}` +
         `*Total Price:* Rs ${totalPrice}\n\n` +
         `*Customer Details*\n` +
         `*Name:* ${userName}\n` +
-        `*Phone:* +977 ${phoneNumber}\n` +
-        `*Address:* ${address}\n\n` +
-        `Please Confirm my order.`;
+        `*Phone:* +977 ${phoneNumber}\n`;
+      if (address) {
+        message += `*Address:* ${address}\n`;
+      }
 
-      const whatsappUrl = `https://wa.me/9808000693?text=${encodeURIComponent(
+      if (tableNo) {
+        message += `*Table No:* ${tableNo}\n`;
+      }
+      
+      if(extraNotes){
+        message += `*Extra Details:* ${extraNotes}\n` + `\n*Please Confirm my order.*`;
+      }
+
+      if(date){
+        message += `*Date:* ${date}\n`;
+      }
+
+      if(time){
+        message += `*Time*: ${time}\n`+ `*Please Confirm my Booking*.\n`;
+      }
+
+      const whatsappUrl = `https://wa.me/${storeData.phone}?text=${encodeURIComponent(
         message
       )}`;
+      console.log('Whatsapp URL: ',whatsappUrl);
       window.open(whatsappUrl, "_blank");
     } catch (error) {
       console.error("Error creating order; ", error);
@@ -159,7 +182,7 @@ const Checkout = (store) => {
                     )}
                   </div>
                   <input
-                    className="flex-1 border border-gray-300 p-2 rounded-md"
+                    className="w-full max-w-md border border-gray-300 p-2 rounded-md text-sm sm:text-base"
                     type="number"
                     placeholder="Enter your WhatsApp number"
                     value={phoneNumber}
@@ -287,9 +310,9 @@ const Checkout = (store) => {
                         Insert Your Table Number
                       </div>
                       <textarea
-                        value={address}
+                        value={tableNo}
                         placeholder="Table No."
-                        onChange={(e) => setAddress(e.target.value)}
+                        onChange={(e) => settableNo(e.target.value)}
                         className="border-gray-300 p-2 border-[1px] border-solid bg-[transparent] [outline:none] self-stretch rounded-6xs box-border h-[40px]"
                       />
                     </div>
