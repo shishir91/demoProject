@@ -1,7 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 
-const SearchModal = ({ isOpen, onClose }) => {
+const SearchModal = ({ isOpen, onClose, setSearchKeyword }) => {
   if (!isOpen) return null;
 
   return (
@@ -20,7 +20,8 @@ const SearchModal = ({ isOpen, onClose }) => {
         <input
           type="text"
           placeholder="Type to search..."
-          className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all text-gray-700 placeholder-gray-400"
+          onChange={(e) => setSearchKeyword(e.target.value)}
         />
       </div>
     </div>

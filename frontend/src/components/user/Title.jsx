@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import SearchModal from "../SearchModal";
 import { useState } from "react";
 
-const Title = ({ className = "", store }) => {
+// eslint-disable-next-line react/prop-types
+const Title = ({ className = "", store,setSearchKeyword }) => {
   const navigate = useNavigate("");
   const [isModalOpen, setModalOpen] = useState(false);
 
@@ -67,7 +68,7 @@ const Title = ({ className = "", store }) => {
           </div>
         </button>
         {/* Search Modal */}
-        <SearchModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} />
+        <SearchModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} setSearchKeyword={setSearchKeyword} />
       </div>
     </div>
   );

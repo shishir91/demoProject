@@ -21,7 +21,7 @@ const App = () => {
 
   useEffect(() => {
     const host = window.location.hostname.split(".");
-    const sub = host.length > 1 ? host[0] : null;
+    const sub = host.length > 3 ? host[0] : null;
     setSubdomain(sub);
   }, []);
 

@@ -186,6 +186,7 @@ const SingleProduct = ({ className = "" }) => {
   const handleBuyNow = () => {
     console.log("Buy Now:");
     console.log("Item Name:", product?.name);
+    console.log("item per Price",product);
     console.log("Quantity:", quantity);
     console.log("Total Price: Rs", totalPrice);
 
@@ -197,7 +198,8 @@ const SingleProduct = ({ className = "" }) => {
             productImage: product.images[0],
             productName: product.name,
             productQuantity: quantity,
-            productPrice: totalPrice,
+            productPrice:product.calculatedPrice,
+            productTotalPrice: totalPrice,
           },
         ],
 
