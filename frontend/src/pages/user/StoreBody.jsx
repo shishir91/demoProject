@@ -173,7 +173,12 @@ const StoreBody = ({ className = "", store }) => {
           <div className="self-stretch flex flex-col items-center justify-center text-base sm:text-lg">
             <div className="self-stretch flex flex-row items-center justify-start">
               <b className="flex-1 tracking-[0.01em] text-h1 text-center sm:text-left">
-                Products
+                Products{" "}
+                {selectedCategory && selectedCategory !== "All" && (
+                  <span className="text-gray-500 text-sm">
+                    - {selectedCategory}
+                  </span>
+                )}
               </b>
             </div>
             {/* Product List (List View) */}
@@ -233,7 +238,12 @@ const StoreBody = ({ className = "", store }) => {
         </div>
 
         {/* Product Description (Grid View) */}
-        {viewType === "grid" && <ProductDescription store={store} selectedCategory={selectedCategory} />}
+        {viewType === "grid" && (
+          <ProductDescription
+            store={store}
+            selectedCategory={selectedCategory}
+          />
+        )}
         <AnimatePresence>
           {isFrameOpen && (
             <PortalDrawer

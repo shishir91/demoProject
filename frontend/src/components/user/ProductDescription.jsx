@@ -37,8 +37,12 @@ const ProductDescription = ({ className = "", store, selectedCategory }) => {
   return (
     <div className="w-full max-w-6xl mx-auto rounded-xl border border-gray-300 p-5 text-base1">
       <div className="text-center">
-        <b className="text-xl text-h1">Products</b>
-        <p className="text-gray-500 text-sm">Our Latest Products</p>
+        <b className="text-xl text-h1">Products{" "}</b>
+        {selectedCategory && selectedCategory !== "All" && (
+                  <span className="text-gray-500 text-sm">
+                    - {selectedCategory}
+                  </span>
+                )}
       </div>
       <div className="mt-5">
         {loading && <p>Loading Products...</p>}
