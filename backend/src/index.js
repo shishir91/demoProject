@@ -38,7 +38,11 @@ app.use(
     origin: (origin, callback) => {
       const allowedOrigins =
         process.env.NODE_ENV === "production"
-          ? ["https://samparka.co", "https://www.samparka.co"]
+          ? // ? ["https://samparka.co", "https://www.samparka.co"]
+            [
+              "https://demoproject-api.onrender.com/",
+              "https://www.demoproject-api.onrender.com/",
+            ]
           : [
               "http://localhost:5173", // Direct match
             ];
@@ -72,8 +76,8 @@ app.use("/store", storeRoute);
 app.use("/reward", rewardRoute);
 app.use("/customer", customerRoute);
 app.use("/product", productRoute);
-app.use("/ecom",ecomRoute);
-app.use("/order",orderRoute);
+app.use("/ecom", ecomRoute);
+app.use("/order", orderRoute);
 
 app.get("/", (req, res) => {
   res.send("Server is Running...." + process.env.CLIENT_ORIGIN);
