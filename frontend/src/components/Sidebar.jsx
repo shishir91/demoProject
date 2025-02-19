@@ -10,6 +10,7 @@ import {
   Crown,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
+import { Leaderboard } from "@mui/icons-material";
 
 const Sidebar = () => {
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -74,6 +75,16 @@ const Sidebar = () => {
             >
               <Users className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
               <span className="ms-3">Customers</span>
+            </Link>
+          </li>
+          {/* Leaderboard */}
+          <li>
+            <Link
+              to="/leaderboard"
+              className="flex items-center p-2 rounded-lg text-white hover:bg-gray-700 group"
+            >
+              <Leaderboard className="w-5 h-5 transition duration-75 text-gray-400 group-hover:text-white" />
+              <span className="ms-3">Leaderboard</span>
             </Link>
           </li>
 

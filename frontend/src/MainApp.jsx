@@ -30,6 +30,7 @@ import SMSSetting from "./pages/SMSSetting";
 import Orders from "./pages/Orders";
 import Services from "./pages/admin/Services";
 import Checkout from "./pages/user/Checkout";
+import Leaderboard from "./pages/Leaderboard";
 
 const MainApp = () => {
   const [authState, setAuthState] = useState({
@@ -195,6 +196,15 @@ const MainApp = () => {
             <ProtectedRoute>
               <Sidebar />
               <EditStore />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/leaderboard"
+          element={
+            <ProtectedRoute>
+              <Sidebar />
+              <Leaderboard />
             </ProtectedRoute>
           }
         />
