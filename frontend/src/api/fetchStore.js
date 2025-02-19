@@ -6,19 +6,19 @@ const fetchStoreData = async (subdomain) => {
     }
 
     try {
-      // Fetch manifest.json
-      const manifestRes = await fetch(
-        `${
-          import.meta.env.VITE_SERVER_BASE_URL
-        }manifest.json?subdomain=${subdomain}`
-      );
-      const store = await manifestRes.json();
+      // // Fetch manifest.json
+      // const manifestRes = await fetch(
+      //   `${
+      //     import.meta.env.VITE_SERVER_BASE_URL
+      //   }manifest.json?subdomain=${subdomain}`
+      // );
+      // const store = await manifestRes.json();
 
       // Fetch store details from API
       const response = await api.get(`/store/checkStore/${subdomain}`);
 
       return {
-        manifest: store,
+        // manifest: store,
         storeData: response.data.store,
         success: response.data.success,
       };

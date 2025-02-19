@@ -63,80 +63,71 @@ const AppStore = (sub) => {
     return children;
   };
 
-  // useEffect(() => {
-  //   const checkStore = async () => {
-  //     if (subdomain && subdomain !== "" && subdomain !== "www") {
-  //       try {
-  //         fetch(
-  //           `${
-  //             import.meta.env.VITE_SERVER_BASE_URL
-  //           }manifest.json?subdomain=${subdomain}`
-  //         )
-  //           .then((res) => res.json())
-  //           .then((store) => {
-  //             const blob = new Blob([JSON.stringify(store)], {
-  //               type: "application/json",
-  //             });
-  //             const url = URL.createObjectURL(blob);
+  useEffect(() => {
+    const checkStore = async () => {
+      if (subdomain && subdomain !== "" && subdomain !== "www") {
+        try {
+          fetch(
+            `${
+              import.meta.env.VITE_SERVER_BASE_URL
+            }manifest.json?subdomain=${subdomain}`
+          )
+            .then((res) => res.json())
+            .then((store) => {
+              const blob = new Blob([JSON.stringify(store)], {
+                type: "application/json",
+              });
+              const url = URL.createObjectURL(blob);
 
-  //             const link = document.createElement("link");
-  //             link.rel = "manifest";
-  //             link.href = url;
-  //             document.head.appendChild(link);
+              const link = document.createElement("link");
+              link.rel = "manifest";
+              link.href = url;
+              document.head.appendChild(link);
 
-  //             // Update document title
-  //             document.title = store.name;
+              // Update document title
+              document.title = store.name;
 
-  //             // Add new favicon
-  //             if (store.icons && store.icons.length > 0) {
-  //               // Remove existing favicons
-  //               document
-  //                 .querySelectorAll("link[rel='icon']")
-  //                 .forEach((el) => el.remove());
-  //               const newFavicon = document.createElement("link");
-  //               newFavicon.rel = "icon";
-  //               newFavicon.type = "image/png";
-  //               newFavicon.sizes = "16x16";
-  //               newFavicon.href = store.icons[0].src;
-  //               document.head.appendChild(newFavicon);
-  //             }
+              // Add new favicon
+              if (store.icons && store.icons.length > 0) {
+                // Remove existing favicons
+                document
+                  .querySelectorAll("link[rel='icon']")
+                  .forEach((el) => el.remove());
+                const newFavicon = document.createElement("link");
+                newFavicon.rel = "icon";
+                newFavicon.type = "image/png";
+                newFavicon.sizes = "16x16";
+                newFavicon.href = store.icons[0].src;
+                document.head.appendChild(newFavicon);
+              }
 
-  //             // Dynamically set Apple-specific meta tags
-  //             const metaTitle = document.createElement("meta");
-  //             metaTitle.name = "apple-mobile-web-app-title";
-  //             metaTitle.content = store.name;
+              // Dynamically set Apple-specific meta tags
+              const metaTitle = document.createElement("meta");
+              metaTitle.name = "apple-mobile-web-app-title";
+              metaTitle.content = store.name;
 
-  //             const touchIcon = document.createElement("link");
-  //             touchIcon.rel = "apple-touch-icon";
-  //             touchIcon.href = store.icons[0].src;
+              const touchIcon = document.createElement("link");
+              touchIcon.rel = "apple-touch-icon";
+              touchIcon.href = store.icons[0].src;
 
-  //             document.head.appendChild(metaTitle);
-  //             document.head.appendChild(touchIcon);
+              document.head.appendChild(metaTitle);
+              document.head.appendChild(touchIcon);
 
-  //             console.log(
-  //               "Dynamic Apple meta tags and icon added for:",
-  //               store.name
-  //             );
-  //           })
-  //           .catch((error) =>
-  //             console.error("Failed to fetch store data:", error)
-  //           );
-
-  //         const response = await api.get(`/store/checkStore/${subdomain}`);
-
-  //         if (response.data.success) {
-  //           setStoreStatus(response.data.success);
-  //           setStoreData(response.data.store);
-  //         }
-  //       } catch (error) {
-  //         console.log(error);
-  //       }
-  //     }
-  //   };
-  //   checkStore();
-  // }, [subdomain]);
-
-
+              console.log(
+                "Dynamic Apple meta tags and icon added for:",
+                store.name
+              );
+            })
+            .catch((error) =>
+              console.error("Failed to fetch store data:", error)
+            );
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    checkStore();
+  }, [subdomain]);
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["store"],
@@ -147,36 +138,36 @@ const AppStore = (sub) => {
 
   useEffect(() => {
     if (data) {
-      const { manifest, storeData, success } = data;
+      const { storeData, success } = data;
       setStoreData(storeData);
       setStoreStatus(success);
       // Update document title
-      document.title = manifest.name;
+      //   document.title = manifest.name;
 
-      // Add favicon dynamically
-      if (manifest.icons && manifest.icons.length > 0) {
-        document
-          .querySelectorAll("link[rel='icon']")
-          .forEach((el) => el.remove());
-        const newFavicon = document.createElement("link");
-        newFavicon.rel = "icon";
-        newFavicon.type = "image/png";
-        newFavicon.sizes = "16x16";
-        newFavicon.href = manifest.icons[0].src;
-        document.head.appendChild(newFavicon);
-      }
+      //   // Add favicon dynamically
+      //   if (manifest.icons && manifest.icons.length > 0) {
+      //     document
+      //       .querySelectorAll("link[rel='icon']")
+      //       .forEach((el) => el.remove());
+      //     const newFavicon = document.createElement("link");
+      //     newFavicon.rel = "icon";
+      //     newFavicon.type = "image/png";
+      //     newFavicon.sizes = "16x16";
+      //     newFavicon.href = manifest.icons[0].src;
+      //     document.head.appendChild(newFavicon);
+      //   }
 
-      // Set Apple meta tags
-      const metaTitle = document.createElement("meta");
-      metaTitle.name = "apple-mobile-web-app-title";
-      metaTitle.content = manifest.name;
+      //   // Set Apple meta tags
+      //   const metaTitle = document.createElement("meta");
+      //   metaTitle.name = "apple-mobile-web-app-title";
+      //   metaTitle.content = manifest.name;
 
-      const touchIcon = document.createElement("link");
-      touchIcon.rel = "apple-touch-icon";
-      touchIcon.href = manifest.icons[0].src;
+      //   const touchIcon = document.createElement("link");
+      //   touchIcon.rel = "apple-touch-icon";
+      //   touchIcon.href = manifest.icons[0].src;
 
-      document.head.appendChild(metaTitle);
-      document.head.appendChild(touchIcon);
+      //   document.head.appendChild(metaTitle);
+      //   document.head.appendChild(touchIcon);
     }
   }, [data]);
 

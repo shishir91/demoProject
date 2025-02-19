@@ -2,7 +2,7 @@ import { Coffee, Smile, ThumbsUp } from "lucide-react";
 import React from "react";
 
 const L2 = ({
-  points = 0,
+  points = 2,
   totalShapes = 9,
   stampColor = "#ffffff",
   cardColor = "#ffffff",

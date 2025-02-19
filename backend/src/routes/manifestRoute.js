@@ -5,14 +5,8 @@
 const express = require("express");
 const Store = require("../models/storeModel");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const { GetObjectCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../config/s3Config.js");
 
 const router = express.Router();
 
@@ -27,7 +21,7 @@ router.get("/manifest.json", async (req, res) => {
       return res.status(404).json({ error: "Store not found" });
     }
     const getObjectParams = {
-      Bucket: "samparkabucket",
+      Bucket: "samparka",
       Key: store.logo,
     };
     const command = new GetObjectCommand(getObjectParams);
@@ -38,7 +32,7 @@ router.get("/manifest.json", async (req, res) => {
     const manifest = {
       name: store.name,
       short_name: store.name,
-      start_url: `https://${subdomain}.samparka.co/loyality`, 
+      start_url: `https://${subdomain}.samparka.co/loyality`,
       theme_color: "#ffffff",
       background_color: "#ffffff",
       display: "standalone",

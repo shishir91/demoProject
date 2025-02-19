@@ -23,7 +23,6 @@ const bcrypt = require("bcrypt");
 const validator = require("validator");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const {
-  S3Client,
   GetObjectCommand,
   PutObjectCommand,
   DeleteObjectCommand,
@@ -31,14 +30,7 @@ const {
 const mailSMSModel = require("../models/mailSMSModel.js");
 const messageModel = require("../models/messageModel.js");
 const smsController = require("./smsController.js");
-
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const s3 = require("../config/s3Config.js");
 
 class StoreController {
   async checkStore(req, res) {
@@ -48,7 +40,7 @@ class StoreController {
         .findOne({ url: storeURL })
         .select("-pin -user -email -pass -smsToken");
       const getObjectParams = {
-        Bucket: "samparkabucket",
+        Bucket: "samparka",
         Key: store.logo,
       };
       const command = new GetObjectCommand(getObjectParams);
@@ -56,7 +48,7 @@ class StoreController {
       store.logo = url;
       if (store.loyaltyCard.customStamp) {
         const getObjectParams1 = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: store.loyaltyCard.customStamp,
         };
         const command1 = new GetObjectCommand(getObjectParams1);
@@ -93,7 +85,7 @@ class StoreController {
       // S3 upload
       let imageName = Date.now().toString() + "-" + req.file.originalname;
       const putObjectParams = {
-        Bucket: "samparkabucket",
+        Bucket: "samparka",
         Key: imageName,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
@@ -118,7 +110,7 @@ class StoreController {
 
       for (const store of stores) {
         const getObjectParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: store.logo,
         };
         const command = new GetObjectCommand(getObjectParams);
@@ -126,7 +118,7 @@ class StoreController {
         store.logo = url;
         if (store.loyaltyCard.customStamp) {
           const getObjectParams1 = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: store.loyaltyCard.customStamp,
           };
           const command1 = new GetObjectCommand(getObjectParams1);
@@ -148,7 +140,7 @@ class StoreController {
       const stores = await storeModel.find({ user: req.user });
       for (const store of stores) {
         const getObjectParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: store.logo,
         };
         const command = new GetObjectCommand(getObjectParams);
@@ -156,7 +148,7 @@ class StoreController {
         store.logo = url;
         if (store.loyaltyCard.customStamp) {
           const getObjectParams1 = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: store.loyaltyCard.customStamp,
           };
           const command1 = new GetObjectCommand(getObjectParams1);
@@ -184,7 +176,7 @@ class StoreController {
           const oldLogoKey = store.loyaltyCard.customStamp;
           if (oldLogoKey && !oldLogoKey.startsWith("https://")) {
             const deleteObjectParams = {
-              Bucket: "samparkabucket",
+              Bucket: "samparka",
               Key: oldLogoKey,
             };
             const deleteCommand = new DeleteObjectCommand(deleteObjectParams);
@@ -194,19 +186,18 @@ class StoreController {
           // S3 upload
           const imageName = Date.now().toString() + "-" + req.file.originalname;
           const putObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: imageName,
             Body: req.file.buffer,
             ContentType: req.file.mimetype,
           };
           const putCommand = new PutObjectCommand(putObjectParams);
-          await s3.send(putCommand);
-
+          const response = await s3.send(putCommand);
+          console.log(response);
           store.loyaltyCard.customStamp = imageName;
           await store.save();
         }
-
-        Object.assign(store.loyaltyCard, req.body);
+        await Object.assign(store.loyaltyCard, req.body);
 
         await store.save();
 
@@ -235,7 +226,7 @@ class StoreController {
           const oldLogoKey = store.logo;
           if (oldLogoKey && !oldLogoKey.startsWith("https://")) {
             const deleteObjectParams = {
-              Bucket: "samparkabucket",
+              Bucket: "samparka",
               Key: oldLogoKey,
             };
             const deleteCommand = new DeleteObjectCommand(deleteObjectParams);
@@ -245,7 +236,7 @@ class StoreController {
           // S3 upload
           const imageName = Date.now().toString() + "-" + req.file.originalname;
           const putObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: imageName,
             Body: req.file.buffer,
             ContentType: req.file.mimetype,
@@ -282,7 +273,7 @@ class StoreController {
       }
       if (req.user.role == "admin" || req.user.id == store.user[0]) {
         const deleteObjectParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: store.logo,
         };
         const command = new DeleteObjectCommand(deleteObjectParams);

@@ -26,18 +26,10 @@ const {
   DeleteObjectCommand,
   PutObjectCommand,
   GetObjectCommand,
-  S3Client,
 } = require("@aws-sdk/client-s3");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const mongoose = require("mongoose");
-
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const s3 = require("../config/s3Config.js");
 
 class ProductController {
   async addProduct(req, res) {
@@ -97,7 +89,7 @@ class ProductController {
       }
 
       const putObjectParams = {
-        Bucket: "samparkabucket",
+        Bucket: "samparka",
         Key: imageName,
         Body: req.file.buffer,
         ContentType: req.file.mimetype,
@@ -197,7 +189,7 @@ class ProductController {
             const imageUrls = await Promise.all(
               product.images.map(async (image) => {
                 const getObjectParams = {
-                  Bucket: "samparkabucket",
+                  Bucket: "samparka",
                   Key: image, // Assuming image is the name of the file in S3
                 };
                 const command = new GetObjectCommand(getObjectParams);
@@ -247,7 +239,7 @@ class ProductController {
       const imageUrls = await Promise.all(
         product.images.map(async (image) => {
           const getObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: image, // Assuming image is the name of the file in S3
           };
           const command = new GetObjectCommand(getObjectParams);
@@ -340,7 +332,7 @@ class ProductController {
         for (const file of req.files) {
           const imageName = Date.now().toString() + "-" + file.originalname;
           const putObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: imageName,
             Body: file.buffer,
             ContentType: file.mimetype,
@@ -355,7 +347,7 @@ class ProductController {
       // Delete images from S3
       for (const img of decodedImageNames) {
         const deleteParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: img, // Ensure `img` is the S3 key, not URL
         };
         const deleteCommand = new DeleteObjectCommand(deleteParams);

@@ -19,18 +19,12 @@ const mailController = require("./mailController");
 const smsController = require("./smsController");
 const validator = require("validator");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
-const { S3Client, GetObjectCommand } = require("@aws-sdk/client-s3");
+const { GetObjectCommand } = require("@aws-sdk/client-s3");
 const rewardModel = require("../models/rewardModel");
 const redemptionModel = require("../models/redemptionModel");
 const reservationModel = require("../models/reservationModel");
 const mailSMSModel = require("../models/mailSMSModel");
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const s3 = require("../config/s3Config.js");
 
 // const smsController = new SmsController();
 // const mailController = new MailController();
@@ -153,7 +147,7 @@ class CustomerController {
           .json({ success: false, message: "Store not found" });
       }
       const getObjectParams = {
-        Bucket: "samparkabucket",
+        Bucket: "samparka",
         Key: store.logo,
       };
       const command = new GetObjectCommand(getObjectParams);
@@ -162,7 +156,7 @@ class CustomerController {
 
       if (store.loyaltyCard.customStamp) {
         const getObjectParams1 = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: store.loyaltyCard.customStamp,
         };
         const command1 = new GetObjectCommand(getObjectParams1);
@@ -351,7 +345,7 @@ class CustomerController {
       const { storeURL } = req.params;
       const store = await storeModel.findOne({ url: storeURL });
       const getObjectParams = {
-        Bucket: "samparkabucket",
+        Bucket: "samparka",
         Key: store.logo,
       };
       const command = new GetObjectCommand(getObjectParams);

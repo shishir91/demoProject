@@ -62,20 +62,16 @@ const CustomizeLoyaltyCard = () => {
       if (response.data.success) {
         toast.success(response.data.message, {
           duration: 2000,
-          
-          onAutoClose: () => navigate("/store"),
         });
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.log(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);

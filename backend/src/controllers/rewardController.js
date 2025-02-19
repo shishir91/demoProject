@@ -11,18 +11,11 @@ const rewardModel = require("../models/rewardModel");
 const storeModel = require("../models/storeModel");
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const {
-  S3Client,
   GetObjectCommand,
   PutObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const s3 = require("../config/s3Config.js");
 
 class RewardController {
   async createReward(req, res) {
@@ -70,7 +63,7 @@ class RewardController {
           continue;
         }
         const getObjectParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: reward.template.image,
         };
         const command = new GetObjectCommand(getObjectParams);
@@ -106,7 +99,7 @@ class RewardController {
           // Skip deletion if the key starts with "https://"
           if (oldLogoKey && !oldLogoKey.startsWith("https://")) {
             const deleteObjectParams = {
-              Bucket: "samparkabucket",
+              Bucket: "samparka",
               Key: oldLogoKey,
             };
             const deleteCommand = new DeleteObjectCommand(deleteObjectParams);
@@ -116,7 +109,7 @@ class RewardController {
           // S3 upload
           const imageName = Date.now().toString() + "-" + req.file.originalname;
           const putObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: imageName,
             Body: req.file.buffer,
             ContentType: req.file.mimetype,
@@ -157,7 +150,7 @@ class RewardController {
       }
       if (req.user.role == "admin" || req.user.id == reward.store.user[0]) {
         const deleteObjectParams = {
-          Bucket: "samparkabucket",
+          Bucket: "samparka",
           Key: reward.template.image,
         };
         const command = new DeleteObjectCommand(deleteObjectParams);

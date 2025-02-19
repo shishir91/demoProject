@@ -1,13 +1,6 @@
 const Store = require("../models/storeModel");
-const { DeleteObjectCommand, PutObjectCommand, S3Client } = require("@aws-sdk/client-s3");
-
-const s3 = new S3Client({
-  region: process.env.AWS_REGION,
-  credentials: {
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  },
-});
+const { DeleteObjectCommand, PutObjectCommand } = require("@aws-sdk/client-s3");
+const s3 = require("../config/s3Config.js");
 
 class EcommerceController {
   async saveOrEditInfo(req, res) {
@@ -22,7 +15,7 @@ class EcommerceController {
         });
       }
 
-      let store = await Store.findById({_id:storeId});
+      let store = await Store.findById({ _id: storeId });
 
       if (store) {
         if (store.services.ecommerce) {
@@ -45,16 +38,17 @@ class EcommerceController {
           if (oldImage) {
             // If an old image exists, delete it from S3
             const deleteParams = {
-              Bucket: "samparkabucket",
+              Bucket: "samparka",
               Key: oldImage, // Old image key
             };
             await s3.send(new DeleteObjectCommand(deleteParams));
           }
 
           // Upload the new image to S3
-          const newImageName = Date.now().toString() + "-" + req.file.originalname;
+          const newImageName =
+            Date.now().toString() + "-" + req.file.originalname;
           const putObjectParams = {
-            Bucket: "samparkabucket",
+            Bucket: "samparka",
             Key: newImageName,
             Body: req.file.buffer,
             ContentType: req.file.mimetype,
