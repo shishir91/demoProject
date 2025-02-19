@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductDescription from "../../components/user/ProductDescription";
@@ -10,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 
-const StoreBody = ({ className = "", store }) => {
+const StoreBody = ({ className = "", store,searchKeyword }) => {
   const token = localStorage.getItem("token");
 
   const [isFrameOpen, setFrameOpen] = useState(false);
@@ -62,11 +63,13 @@ const StoreBody = ({ className = "", store }) => {
     setSelectedCategory(event.target.value);
   };
 
-  const filteredProducts =
-    selectedCategory && selectedCategory !== "All"
-      ? products?.products?.filter((item) => item.category === selectedCategory)
-      : products?.products; // Show all if "All" is selected
+  const filteredProducts = products?.products?.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(searchKeyword.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || selectedCategory === "" || product.category === selectedCategory;
 
+    return matchesSearch && matchesCategory;
+  });
   if (isLoading) {
     return (
       <div className={`relative flex flex-col items-center ${className} `}>

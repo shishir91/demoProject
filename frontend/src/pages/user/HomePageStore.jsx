@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Title from "../../components/user/Title";
 import StoreBody from "./StoreBody";
 import PropTypes from "prop-types";
@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 const HomePageStore = (store) => {
   const navigate = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState("");
 
   useEffect(() => {
     const scrollAnimElements = document.querySelectorAll(
@@ -48,7 +49,7 @@ const HomePageStore = (store) => {
           src="/vector4.svg"
         />
       </button>
-      <Title store={store.store} />
+      <Title store={store.store} setSearchKeyword={setSearchKeyword}/>
       {/* <div className="self-stretch flex flex-row items-center justify-center py-2.5 px-5 sm1:pl-2.5 sm1:pr-2.5 sm1:box-border">
         <img
           className="w-[480px] rounded-xl h-auto max-w-full lg:w-[500px] lg:pl-2.5 lg:box-border sm1:flex-1 sm1:self-stretch sm1:h-auto sm1:pl-[30px] sm1:pr-[30px] sm1:box-border sm1:min-w-[100px]"
@@ -56,7 +57,7 @@ const HomePageStore = (store) => {
           src="/frame-14101039181@2x.png"
         />
       </div> */}
-      <StoreBody store={store} />
+      <StoreBody store={store} searchKeyword={searchKeyword}  />
       {/* <div className="self-stretch flex flex-row items-center justify-center py-5 px-0 gap-[11px]">
         <a
           className="text-decoration-none w-[18px] relative h-[19px] overflow-hidden shrink-0"
