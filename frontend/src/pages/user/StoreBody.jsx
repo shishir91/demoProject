@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ProductDescription from "../../components/user/ProductDescription";
@@ -10,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
 
-const StoreBody = ({ className = "", store }) => {
+const StoreBody = ({ className = "", store,searchKeyword }) => {
   const token = localStorage.getItem("token");
 
   const [isFrameOpen, setFrameOpen] = useState(false);
@@ -62,11 +63,13 @@ const StoreBody = ({ className = "", store }) => {
     setSelectedCategory(event.target.value);
   };
 
-  const filteredProducts =
-    selectedCategory && selectedCategory !== "All"
-      ? products?.products?.filter((item) => item.category === selectedCategory)
-      : products?.products; // Show all if "All" is selected
+  const filteredProducts = products?.products?.filter((product) => {
+    const matchesSearch = product.name.toLowerCase().includes(searchKeyword.toLowerCase());
+    const matchesCategory =
+      selectedCategory === "All" || selectedCategory === "" || product.category === selectedCategory;
 
+    return matchesSearch && matchesCategory;
+  });
   if (isLoading) {
     return (
       <div className={`relative flex flex-col items-center ${className} `}>
@@ -173,7 +176,12 @@ const StoreBody = ({ className = "", store }) => {
           <div className="self-stretch flex flex-col items-center justify-center text-base sm:text-lg">
             <div className="self-stretch flex flex-row items-center justify-start">
               <b className="flex-1 tracking-[0.01em] text-h1 text-center sm:text-left">
-                Products
+                Products{" "}
+                {selectedCategory && selectedCategory !== "All" && (
+                  <span className="text-gray-500 text-sm">
+                    - {selectedCategory}
+                  </span>
+                )}
               </b>
             </div>
             {/* Product List (List View) */}
@@ -233,7 +241,12 @@ const StoreBody = ({ className = "", store }) => {
         </div>
 
         {/* Product Description (Grid View) */}
-        {viewType === "grid" && <ProductDescription store={store} selectedCategory={selectedCategory} />}
+        {viewType === "grid" && (
+          <ProductDescription
+            store={store}
+            selectedCategory={selectedCategory}
+          />
+        )}
         <AnimatePresence>
           {isFrameOpen && (
             <PortalDrawer
