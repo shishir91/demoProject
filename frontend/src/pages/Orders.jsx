@@ -115,7 +115,7 @@ export default function Orders() {
   };
 
   return (
-    <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl text-white">
+    <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-4 mt-4 rounded-xl text-white overflow-x-auto">
       {/* Header */}
       <div className="flex items-center gap-4 w-full md:w-auto">
         <h1 className="text-2xl font-bold mb-4">Orders</h1>
@@ -145,6 +145,8 @@ export default function Orders() {
             <th className="p-2 text-center">Customer Name</th>
             <th className="p-2 text-center">Customer Phone No</th>
             <th className="p-2 text-center">Customer Address</th>
+            <th className="p-2 text-center">Table No</th>
+            <th className="p-2 text-center">Extra Notes</th>
             <th className="p-2 text-center">Products</th>
             <th className="p-2 text-center">Total Price</th>
             <th className="p-2 text-center">Status</th>
@@ -158,7 +160,9 @@ export default function Orders() {
               <td className="p-2 text-center">{order.orderDate}</td>
               <td className="p-2 text-center">{order.userName}</td>
               <td className="p-2 text-center">{order.userPhone}</td>
-              <td className="p-2 text-center">{order.userAddress}</td>
+              <td className="p-2 text-center">{order.userAddress? order.userAddress :"- - -"}</td>
+              <td className="p-2 text-center">{order.tableNo? order.tableNo : "- - -"}</td>
+              <td className="p-2 text-center">{order.extraNotes?order.extraNotes : "- - -"}</td>
               <td className="p-2 text-center">
                 <table className="min-w-full table-auto border-collapse text-sm">
                   <thead>

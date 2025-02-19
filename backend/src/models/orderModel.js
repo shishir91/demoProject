@@ -12,7 +12,15 @@ const orderSchema = new mongoose.Schema({
   },
   userAddress: {
     type: String,
-    required: true,
+  },
+  tableNo:{
+    type:String,
+  },
+  extraNotes:{
+    type:String
+  },
+  Time:{
+    type:Date
   },
   storeId: {
     type: mongoose.Schema.Types.ObjectId,

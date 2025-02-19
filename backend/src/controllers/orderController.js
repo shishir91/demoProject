@@ -4,12 +4,21 @@ const storeModel = require("../models/storeModel");
 class OrderController {
   async makeOrder(req, res) {
     try {
-      const { userName, userPhone, userAddress, storeId, products } = req.body;
+      const {
+        userName,
+        userPhone,
+        userAddress,
+        storeId,
+        products,
+        Orderdate,
+        time,
+        extraNotes,
+        tableNo,
+      } = req.body;
 
       if (
         !userName ||
         !userPhone ||
-        !userAddress ||
         !storeId ||
         !products ||
         products.length === 0
@@ -30,7 +39,10 @@ class OrderController {
         userAddress,
         storeId,
         products,
-
+        Orderdate,
+        time,
+        extraNotes,
+        tableNo,
         totalAmount,
         status: "pending",
       });
@@ -172,7 +184,12 @@ class OrderController {
         success: true,
         message: "Order updated succesfully",
       });
-    } catch (error) {}
+    } catch (error) {
+      return res.status(400).json({
+        success:false,
+        message:`Order Update failed ${error.message}`
+      })
+    }
   }
 }
 module.exports = new OrderController();

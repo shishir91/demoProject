@@ -17,6 +17,8 @@ const Customers = () => {
   const [points, setPoints] = useState(0);
   const [storeID, setStoreID] = useState("");
   const [phone, setPhone] = useState("");
+  const [query, setQuery] = useState("");
+
   // const
   const [newCustomer, setNewCustomer] = useState({
     store: "",
@@ -159,6 +161,15 @@ const Customers = () => {
       setLoading(false);
     }
   };
+
+  const filteredCustomers = customers.filter((user) =>
+    [user.name, user.email, user.phone].some((field) =>
+      String(field || "")
+        .toLowerCase()
+        .includes(query.toLowerCase())
+    )
+  );
+
   return (
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded rounded-xl">
       {loading && <LoadingSpinner />}
@@ -197,7 +208,9 @@ const Customers = () => {
           <div className="relative flex-1 md:w-64">
             <input
               type="text"
-              placeholder="Search by Customer Name"
+              placeholder="Search Name, Email or Phone"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               className="w-full bg-[#1E1B1A] text-emerald-400 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <Search
@@ -209,7 +222,7 @@ const Customers = () => {
       </div>
 
       {/* User Table */}
-      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto">
+      <div className="bg-[#1E1B1A] rounded-md shadow-md overflow-x-auto mt-4">
         <table className="w-full table-auto">
           <thead className="bg-stone-700">
             <tr>
@@ -223,26 +236,34 @@ const Customers = () => {
             </tr>
           </thead>
           <tbody>
-            {customers.map((user) => (
-              <tr key={user._id} className="border-t">
-                <td className="px-4 py-2 text-gray-300">{user._id}</td>
-                <td className="px-4 py-2 text-gray-300">{user.name}</td>
-                <td className="px-4 py-2 text-gray-300">{user.email}</td>
-                <td className="px-4 py-2 text-gray-300">{user.phone}</td>
-                <td className="px-4 py-2 text-gray-300">
-                  <button
-                    className="bg-green-800 p-1 px-4 rounded-lg text-white"
-                    onClick={() => {
-                      setPointsModal(true);
-                      setStoreID(user.store);
-                      setPhone(user.phone);
-                    }}
-                  >
-                    Give Points
-                  </button>
+            {filteredCustomers.length > 0 ? (
+              filteredCustomers.map((user) => (
+                <tr key={user._id} className="border-t">
+                  <td className="px-4 py-2 text-gray-300">{user._id}</td>
+                  <td className="px-4 py-2 text-gray-300">{user.name}</td>
+                  <td className="px-4 py-2 text-gray-300">{user.email}</td>
+                  <td className="px-4 py-2 text-gray-300">{user.phone}</td>
+                  <td className="px-4 py-2 text-gray-300">
+                    <button
+                      className="bg-green-800 p-1 px-4 rounded-lg text-white"
+                      onClick={() => {
+                        setPointsModal(true);
+                        setStoreID(user.store);
+                        setPhone(user.phone);
+                      }}
+                    >
+                      Give Points
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={5} className="px-4 py-2 text-center text-gray-400">
+                  No customers found
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
       </div>

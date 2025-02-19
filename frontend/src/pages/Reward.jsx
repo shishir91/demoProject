@@ -23,6 +23,7 @@ const Reward = () => {
   const [dropdownOpen, setDropdownOpen] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [modelRewardId, setModelRewardId] = useState();
+  const [query, setQuery] = useState("");
 
   // Fetch stores based on user role
   const getStoresAdmin = async () => {
@@ -35,7 +36,6 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -51,7 +51,6 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -67,7 +66,6 @@ const Reward = () => {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     }
   };
@@ -84,14 +82,12 @@ const Reward = () => {
       } else {
         toast.error(response.data.message, {
           duration: 2000,
-          
         });
       }
     } catch (error) {
       console.error(error);
       toast.error(error.message, {
         duration: 2000,
-        
       });
     } finally {
       setLoading(false);
@@ -131,6 +127,11 @@ const Reward = () => {
     fetchData();
     setLoading(false);
   }, [token]);
+
+  // Filter rewards based on search query
+  const filteredRewards = rewards.filter((reward) =>
+    reward.name.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <div className="p-4 sm:ml-60 mt-4 mr-4 min-h-screen bg-stone-800 text-gray-100 rounded rounded-xl">
@@ -174,6 +175,8 @@ const Reward = () => {
           <div className="relative flex-1 md:w-64">
             <input
               type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
               placeholder="Search by Reward Name"
               className="w-full bg-[#1E1B1A] rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
             />
@@ -199,8 +202,8 @@ const Reward = () => {
         </div>
 
         {/* Reward Cards */}
-        {rewards &&
-          rewards.map((reward, index) => (
+        {filteredRewards.length > 0 ? (
+          filteredRewards.map((reward, index) => (
             <div
               key={index}
               className="bg-stone-900 p-4 rounded-lg relative shadow-lg"
@@ -258,7 +261,12 @@ const Reward = () => {
               <div className="w-4 h-4 rounded-full bg-green-500"></div>
             </div> */}
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="col-span-full text-center text-gray-400">
+            No rewards found
+          </div>
+        )}
       </div>
       {/* Model */}
       {showModal && (

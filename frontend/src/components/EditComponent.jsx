@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Trash2 } from "lucide-react";
-import api from "../api/config"
-import {toast} from "sonner";
+import api from "../api/config";
+import { toast } from "sonner";
 
 export default function EditComponent({ order, onClose }) {
   const [updatedOrder, setUpdatedOrder] = useState({ ...order });
@@ -41,19 +41,20 @@ export default function EditComponent({ order, onClose }) {
         `/order/update/${updatedOrder._id}`,
         updatedOrder
       );
-      if(response.data.success){
+      if (response.data.success) {
         toast.success("Order updated");
         onClose();
       }
-        
     } catch (error) {
       console.error(error);
     }
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg w-96 text-black">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-20">
+  <div className="bg-white p-6 rounded-lg w-96 text-black max-h-[80vh] overflow-hidden">
+    <div className="overflow-y-auto max-h-[75vh] p-2">
+
         <h2 className="text-xl font-bold mb-4">Edit Order</h2>
 
         <label>Customer Name</label>
@@ -157,6 +158,7 @@ export default function EditComponent({ order, onClose }) {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }
