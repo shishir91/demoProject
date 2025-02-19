@@ -40,8 +40,8 @@ app.use(
         process.env.NODE_ENV === "production"
           ? // ? ["https://samparka.co", "https://www.samparka.co"]
             [
-              "https://demoproject-api.onrender.com/",
-              "https://www.demoproject-api.onrender.com/",
+              "https://demoproject-1-wrxz.onrender.com/",
+              "https://www.demoproject-1-wrxz.onrender.com/",
             ]
           : [
               "http://localhost:5173", // Direct match
@@ -49,8 +49,9 @@ app.use(
 
       let dynamicLocalhostRegex;
       process.env.NODE_ENV === "production"
-        ? (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.samparka.co$/)
-        : (dynamicLocalhostRegex = /^http:\/\/[a-z0-9-]+\.localhost:5173$/);
+      // ? (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.samparka.co$/)
+      ? (dynamicLocalhostRegex = /^https:\/\/[a-z0-9-]+\.demoproject-1-wrxz.onrender.com$/)
+      : (dynamicLocalhostRegex = /^http:\/\/[a-z0-9-]+\.localhost:5173$/);
 
       if (
         !origin ||
