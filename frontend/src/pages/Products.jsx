@@ -5,6 +5,7 @@ import api from "../api/config";
 import { toast } from "sonner";
 import ProductFilter from "../components/ProductFilter";
 import ProductCard from "../components/ProductCard";
+import { Search } from "lucide-react";
 
 export default function Products() {
   const [stores, setStores] = useState([]);
@@ -14,6 +15,7 @@ export default function Products() {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [filter, setFilter] = useState("");
   const [storeDescription, setStoreDescription] = useState("");
+  const [query, setQuery] = useState("");
 
   const token = localStorage.getItem("token");
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -77,7 +79,11 @@ export default function Products() {
     // Handle saving the description (e.g., send to API or update store data)
     toast.success("Store description saved!", { duration: 2000 });
   };
-
+  const filteratedProducts = filteredProducts.filter((product) =>
+    [product.name].some((field) =>
+      field.toLowerCase().includes(query.toLowerCase())
+    )
+  );
   return (
     <div className="p-4 sm:ml-64 bg-stone-800 min-h-screen mr-6 mt-7 rounded-xl">
       {/* Header */}
@@ -139,19 +145,35 @@ export default function Products() {
               </div>
             </div>
             {/* Product Filter and Add Products Button */}
-            <div className="flex items-center gap-4 mb-2">
-              <ProductFilter onFilterChange={setFilter} storeId={storeId} />
-              <Link to="/addProducts" className="ml-auto sm:ml-0">
-                <button className="w-auto h-10 bg-green-800 p-2 rounded-lg text-gray-200">
-                  <span className="hidden sm:block">+ Add Products</span>
-                  <span className="block sm:hidden">+</span>
-                </button>
-              </Link>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-4">
+              <div className="flex gap-4">
+                <ProductFilter onFilterChange={setFilter} storeId={storeId} />
+                <Link to="/addProducts" className="ml-auto sm:ml-0 mb-4">
+                  <button className="w-full sm:w-auto min-h-10 bg-green-800 p-2 rounded-lg text-gray-200">
+                    <span className="block">+ Add Products</span>
+                  </button>
+                </Link>
+              </div>
+
+              <div className="relative flex-1 sm:w-64 mb-3">
+                <input
+                  type="text"
+                  placeholder="Search by Store Name or Location"
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full bg-stone-900 text-emerald-400 rounded-lg pl-4 pr-10 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <Search
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  size={18}
+                />
+              </div>
             </div>
+
             {/* // Product Cards */}
             <div className="product-list grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {filteredProducts.length > 0 ? (
-                filteredProducts.map((product) => (
+              {filteratedProducts.length > 0 ? (
+                filteratedProducts.map((product) => (
                   <div key={product._id}>
                     <ProductCard product={product} />
                   </div>

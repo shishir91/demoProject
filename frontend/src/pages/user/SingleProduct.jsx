@@ -197,7 +197,7 @@ const SingleProduct = ({ className = "" }) => {
             productImage: product.images[0],
             productName: product.name,
             productQuantity: quantity,
-            productTotalPrice: totalPrice,
+            productPrice: totalPrice,
           },
         ],
 

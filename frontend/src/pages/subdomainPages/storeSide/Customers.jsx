@@ -160,23 +160,25 @@ const Customers = (state) => {
           <table className="w-full table-auto min-w-max">
             <thead className="bg-stone-700">
               <tr>
-                <th className="px-4 py-2 text-left text-gray-200">ID</th>
+                <th className="px-4 py-2 text-left text-gray-200">S.N.</th>
                 <th className="px-4 py-2 text-left text-gray-200">Name</th>
                 <th className="px-4 py-2 text-left text-gray-200">Email</th>
                 <th className="px-4 py-2 text-left text-gray-200">
                   Phone Number
                 </th>
+                <th className="px-4 py-2 text-left text-gray-200">Points</th>
                 <th className="px-4 py-2 text-left text-gray-200">Action</th>
               </tr>
             </thead>
             <tbody>
               {filteredCustomers.length > 0 ? (
-                filteredCustomers.map((user) => (
+                filteredCustomers.map((user, index) => (
                   <tr key={user._id} className="border-t">
-                    <td className="px-4 py-2 text-gray-300">{user._id}</td>
+                    <td className="px-4 py-2 text-gray-300">{index + 1}</td>
                     <td className="px-4 py-2 text-gray-300">{user.name}</td>
                     <td className="px-4 py-2 text-gray-300">{user.email}</td>
                     <td className="px-4 py-2 text-gray-300">{user.phone}</td>
+                    <td className="px-4 py-2 text-gray-300">{user.points}</td>
                     <td className="px-4 py-2 text-gray-300">
                       <button
                         className="bg-green-800 p-1 px-4 rounded-lg text-white"

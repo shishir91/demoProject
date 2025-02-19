@@ -76,8 +76,8 @@ const Checkout = (store) => {
       userPhone: phoneNumber,
       userAddress: address,
       products: items,
-      Orderdate:date,
-      time:time,
+      Orderdate: date,
+      time: time,
       extraNotes,
       tableNo,
     };
@@ -109,23 +109,24 @@ const Checkout = (store) => {
       if (tableNo) {
         message += `*Table No:* ${tableNo}\n`;
       }
-      
-      if(extraNotes){
-        message += `*Extra Details:* ${extraNotes}\n` + `\n*Please Confirm my order.*`;
+
+      if (extraNotes) {
+        message +=
+          `*Extra Details:* ${extraNotes}\n` + `\n*Please Confirm my order.*`;
       }
 
-      if(date){
+      if (date) {
         message += `*Date:* ${date}\n`;
       }
 
-      if(time){
-        message += `*Time*: ${time}\n`+ `*Please Confirm my Booking*.\n`;
+      if (time) {
+        message += `*Time*: ${time}\n` + `*Please Confirm my Booking*.\n`;
       }
 
-      const whatsappUrl = `https://wa.me/${storeData.phone}?text=${encodeURIComponent(
-        message
-      )}`;
-      console.log('Whatsapp URL: ',whatsappUrl);
+      const whatsappUrl = `https://wa.me/${
+        storeData.phone
+      }?text=${encodeURIComponent(message)}`;
+      console.log("Whatsapp URL: ", whatsappUrl);
       window.open(whatsappUrl, "_blank");
     } catch (error) {
       console.error("Error creating order; ", error);
@@ -184,6 +185,8 @@ const Checkout = (store) => {
                   <input
                     className="w-full max-w-md border border-gray-300 p-2 rounded-md text-sm sm:text-base"
                     type="number"
+                    min={10}
+                    max={10}
                     placeholder="Enter your WhatsApp number"
                     value={phoneNumber}
                     onChange={(e) => setPhoneNumber(e.target.value)}
