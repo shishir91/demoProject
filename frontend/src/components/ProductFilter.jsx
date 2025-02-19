@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Filter } from "lucide-react";
 import api from "../api/config";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 const ProductFilter = ({ onFilterChange, storeId }) => {
   const token = localStorage.getItem("token");
